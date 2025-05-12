@@ -2,29 +2,6 @@
 
 This file contains a rough plan for the walkthrough and will be removed from the final product.
 
-## Objectives for the entire lesson/walkthrough
-
-- [ ] Explain the benefit of unit tests on top of integration/e2e tests.
-- [ ] Understand the key anatomy of a Fortran unit test (test-suite boiler-plate, input types, calls to functions under test, assertions, etc).
-- [ ] Able to identify Fortran code which is problematic for unit testing.
-- [ ] Able to write a Fortran unit test for a procedure with...
-   - [ ] test-drive
-   - [ ] veggies
-   - [ ] pFUnit
-- [ ] Able to add unit tests into the build system of a Fortran project using...
-   - [ ] CMake with...
-      - [ ] test-drive
-      - [ ] veggies
-      - [ ] pFUnit
-   - [ ] FPM with...
-      - [ ] test-drive
-      - [ ] veggies
-      - [ ] pFUnit
-- Able to understand the failure output of a Fortran unit test written in...
-   - [ ] test-drive
-   - [ ] veggies
-   - [ ] pFUnit
-
 ## Episodes
 
 ### 1. Introduction and getting the walkthrough src code
