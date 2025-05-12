@@ -12,8 +12,28 @@ exercises: 2
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Explain how to use markdown with The Carpentries Workbench
-- Demonstrate how to include pieces of code, figures, and nested challenge blocks
+Objectives for the entire lesson/walkthrough
+
+- [ ] Explain the benefit of unit tests on top of integration/e2e tests.
+- [ ] Understand the key anatomy of a Fortran unit test (test-suite boiler-plate, input types, calls to functions under test, assertions, etc).
+- [ ] Able to identify Fortran code which is problematic for unit testing.
+- [ ] Able to write a Fortran unit test for a procedure with...
+   - [ ] test-drive
+   - [ ] veggies
+   - [ ] pFUnit
+- [ ] Able to add unit tests into the build system of a Fortran project using...
+   - [ ] CMake with...
+      - [ ] test-drive
+      - [ ] veggies
+      - [ ] pFUnit
+   - [ ] FPM with...
+      - [ ] test-drive
+      - [ ] veggies
+      - [ ] pFUnit
+- Able to understand the failure output of a Fortran unit test written in...
+   - [ ] test-drive
+   - [ ] veggies
+   - [ ] pFUnit
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
