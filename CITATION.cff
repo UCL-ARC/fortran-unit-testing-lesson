@@ -5,7 +5,7 @@
 # ensuring that the author list and other fields remain accurate.
 
 cff-version: 1.2.0
-title: FIXME
+title: Unit Testing in Fortran
 message: >-
   Please cite this lesson using the information in this file
   when you refer to it in publications, and/or if you
@@ -13,10 +13,18 @@ message: >-
   training material.
 type: dataset
 authors:
-  - given-names: FIXME
-    family-names: FIXME
+  - given-names: Connor
+    family-names: Aird
 abstract: >-
-  FIXME Replace this with a short abstract describing the
-  lesson, e.g. its target audience and main intended
-  learning objectives.
+  This lesson aims to teach the basics of writing unit tests in Fortran
+  using a set of available frameworks - pFUnit, test-drive and veggies.
+  The lesson will cover the basics of unit testing, how to identify and
+  write testable Fortran code, how to write the unit tests for both
+  serial and parallel Fortran in all three frameworks and how to
+  integrate these tests into a Fortran project using both CMake and FPM
+  build systems.
+
+  This lesson is aimed at learners who already understand the basics of
+  programming in Fortran and wish to start increasing the maintainability
+  of their code with the addition of unit tests.
 license: CC-BY-4.0
