@@ -1,54 +1,52 @@
 ---
-title: "Using Markdown"
-teaching: 10
+title: "Introduction"
+teaching: 3
 exercises: 2
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How do you write a lesson using Markdown and `{sandpaper}`?
+- How can you follow along with this walkthrough?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-
+- Can clone the provided repo for the walkthrough.
+- Understand the objectives of this walkthrough.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Introduction
 
-This is a lesson created via The Carpentries Workbench. It is written in
-[Pandoc-flavored Markdown](https://pandoc.org/MANUAL.html) for static files and
-[R Markdown][r-markdown] for dynamic files that can render code into output. 
-Please refer to the [Introduction to The Carpentries 
-Workbench](https://carpentries.github.io/sandpaper-docs/) for full documentation.
+This walkthrough aims to...
+- Demonstrate the importance of testing Fortran codes with unit tests.
+- Show how to write unit tests for Fortran Code using three different frameworks: test-drive, veggies and pFUnit. 
+- Show how to integrate these tests with both CMake and FPM build systems.
+- Highlight the differences between writing unit tests for parallel and serial Fortran code.
 
-What you need to know is that there are three sections required for a valid
-Carpentries lesson:
+To achieve these aims we will use a repository containing some Fortran code with an existing test setup so we can try some of what we learn.
 
- 1. `questions` are displayed at the beginning of the episode to prime the
-    learner for the content.
- 2. `objectives` are the learning objectives for an episode displayed with
-    the questions.
- 3. `keypoints` are displayed at the end of the episode to reinforce the
-    objectives.
+::::::::::::::::::::::::::::::::::::: callout
+
+To run any of the pFUnit tests, you will need to have pFUnit built locally. Please follow the [instructions provided by pFUnit](https://github.com/Goddard-Fortran-Ecosystem/pFUnit?tab=readme-ov-file#building-and-installing-pfunit) to set this up.
+
+:::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
 
-Inline instructor notes can help inform instructors of timing challenges
-associated with the lessons. They appear in the "Instructor View"
+Switch to terminal and clone the repo [UCL-ARC/fortran-tooling](https://github.com/UCL-ARC/fortran-tooling.git). 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: challenge 
 
-## Challenge 1: Can you do it?
+## Challenge 1: Can you access the exercises repo?
 
-What is the output of this command?
+Are you able to clone the exercises repository?
 
-```r
-paste("This", "new", "lesson", "looks", "good")
+```sh
+git clone https://github.com/UCL-ARC/fortran-tooling.git
 ```
 
 :::::::::::::::::::::::: solution 
@@ -56,58 +54,13 @@ paste("This", "new", "lesson", "looks", "good")
 ## Output
  
 ```output
-[1] "This new lesson looks good"
+Cloning into 'fortran-tooling'...
+remote: Enumerating objects: 955, done.
+remote: Counting objects: 100% (419/419), done.
+remote: Compressing objects: 100% (219/219), done.
+remote: Total 955 (delta 242), reused 344 (delta 199), pack-reused 536 (from 1)
+Receiving objects: 100% (955/955), 192.00 KiB | 3.62 MiB/s, done.
+Resolving deltas: 100% (498/498), done.
 ```
 
 :::::::::::::::::::::::::::::::::
-
-
-## Challenge 2: how do you nest solutions within challenge blocks?
-
-:::::::::::::::::::::::: solution 
-
-You can add a line with at least three colons and a `solution` tag.
-
-:::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-## Figures
-
-You can use standard markdown for static figures with the following syntax:
-
-`![optional caption that appears below the figure](figure url){alt='alt text for
-accessibility purposes'}`
-
-![You belong in The Carpentries!](https://raw.githubusercontent.com/carpentries/logo/master/Badge_Carpentries.svg){alt='Blue Carpentries hex person logo with no text.'}
-
-::::::::::::::::::::::::::::::::::::: callout
-
-Callout sections can highlight information.
-
-They are sometimes used to emphasise particularly important points
-but are also used in some lessons to present "asides": 
-content that is not central to the narrative of the lesson,
-e.g. by providing the answer to a commonly-asked question.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-
-## Math
-
-One of our episodes contains $\LaTeX$ equations when describing how to create
-dynamic reports with {knitr}, so we now use mathjax to describe this:
-
-`$\alpha = \dfrac{1}{(1 - \beta)^2}$` becomes: $\alpha = \dfrac{1}{(1 - \beta)^2}$
-
-Cool, right?
-
-::::::::::::::::::::::::::::::::::::: keypoints 
-
-- Use `.md` files for episodes when you want static content
-- Use `.Rmd` files for episodes when you need to generate output
-- Run `sandpaper::check_lesson()` to identify any issues with your lesson
-- Run `sandpaper::build_lesson()` to preview your lesson locally
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-[r-markdown]: https://rmarkdown.rstudio.com/
