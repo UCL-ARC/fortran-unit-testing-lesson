@@ -18,7 +18,7 @@ carpentry: 'incubator'
 carpentry_description: 'Lesson Description'
 
 # Overall title for pages.
-title: 'Fortran Unit Testing'
+title: 'Unit Testing in Fortran'
 
 # Date the lesson was created (YYYY-MM-DD, this is empty by default)
 created: '2025-05-09'
