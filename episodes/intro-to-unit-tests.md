@@ -38,6 +38,82 @@ Several key aspects define a unit test. They should be...
 
 There are other forms of testing, such as integration testing in which two or more units of a code base are tested to verify that they work together, or that they are **integrated** correctly. However, today we are focusing on unit tests as it is often the case that many of these larger tests are written using the same test tools and frameworks, hence we will make progress with both by starting with unit testing.
 
+::::::::::::::::::::::::::::::::::::: challenge 
+
+#### Challenge 1: Unit test bad practices
+
+Take a look at this partial test written in Fortran where we are testing some code which performs transforms on matrices.
+1. Can you identify the aspects of this test which make it a bad unit test?
+2. Can you rewrite it to make it an exemplar unit test?
+
+```f90
+...
+open (unit=transform_file_unit, &
+      file=transform_file_name, &
+      status=status,            &
+      IOSTAT=iostat)
+
+expected_matrix(1,1:num_particles) = [2.0, 4.0, 6.0, 8.0, 10.0]
+expected_matrix(2,1:num_particles) = [12.0, 14.0, 16.0, 18.0, 20.0]
+expected_matrix(3,1:num_particles) = [22.0, 24.0, 26.0, 28.0, 30.0]
+
+call apply_transform(transform_file_unit, actual_matrix, num_particles)
+call scale_matrix(2.0, actual_matrix, num_particles)
+
+@assertEqual(expected_matrix(:, 1:num_particles), actual_matrix(:, 1:num_particles), "Unexpected values for actual matrix")
+```
+
+:::::::::::::::::::::::: solution 
+
+There are several issues with this test.
+1. For this test to work we need the transform file to exist. However, we are not checking if this file exists. There are multiple ways to improve this. For example, prior to calling the src code, we could...
+    - add a simple check that the file exists before calling the src code.
+    ```f90
+    ...
+    open (unit=transform_file_unit, &
+          file=transform_file_name, &
+          status=status,            &
+          IOSTAT=iostat)
+    
+    @assertEqual(status, 0, "Expected transform file not found")
+    ...
+    ```
+    - create this file prior to calling the src code
+    ```f90
+    open (unit=transform_file_unit, &
+          file=transform_file_name, &
+          status=status,            &
+          IOSTAT=iostat)
+    
+    transform(1,:) = [1, 0, 0]
+    transform(2,:) = [0, 1, 0]
+    transform(3,:) = [0, 0, 1]
+    do i=1,3
+        write(transform_file_unit,'(i2,i2,i2)') tranform(1,i), tranform(2,i), tranform(3,i)
+    end do
+
+    close(transform_file_unit)
+    ```
+```f90
+...
+open (unit=transform_file_unit, &
+      file=transform_file_name, &
+      status=status,            &
+      IOSTAT=iostat)
+
+expected_matrix(1,1:num_particles) = [2.0, 4.0, 6.0, 8.0, 10.0]
+expected_matrix(2,1:num_particles) = [12.0, 14.0, 16.0, 18.0, 20.0]
+expected_matrix(3,1:num_particles) = [22.0, 24.0, 26.0, 28.0, 30.0]
+
+call apply_transform_from_file(transform_file_name, actual_matrix, num_particles)
+call scale_matrix(2.0, actual_matrix, num_particles)
+
+@assertEqual(expected_matrix(:, 1:num_particles), actual_matrix(:, 1:num_particles), "Unexpected values for actual matrix")
+```
+
+:::::::::::::::::::::::::::::::::
+
+
 ### What does a unit test look like?
 
 All unit tests tend to follow the same pattern of Given-When-Then.
@@ -53,23 +129,23 @@ All unit tests tend to follow the same pattern of Given-When-Then.
 
 ::::::::::::::::::::::::::::::::::::: challenge 
 
-## Challenge 1: Write a unit test in sudo code.
+#### Challenge 1: Write a unit test in sudo code.
 
-Assuming you have a functio `reverse_array` which reverses the order of an allocated array. Write a unit test in sudo code for `reverse_array`.
+Assuming you have a function `reverse_array` which reverses the order of an allocated array. Write a unit test in sudo code for `reverse_array`.
 
 :::::::::::::::::::::::: solution 
  
-```md
-# Given 
+ ```
+! Given
 Allocate the input array input_array
-Allocate the expected output array expected_output_array
 Fill input_array with (1,2,3,4)
+Allocate the expected output array expected_output_array
 Fill expected_output_array with (4,3,2,1)
 
-# When
+! When
 Call reverse_array with input_array
 
-# Then
+! Then
 for each element in input_array 
     Assert that the corrosponding element of expected_output_array matches that of input_array
 ```
