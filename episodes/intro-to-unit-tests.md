@@ -38,82 +38,6 @@ Several key aspects define a unit test. They should be...
 
 There are other forms of testing, such as integration testing in which two or more units of a code base are tested to verify that they work together, or that they are **integrated** correctly. However, today we are focusing on unit tests as it is often the case that many of these larger tests are written using the same test tools and frameworks, hence we will make progress with both by starting with unit testing.
 
-::::::::::::::::::::::::::::::::::::: challenge 
-
-#### Challenge 1: Unit test bad practices
-
-Take a look at this partial test written in Fortran where we are testing some code which performs transforms on matrices.
-1. Can you identify the aspects of this test which make it a bad unit test?
-2. Can you rewrite it to make it an exemplar unit test?
-
-```f90
-...
-open (unit=transform_file_unit, &
-      file=transform_file_name, &
-      status=status,            &
-      IOSTAT=iostat)
-
-expected_matrix(1,1:num_particles) = [2.0, 4.0, 6.0, 8.0, 10.0]
-expected_matrix(2,1:num_particles) = [12.0, 14.0, 16.0, 18.0, 20.0]
-expected_matrix(3,1:num_particles) = [22.0, 24.0, 26.0, 28.0, 30.0]
-
-call apply_transform(transform_file_unit, actual_matrix, num_particles)
-call scale_matrix(2.0, actual_matrix, num_particles)
-
-@assertEqual(expected_matrix(:, 1:num_particles), actual_matrix(:, 1:num_particles), "Unexpected values for actual matrix")
-```
-
-:::::::::::::::::::::::: solution 
-
-There are several issues with this test.
-1. For this test to work we need the transform file to exist. However, we are not checking if this file exists. There are multiple ways to improve this. For example, prior to calling the src code, we could...
-    - add a simple check that the file exists before calling the src code.
-    ```f90
-    ...
-    open (unit=transform_file_unit, &
-          file=transform_file_name, &
-          status=status,            &
-          IOSTAT=iostat)
-    
-    @assertEqual(status, 0, "Expected transform file not found")
-    ...
-    ```
-    - create this file prior to calling the src code
-    ```f90
-    open (unit=transform_file_unit, &
-          file=transform_file_name, &
-          status=status,            &
-          IOSTAT=iostat)
-    
-    transform(1,:) = [1, 0, 0]
-    transform(2,:) = [0, 1, 0]
-    transform(3,:) = [0, 0, 1]
-    do i=1,3
-        write(transform_file_unit,'(i2,i2,i2)') tranform(1,i), tranform(2,i), tranform(3,i)
-    end do
-
-    close(transform_file_unit)
-    ```
-```f90
-...
-open (unit=transform_file_unit, &
-      file=transform_file_name, &
-      status=status,            &
-      IOSTAT=iostat)
-
-expected_matrix(1,1:num_particles) = [2.0, 4.0, 6.0, 8.0, 10.0]
-expected_matrix(2,1:num_particles) = [12.0, 14.0, 16.0, 18.0, 20.0]
-expected_matrix(3,1:num_particles) = [22.0, 24.0, 26.0, 28.0, 30.0]
-
-call apply_transform_from_file(transform_file_name, actual_matrix, num_particles)
-call scale_matrix(2.0, actual_matrix, num_particles)
-
-@assertEqual(expected_matrix(:, 1:num_particles), actual_matrix(:, 1:num_particles), "Unexpected values for actual matrix")
-```
-
-:::::::::::::::::::::::::::::::::
-
-
 ### What does a unit test look like?
 
 All unit tests tend to follow the same pattern of Given-When-Then.
@@ -169,3 +93,120 @@ If you have a comprehensive understanding of your code, perhaps this is all you 
 test_populate_arrays Failed: Expected 0 for index 1 but got 1
 ```
 This is so much clearer. We immediately have an idea of what could be going wrong and the unit test itself will help us determine the problematic code to investigate.
+
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+### Challenge 2: Unit test bad practices
+
+Take a look at this partial test written in Fortran where we are testing some code which performs transforms on matrices.
+1. Can you identify the aspects of this test which make it a bad unit test?
+2. Can you rewrite it to make it an exemplar unit test?
+
+```f90
+...
+! Given
+expected_matrix(1,1:num_particles) = [2.0, 4.0, 6.0, 8.0, 10.0]
+expected_matrix(2,1:num_particles) = [12.0, 14.0, 16.0, 18.0, 20.0]
+expected_matrix(3,1:num_particles) = [22.0, 24.0, 26.0, 28.0, 30.0]
+
+! When
+call apply_transform(transform_file_name, actual_matrix, num_particles)
+call scale_matrix(2.0, actual_matrix, num_particles)
+
+! Then
+@assertEqual(expected_matrix(:, 1:num_particles), actual_matrix(:, 1:num_particles), "Unexpected values for actual matrix")
+```
+
+:::::::::::::::::::::::: solution 
+
+There are several issues with this test.
+1. For this test to work we need the transform file to exist. However, we are not checking if this file exists. There are multiple ways to improve this. For example, prior to calling the src code, we could...
+    - add a simple check that the file exists before calling the src code.
+        ```f90
+        ...
+        ! Open the file by name and verify it was successful
+        open (unit=transform_file_unit, &
+            file=transform_file_name, &
+            status=status,            &
+            IOSTAT=iostat)
+        @assertEqual(status, 0, "Expected transform file not found")
+        ...
+        ```
+    - create this file prior to calling the src code
+        ```f90
+        ...
+        ! Open the file by name and verify it was successful
+        open (unit=transform_file_unit, &
+            file=transform_file_name, &
+            status=status,            &
+            IOSTAT=iostat)
+        @assertEqual(status, 0, "Expected transform file not found")
+        
+        ! Write the tranform to the file
+        transform(1,:) = [1, 0, 0]
+        transform(2,:) = [0, 1, 0]
+        transform(3,:) = [0, 0, 1]
+        do i=1,3
+            write(transform_file_unit,'(i2,i2,i2)') transform(1,i), transform(2,i), transform(3,i)
+        end do
+
+        close(transform_file_unit)
+        ...
+        ```
+2. Within the test we are calling two functions in our `When` section. To make sure out test is **Isolated** and **Minimal**, we should be calling only one src procedure before checking assertions. We could improve this by...
+    - Add an assertion after every subroutine call
+        ```f90
+        ...
+        ! Given
+        expected_matrix_after_transform(1,1:num_particles) = [1.0, 2.0, 3.0, 4.0, 5.0]
+        expected_matrix_after_transform(2,1:num_particles) = [6.0, 7.0, 8.0, 9.0, 10.0]
+        expected_matrix_after_transform(3,1:num_particles) = [11.0, 12.0, 13.0, 14.0, 15.0]
+
+        expected_matrix_after_scaling(1,1:num_particles) = [2.0, 4.0, 6.0, 8.0, 10.0]
+        expected_matrix_after_scaling(2,1:num_particles) = [12.0, 14.0, 16.0, 18.0, 20.0]
+        expected_matrix_after_scaling(3,1:num_particles) = [22.0, 24.0, 26.0, 28.0, 30.0]
+
+        ! When 1
+        call apply_transform(transform_file_name, actual_matrix, num_particles)
+
+        ! Then 1
+        @assertEqual(expected_matrix_after_transform(:, 1:num_particles), actual_matrix(:, 1:num_particles), "Unexpected values for actual matrix after transform")
+
+        ! When 2
+        call scale_matrix(2.0, actual_matrix, num_particles)
+
+        ! Then 2
+        @assertEqual(expected_matrix_after_scaling(:, 1:num_particles), actual_matrix(:, 1:num_particles), "Unexpected values for actual matrix after scaling")
+        ```
+    - Split into two tests
+        ```f90
+        ...
+        ! Test 1
+        ! Given
+        expected_matrix_after_transform(1,1:num_particles) = [1.0, 2.0, 3.0, 4.0, 5.0]
+        expected_matrix_after_transform(2,1:num_particles) = [6.0, 7.0, 8.0, 9.0, 10.0]
+        expected_matrix_after_transform(3,1:num_particles) = [11.0, 12.0, 13.0, 14.0, 15.0]
+
+        ! When
+        call apply_transform(transform_file_name, actual_matrix, num_particles)
+
+        ! Then
+        @assertEqual(expected_matrix_after_transform(:, 1:num_particles), actual_matrix(:, 1:num_particles), "Unexpected values for actual matrix after transform")
+        ...
+        ! Test 2
+        ! Given
+        actual_matrix(1,1:num_particles) = [1.0, 2.0, 3.0, 4.0, 5.0]
+        actual_matrix(2,1:num_particles) = [6.0, 7.0, 8.0, 9.0, 10.0]
+        actual_matrix(3,1:num_particles) = [11.0, 12.0, 13.0, 14.0, 15.0]
+
+        expected_matrix_after_scaling(1,1:num_particles) = [2.0, 4.0, 6.0, 8.0, 10.0]
+        expected_matrix_after_scaling(2,1:num_particles) = [12.0, 14.0, 16.0, 18.0, 20.0]
+        expected_matrix_after_scaling(3,1:num_particles) = [22.0, 24.0, 26.0, 28.0, 30.0]
+        ! When
+        call scale_matrix(2.0, actual_matrix, num_particles)
+
+        ! Then
+        @assertEqual(expected_matrix_after_scaling(:, 1:num_particles), actual_matrix(:, 1:num_particles), "Unexpected values for actual matrix after scaling")
+        ```
+:::::::::::::::::::::::::::::::::
