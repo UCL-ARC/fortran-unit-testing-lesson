@@ -25,7 +25,7 @@ exercises:
 
 Unit testing is a way of verifying the validity of a code base by testing its smallest individual components, or **units**.
 
->*"If the parts don't work by themselves, they probably won't work well together"* [Reference, The pragmatic programmer].
+>*"If the parts don't work by themselves, they probably won't work well together"* (Thomas and Hunt, 2019, Topic 51).
 
 Several key aspects define a unit test. They should be...
 
@@ -37,7 +37,7 @@ Several key aspects define a unit test. They should be...
 
 #### Other forms of testing
 
-There are other forms of testing, such as integration testing in which two or more units of a code base are tested to verify that they work together, or that they are **integrated** correctly. However, today we are focusing on unit tests as it is often the case that many of these larger tests are written using the same test tools and frameworks, hence we will make progress with both by starting with unit testing.
+There are other forms of testing, such as integration testing in which two or more units of a code base are tested to verify that they work together, or that they are correctly **integrated**. However, today we are focusing on unit tests as it is often the case that many of these larger tests are written using the same test tools and frameworks, hence we will make progress with both by starting with unit testing.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -46,12 +46,17 @@ There are other forms of testing, such as integration testing in which two or mo
 All unit tests tend to follow the same pattern of Given-When-Then.
 
 - **Given** we are in some specific starting state
+
     - Units of code almost always have some inputs. These inputs may be scalars to be passed into a function, but they may also be an external dependency such as a database, file or array which must be allocated.
     - This database, file or array memory must exist before the unit can be tested. Hence, we must set up this state in advance of calling the unit we are testing.
+
 - **When** we carry out a specific action
+
     - This is the step in which we call the unit of code to be tested, such as a call to a function or subroutine.
     - We should limit the number of actions being performed here to ensure it is easy to determine which unit is failing in the event that a test fails.
+
 - **Then** some specific event/outcome will have occurred.
+
     - Once we have called our unit of code, we must check that what we expected to happen did indeed happen.
     - This could mean comparing a scalar or vector quantity returned from the called unit against some expected value. However, it could be something more complex such as validating the contents of a database or outputted file.
 
@@ -83,7 +88,7 @@ for each element in input_array:
 
 ### When should unit tests be run?
 
-A major benefit of unit tests is the ability to identify bugs at the earliest possible stage. Therefore, unit tests should be run frequently throughout the development process. Passing unit tests give you and your collaborators' confidence that changes to your code are correct and have not broken any existing features, so run your unit tests...
+A major benefit of unit tests is the ability to identify bugs at the earliest possible stage. Therefore, unit tests should be run frequently throughout the development process. Passing unit tests give you and your collaborators confidence that changes to your code are correct and have not broken any existing features, so run your unit tests...
 
 - if you make a change locally
 - if you raise a merge request
@@ -111,144 +116,14 @@ Now imagine the situation where this developer added unit tests for their new co
 test_populate_arrays Failed: Expected 1 for index 1 but got 0
 ```
 
-This is so much clearer. We immediately have an idea of what could be going wrong and the unit test itself will help us determine the problematic code to investigate.
+This is much clearer. We immediately have an idea of what could be going wrong and the unit test itself will help us determine the problematic code to investigate.
 
 ::::::::::::::::::::::::::::::::::::: challenge 
 
 ### Challenge 2: Unit test bad practices
 
-Take a look at this test written in Fortran where we are testing some code for simple mathematical operations.
+Take a look at episode-1/challenege-2 in the exercises provided.
 
-1. Can you identify the aspects of this test which make it a bad unit test?
-2. Can you rewrite it to make it an exemplar unit test?
+## References 
 
-```f90
-subroutine test_maths_module()
-    implicit none
-    integer :: actual_value, expected_value
-
-    ! Given we have an input of 2
-    actual_value = 2
-    expected_value = 24
-
-    ! When we apply our maths operations
-    call double(actual_value)
-    call factorial(actual_value)
-
-    ! Then we expect the actual_value to match the expected_value
-    @assertEqual(expected_value, actual_value, ""Unexpected value after double and factorial")
-end subroutine test_maths_module
-```
-
-:::::::::::::::::::::::: solution 
-
-There are a few potential improvements
-
-1. Within the test we are calling two functions in our `When` section. To make sure our test is **Isolated** and **Minimal**, we should be calling only one procedure before checking assertions. We could improve this by...
-
-    adding an assertion after every subroutine call
-
-    ```f90
-    subroutine test_maths_module()
-        implicit none
-        integer :: actual_value, expected_value_after_double, expected_value_after_factorial
-
-        ! Given we have an input of 2
-        actual_value = 2
-        expected_value_after_double = 4
-        expected_value_after_factorial = 24
-
-        ! When we double our input
-        call double(actual_value)
-
-        ! Then we expect the actual_value to match the expected_value
-        @assertEqual(expected_value_after_double, actual_value, "Unexpected value after double")
-
-        ! When we get the factorial of our input
-        call factorial(actual_value)
-
-        ! Then we expect the actual_value to match the expected_value
-        @assertEqual(expected_value_after_factorial, actual_value, "Unexpected value after factorial")
-    end subroutine test_maths_module
-    ```
-
-    or, even better, we split into two tests
-
-    ```f90
-    subroutine test_double()
-        implicit none
-        integer :: actual_value, expected_value
-
-        ! Given we have an input of 2
-        actual_value = 2
-        expected_value = 4
-
-        ! When we double our input
-        call double(actual_value)
-
-        ! Then we expect the actual_value to match the expected_value
-        @assertEqual(expected_value, actual_value, "Unexpected value after double")
-
-    end subroutine test_double
-
-    subroutine test_factorial()
-        implicit none
-        integer :: actual_value, expected_value
-
-        ! Given we have an input of 4
-        actual_value = 4
-        expected_value = 24
-
-        ! When we get the factorial of our input
-        call factorial(actual_value)
-
-        ! Then we expect the actual_value to match the expected_value
-        @assertEqual(expected_value, actual_value, "Unexpected value after factorial")
-    end subroutine test_factorial
-    ```
-
-2. To improve this further, we could make the test(s) more generic to allow a wider set of inputs to be tested.
-
-    ```f90
-    ! Setting the values of actual/expected_value outside of the test allows many different inputs to be tested using the same code.
-    subroutine test_double(actual_value, expected_value)
-        implicit none
-        integer, intent(inout) :: actual_value
-        integer, intent(out) :: expected_value
-
-        ! When we double our input
-        call double(actual_value)
-
-        ! Then we expect the actual_value to match the expected_value
-        @assertEqual(expected_value_after_double, actual_value, ""Unexpected value after double")
-
-    end subroutine test_double
-
-    subroutine test_factorial(actual_value, expected_value)
-        implicit none
-        integer, intent(inout) :: actual_value
-        integer, intent(out) :: expected_value
-
-        ! When we get the factorial of our input
-        call factorial(actual_value)
-
-        ! Then we expect the actual_value to match the expected_value
-        @assertEqual(expected_value, actual_value, ""Unexpected value after factorial")
-    end subroutine test_factorial
-    ```
-
-    Now we can call these tests with different inputs to test edge cases and different paths through the code. For example...
-
-    ```f90
-    call test_double(2, 4)
-    call test_double(0, 0)
-    call test_double(-1, -2)
-    call test_double(5e10, 1e11)
-
-    call test_factorial(4, 24)
-    call test_factorial(0, 1)
-    call test_factorial(10, 3.6288e6)
-    ```
-
-:::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::
+- David Thomas and Andrew Hunt (2019). The Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 2nd Edition. Addison-Wesley Professional.
