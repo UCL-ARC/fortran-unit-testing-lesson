@@ -122,7 +122,7 @@ This is much clearer. We immediately have an idea of what could be going wrong a
 
 ### Challenge 2: Unit test bad practices
 
-Take a look at episode-1/challenege-2 in the exercises provided.
+Take a look at [1-into-to-unit-tests/challenge-2](https://github.com/UCL-ARC/fortran-unit-testing-exercises/episodes/1-into-to-unit-tests/challenge-2) in the exercises repository.
 
 ## References 
 
