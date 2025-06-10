@@ -46,17 +46,12 @@ There are other forms of testing, such as integration testing in which two or mo
 All unit tests tend to follow the same pattern of Given-When-Then.
 
 - **Given** we are in some specific starting state
-
     - Units of code almost always have some inputs. These inputs may be scalars to be passed into a function, but they may also be an external dependency such as a database, file or array which must be allocated.
     - This database, file or array memory must exist before the unit can be tested. Hence, we must set up this state in advance of calling the unit we are testing.
-
 - **When** we carry out a specific action
-
     - This is the step in which we call the unit of code to be tested, such as a call to a function or subroutine.
     - We should limit the number of actions being performed here to ensure it is easy to determine which unit is failing in the event that a test fails.
-
 - **Then** some specific event/outcome will have occurred.
-
     - Once we have called our unit of code, we must check that what we expected to happen did indeed happen.
     - This could mean comparing a scalar or vector quantity returned from the called unit against some expected value. However, it could be something more complex such as validating the contents of a database or outputted file.
 
@@ -123,6 +118,8 @@ This is much clearer. We immediately have an idea of what could be going wrong a
 ### Challenge 2: Unit test bad practices
 
 Take a look at [1-into-to-unit-tests/challenge-2](https://github.com/UCL-ARC/fortran-unit-testing-exercises/episodes/1-into-to-unit-tests/challenge-2) in the exercises repository.
+
+::::::::::::::::::::::::::::::::::::::::::::::: 
 
 ## References 
 
