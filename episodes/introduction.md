@@ -52,20 +52,35 @@ Resolving deltas: 100% (98/98), done.
 :::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::: callout
+## Dependencies
 
-## pFUnit
+To following along with this lesson's exercises you will require the following
 
-To run any of the pFUnit tests, you will need to have pFUnit built and installed locally. This can be done using the bash script provided in the exercises repo [build-pfunit.sh](https://github.com/UCL-ARC/fortran-unit-testing-exercises/build-pfunit.sh).
+- Fortran Package Manager (FPM)
+- CMake
+- pFUnit
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+### Challenge 2: Can you install the above dependencies?
+
+Try to install the dependencies listed above. 
+
+- FPM [Install instructions](https://fpm.fortran-lang.org/install/index.html)
+- pFUnit, a bash script is provided in the exercises repo [build-pfunit.sh](https://github.com/UCL-ARC/fortran-unit-testing-exercises/build-pfunit.sh).
+
+:::::::::::::::::::::::::::: solution
 
 ```bash
-./build-pfunit.sh -b
+$ fpm --version
+Version:     0.12.0, alpha
+
+$ cmake --version
+cmake version 3.27.0
+
+$ ./build-pfunit.sh -t
+TODO
 ```
 
-Test your installation via 
-
-```bash
-./build-pfunit.sh -t
-```
-
+:::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::
