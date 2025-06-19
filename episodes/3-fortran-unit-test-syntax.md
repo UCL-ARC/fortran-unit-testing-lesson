@@ -14,11 +14,7 @@ exercises:
 ::::::::::::::::::::::::::::::::::::: objectives
 
 - Able to write a unit test for a Fortran procedure with test-drive, veggies and/or pFUnit.
-    - Assessment: Given a procedure, ask learner to write a unit test. Provide all the boilerplate needed
-
 - Understand the similarities between each framework and where they differ.
-    - Assessment: Assign the labels for shared unit test anatomy to sections of tests written with each framework.
-    - Assessment: Provide a test in one framework and ask learners to reproduce in another.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -27,27 +23,22 @@ exercises:
 
 - [Veggies](https://gitlab.com/everythingfunctional/veggies)
     - Integrated with FPM and CMake.
-- [pFUnit](https://github.com/Goddard-Fortran-Ecosystem/pFUnit)
-    - Most feature rich framework.
-    - Requires writing tests in a non-standard file format which is then converted to F90 before compilation.
-    - Integrated with CMake.
 - [test-drive](https://github.com/fortran-lang/test-drive)
     - This is the least featured of the frameworks.
     - Requires more boilerplate than the other frameworks.
     - Integrated with FPM and CMake.
+- [pFUnit](https://github.com/Goddard-Fortran-Ecosystem/pFUnit)
+    - Most feature rich framework.
+    - Requires writing tests in a non-standard file format which is then converted to F90 before compilation.
+    - Integrated with CMake.
 
-## What are shared between the frameworks?
-
-- Defining types for test parameters
-- Creating `test suites` to separate tests for different units or modules into isolated blocks.
-
-### The basic structure of a test module
+## The shared structure of a test module
 
 All three frameworks share a basic structure for their test modules.
 
 ```f90 
 module test_something
-    ! use veggies or testdrive or funit
+    ! use veggies|testdrive|funit
     ! use the src to be tested
     implicit none
 
@@ -58,37 +49,41 @@ contains
 
     ! Define the actual test execution code which will call the src and execute assertions
 
-    ! Define any constructors for your derived types (test parameters/cases)
+    ! Define constructors for your derived types (test parameters/cases)
 end module test_something
 ```
 
 ## Let's dive into the syntax
 
-We will use the game of life example from challenge 1 of the last episode to highlight the difference in syntax between the three frameworks.
+We will use the game of life example from challenge 1 of the last episode to highlight the difference in
+syntax between the three frameworks.
+
 
 ### Define types to act as test parameters (and test case for pfunit)
 
-This step is similar for all three frameworks and uses standard Fortran syntax to define a [derived type](https://fortran-lang.org/learn/quickstart/derived_types).
-
-The key differences are...
+This step is similar for all three frameworks and uses standard Fortran syntax to define a [derived type](https://fortran-lang.org/learn/quickstart/derived_types). The key differences are...
 
 - Whether the derived type extends another type or not.
 - The required [type-bound procedures](https://fortran-lang.org/learn/quickstart/derived_types/#type-bound-procedures).
 - Whether a test case derived type is needed.
 
->NOTE: If we want to add a constructor for these types, it must be declared as
-> an interface to the derived-type
-> ```F90
-> interface my_test_params
->   module procedure mu_test_params_constructor
-> end interface my_test_params
-> ```
+::::::::::::::::::::::::::::::::::::: callout
+
+If we want to add a constructor for these types, it must be declared, at this point as an interface to
+the derived-type
+
+```F90
+interface my_test_params
+    module procedure my_test_params_constructor
+end interface my_test_params
+```
+
+:::::::::::::::::::::::::::::::::::::::::::::
 
 #### Veggies
 
 ```F90
 type, extends(input_t) :: my_test_params
-    ! Declare some test parameters
     integer :: input, expected_output
 end type my_test_params
 ```
@@ -97,7 +92,6 @@ end type my_test_params
 
 ```F90
 type :: my_test_params
-    ! Declare some test parameters
     integer :: input, expected_output
 end my_test_params
 ```
@@ -107,7 +101,6 @@ end my_test_params
 ```F90
 @testParameter
 type, extends(AbstractTestParameter) :: my_test_params
-    ! Declare some test parameters
     integer :: input, expected_output
 contains
         procedure :: toString => my_test_params_toString
@@ -121,11 +114,15 @@ end type my_test_case
 
 ### Define a test suite (collection of tests) to be returned from a procedure
 
-The principle behind this step is the same for all three frameworks but the implementation differs somewhat.
-
-For Veggies and pFUnit, we define a function which returns an array of derived-types. For veggies 
+In this section we define our suite of tests to test the unit in question. This can return a single test but
+it's likely that there are multiple scenarios and edge cases we would like to test. Therefore, we return an
+array of tests rather than a single test.
 
 #### Veggies
+
+For Veggies, we define a function which returns a Veggies derived-type that takes an array of test parameters
+representing different test scenarios and a generic test function, in this case `check_my_src_procedure`. This
+test function is where we actually call our src procedure and carry out assertions (see [the next section](#define-the-actual-test-execution-code-which-will-call-the-src-and-execute-assertions)). 
 
 ```F90
 function my_test_suite() result(tests)
@@ -149,22 +146,27 @@ end function my_test_suite
 
 #### test-drive
 
+For test-drive, we define a subroutine which populates an array of test parameters called the testsuite.
+To build this testsuite we provide additional subroutines which actually set up the test parameters and
+then call the test function.
+
 ```F90
 subroutine my_test_suite(testsuite)
     type(unittest_type), allocatable, intent(out) :: testsuite(:)
 
     testsuite = [ &
-        new_unittest("call my_src_procedure with input of 1", test_my_procedure_with_input_1) &
+        new_unittest("my_src_procedure: Given input is 1, output is 2", test_my_procedure_with_input_1) &
     ]
 end subroutine my_test_suite
 
+!> Given input is 1, output is 2
 subroutine test_my_procedure_with_input_1(error)
     type(error_type), allocatable, intent(out) :: error
 
     type(my_test_params) :: params
 
     params%input = 1
-    params%expected_output = 1
+    params%expected_output = 2
 
     call check_my_src_procedure(error, params)
 end subroutine test_my_procedure_with_input_1
@@ -172,20 +174,27 @@ end subroutine test_my_procedure_with_input_1
 
 #### pFUnit
 
+For pFUnit, we define a function which simply returns an array of our test parameter derived-type.
+
 ```F90
 function my_test_suite() result(params)
-    type(my_test_params) :: params(1)
+    type(my_test_params), allocatable :: params(:)
 
-    ! Given input is 1
-    params(1) = my_test_params(1)
+    params = [ &
+        my_test_params(1, 2) & ! Given input is 1, output is 2
+    ]
 end function my_test_suite
 ```
 
 ### Define the actual test execution code which will call the src and execute assertions
 
-This is where the src code to be tested and assertion procedures provided by the test frameworks will be called.
+This is where we actually call our src procedure and carry out assertions.
 
 #### Veggies
+
+For Veggies, we define a function which takes a veggies `input_t` type and returns a veggies `result_t`
+type. As this input_t type is generic compared to out parameter type, we do some additional verification
+to ensure we are passing the expected test parameter type.
 
 ```F90
 function check_my_src_procedure(params) result(result_)
@@ -209,6 +218,8 @@ end function check_my_src_procedure
 
 #### test-drive
 
+For test-drive, we define a subroutine which takes an error and an instance of our test parameters derived-type.
+
 ```F90
 subroutine check_my_src_procedure(error, params)
     type(error_type), allocatable, intent(out) :: error
@@ -223,7 +234,24 @@ subroutine check_my_src_procedure(error, params)
 end subroutine check_my_src_procedure
 ```
 
+::::::::::::::::::::::::::::::::::::: callout
+
+We must check if error has been allocated after every `check`. i.e.
+
+```F90
+call check(...)
+if (allocated(error)) return
+
+call check(...)
+if (allocated(error)) return
+```
+
+:::::::::::::::::::::::::::::::::::::::::::::
+
 #### pFUnit
+
+For pFUnit, we define a subroutine which takes an instance of our test case derived-type and is annotated
+with the pFUnit annotation `@Test`.
 
 ```F90
 @Test
@@ -235,23 +263,23 @@ subroutine TestMySrcProcedure(this)
     call my_src_procedure(this%params%input, actual_output)
 
     @assertEqual(this%params%input, actual_output, "Unexpected output from my_src_procedure")
-
-    deallocate(actual_new_board)
 end subroutine TestMySrcProcedure
 ```
 
-## Define any constructors for your derived types (test parameters/cases)
+## Define constructors for your derived types (test parameters/cases)
 
 For **Veggies** and **test-drive**, this step is not always required but can be useful to simplify
 populating multiple different test cases. For example, if we wished to test a subroutine which
 performs some operations on a large matrix we could create a constructor to populate this matrix
-with random values, for example. We would then just need to call this constructor with different
+with random values. We would then just need to call this constructor with different
 inputs to generate multiple test cases.
 
-For **pFUnit** we are also required to define functions to convert from test parameters to both a test
-case and a string.
-
 #### pFUnit
+
+For pFUnit, we are required to define two functions
+
+- A conversion from test parameters to both a test case
+- A conversion from test parameters to a string
 
 ```F90
 function my_test_params_to_my_test_case(testParameter) result(tst)
@@ -272,3 +300,11 @@ function my_test_params_toString(testParameter) result(string)
     string = trim(buffer)
 end function my_test_params_toString
 ```
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+#### Challenge: Write Fortran unit tests in multiple frameworks.
+
+Take a look at [3-fortran-unit-test-syntax/challenge-1](https://github.com/UCL-ARC/fortran-unit-testing-exercises/episodes/3-fortran-unit-test-syntax/challenge-1) in the exercises repository.
+
+:::::::::::::::::::::::::::::::::::::::::::::
