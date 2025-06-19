@@ -69,6 +69,7 @@ episodes:
 - introduction.md
 - 1-intro-to-unit-tests.md
 - 2-intro-to-fortran-unit-tests.md
+- 3-fortran-unit-test-syntax.md
 
 # Information for Learners
 learners: 

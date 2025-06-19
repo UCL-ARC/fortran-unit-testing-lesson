@@ -51,14 +51,14 @@ module test_something
     ! use the src to be tested
     implicit none
 
-    ! Define types to act as test parameters
+    ! Define types to act as test parameters (and test case for pfunit)
 contains
 
     ! Define a test suite (collection of tests) to be returned from a procedure
 
     ! Define the actual test execution code which will call the src and execute assertions
 
-    ! Define constructors for the test parameter types
+    ! Define any constructors for your derived types (test parameters/cases)
 end module test_something
 ```
 
@@ -66,57 +66,209 @@ end module test_something
 
 We will use the game of life example from challenge 1 of the last episode to highlight the difference in syntax between the three frameworks.
 
-### Define derived types to act as test parameters
+### Define types to act as test parameters (and test case for pfunit)
 
 This step is similar for all three frameworks and uses standard Fortran syntax to define a [derived type](https://fortran-lang.org/learn/quickstart/derived_types).
 
 The key differences are...
 
-- Whether the derived type inherits from another type or not.
+- Whether the derived type extends another type or not.
 - The required [type-bound procedures](https://fortran-lang.org/learn/quickstart/derived_types/#type-bound-procedures).
+- Whether a test case derived type is needed.
 
-Take a look below at how the definition of `check_for_steady_state_in_out_t` changes between the three frameworks.
+>NOTE: If we want to add a constructor for these types, it must be declared as
+> an interface to the derived-type
+> ```F90
+> interface my_test_params
+>   module procedure mu_test_params_constructor
+> end interface my_test_params
+> ```
 
-#### veggies
+#### Veggies
 
-```f90
-type, extends(input_t) :: check_for_steady_state_in_out_t
-    integer, dimension(:,:), allocatable :: current_board, new_board
-    logical :: expected_steady_state
-end type check_for_steady_state_in_out_t
-interface check_for_steady_state_in_out_t
-    module procedure check_for_steady_state_in_out_constructor
-end interface check_for_steady_state_in_out_t
+```F90
+type, extends(input_t) :: my_test_params
+    ! Declare some test parameters
+    integer :: input, expected_output
+end type my_test_params
 ```
-
-Unique aspects:
-
-- Our derived type extends `input_t`, a derived type from veggies.
-- We define an interface for the constructor of our type.
-
-#### pFUnit
-
-```f90
-@testParameter
-type, extends(AbstractTestParameter) :: check_for_steady_state_in_out_t
-    integer, dimension(:,:), allocatable :: current_board, new_board
-    logical :: expected_steady_state
-contains
-      procedure :: toString => check_for_steady_state_in_out_toString
-end type check_for_steady_state_in_out_t
-```
-
-Unique aspects:
-
-- Our derived type has a decorated, `@testParameter`, which pFUnit will use when converting to F90.
-- Our derived type extends `AbstractTestParameter`, a derived type from pFUnit.
-- We define a type-bound procedure for how to convert our derived type to a string. This used to output our parameters when printing test information during execution.
 
 #### test-drive
 
-```f90
-type :: check_for_steady_state_in_out_t
-    integer, dimension(:,:), allocatable :: current_board, new_board
-    logical :: expected_steady_state
-end type check_for_steady_state_in_out_t
+```F90
+type :: my_test_params
+    ! Declare some test parameters
+    integer :: input, expected_output
+end my_test_params
+```
+
+#### pFUnit
+
+```F90
+@testParameter
+type, extends(AbstractTestParameter) :: my_test_params
+    ! Declare some test parameters
+    integer :: input, expected_output
+contains
+        procedure :: toString => my_test_params_toString
+end type my_test_params
+
+@TestCase(testParameters={my_test_suite()}, constructor=my_test_params_to_my_test_case)
+type, extends(ParameterizedTestCase) :: my_test_case
+    type(my_test_params) :: params
+end type my_test_case
+```
+
+### Define a test suite (collection of tests) to be returned from a procedure
+
+The principle behind this step is the same for all three frameworks but the implementation differs somewhat.
+
+For Veggies and pFUnit, we define a function which returns an array of derived-types. For veggies 
+
+#### Veggies
+
+```F90
+function my_test_suite() result(tests)
+    type(test_item_t) :: tests
+
+    type(example_t) :: my_test_data(1)
+
+    ! Given input is 1, output is 2
+    my_test_data(1) = example_t(my_test_params(1, 2))
+
+    tests = describe( &
+        "my_src_procedure", &
+        [ it( &
+            "given some inputs, when I call my_src_procedure, Then we get the expected output", &
+            my_test_data, &
+            check_my_src_procedure &
+        )] &
+    )
+end function my_test_suite
+```
+
+#### test-drive
+
+```F90
+subroutine my_test_suite(testsuite)
+    type(unittest_type), allocatable, intent(out) :: testsuite(:)
+
+    testsuite = [ &
+        new_unittest("call my_src_procedure with input of 1", test_my_procedure_with_input_1) &
+    ]
+end subroutine my_test_suite
+
+subroutine test_my_procedure_with_input_1(error)
+    type(error_type), allocatable, intent(out) :: error
+
+    type(my_test_params) :: params
+
+    params%input = 1
+    params%expected_output = 1
+
+    call check_my_src_procedure(error, params)
+end subroutine test_my_procedure_with_input_1
+```
+
+#### pFUnit
+
+```F90
+function my_test_suite() result(params)
+    type(my_test_params) :: params(1)
+
+    ! Given input is 1
+    params(1) = my_test_params(1)
+end function my_test_suite
+```
+
+### Define the actual test execution code which will call the src and execute assertions
+
+This is where the src code to be tested and assertion procedures provided by the test frameworks will be called.
+
+#### Veggies
+
+```F90
+function check_my_src_procedure(params) result(result_)
+    class(input_t), intent(in) :: params
+    type(result_t) :: result_
+
+    integer :: actual_output
+
+    select type (params)
+    type is (my_test_params)
+        call my_src_procedure(params%input, actual_output)
+
+        reult_ = assert_equal(params%expected_output, actual_output, "Unexpected output from my_src_procedure")
+    class default
+        result_ = fail("Didn't get my_test_params")
+
+    end select
+
+end function check_my_src_procedure
+```
+
+#### test-drive
+
+```F90
+subroutine check_my_src_procedure(error, params)
+    type(error_type), allocatable, intent(out) :: error
+    class(my_test_params), intent(in) :: params
+
+    integer :: actual_output
+    
+    call my_src_procedure(params%input, actual_output)
+
+    call check(error, params%expected_output, actual_output, "Unexpected output from my_src_procedure")
+    if (allocated(error)) return
+end subroutine check_my_src_procedure
+```
+
+#### pFUnit
+
+```F90
+@Test
+subroutine TestMySrcProcedure(this)
+    class (my_test_case), intent(inout) :: this
+
+    integer :: actual_output
+
+    call my_src_procedure(this%params%input, actual_output)
+
+    @assertEqual(this%params%input, actual_output, "Unexpected output from my_src_procedure")
+
+    deallocate(actual_new_board)
+end subroutine TestMySrcProcedure
+```
+
+## Define any constructors for your derived types (test parameters/cases)
+
+For **Veggies** and **test-drive**, this step is not always required but can be useful to simplify
+populating multiple different test cases. For example, if we wished to test a subroutine which
+performs some operations on a large matrix we could create a constructor to populate this matrix
+with random values, for example. We would then just need to call this constructor with different
+inputs to generate multiple test cases.
+
+For **pFUnit** we are also required to define functions to convert from test parameters to both a test
+case and a string.
+
+#### pFUnit
+
+```F90
+function my_test_params_to_my_test_case(testParameter) result(tst)
+    type (my_test_case) :: tst
+    type (my_test_params), intent(in) :: testParameter
+
+    tst%params%input = testParameter%input
+    tst%params%expected_output = testParameter%expected_output
+end function my_test_params_to_my_test_case
+
+function my_test_params_toString(testParameter) result(string)
+    class (my_test_params), intent(in) :: this
+    character(:), allocatable :: string
+
+    character(len=80) :: buffer
+
+    write(buffer,'("Given ",i4," we expect to get ",i4)') this%input, this%expected_output
+    string = trim(buffer)
+end function my_test_params_toString
 ```
