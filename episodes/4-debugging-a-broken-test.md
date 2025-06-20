@@ -146,6 +146,44 @@ end program test_main
 
 :::::::::::::::::::::::::::::::::::::
 
+::::::::::::::::::::::::::::: spoiler
+
+#### pFUnit
+
+pFUnit leverages CTest's mechanism to filter tests.
+
+:::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::: spoiler
+
+#### CTest
+
+When building test-drive and veggies with CMake, to maintian the ability to run
+our tests individually, we can add named tests to ctest. To do this, we can add
+the following to the CMakeLists.txt.
+
+```cmake
+# Create a list of tests
+set(
+  tests
+  "my_src_procedure"
+)
+#...
+# Define test executable and Link library 
+#...
+# Define tests using the veggies test executable
+foreach(t IN LISTS tests)
+  add_test(NAME "veggies_${t}" COMMAND "test_${PROJECT_NAME}-veggies" "-f" "${t}")
+endforeach()
+
+# Or define tests using the test-drive executable
+foreach(t IN LISTS tests)
+  add_test(NAME "testdrive_${t}" COMMAND "test_${PROJECT_NAME}-test-drive" "${t}" WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+endforeach()
+```
+
+:::::::::::::::::::::::::::::::::::::
+
 ::::::::::::::::::::::::::::::::::::: challenge
 
 ### Challenge 1: Where do we define the name and description of a test
@@ -154,8 +192,6 @@ Use the previous exercises we've worked through to identify where, in each of th
 three frameworks, we define the name and description of a test.
 
 :::::::::::::::::::::::::::::::: solution
-
-Expands the boxes below to see the solution for each framework
 
 ::::::::::::::::::::::::::::: spoiler
 
@@ -229,30 +265,52 @@ end subroutine test_my_src_procedure_testsuite
 
 ::::::::::::::::::::::::::::: spoiler
 
-#### Filtering with ctest
+#### pFUnit
 
-To maintian the ability to run our tests individually, we can add named tests to
-ctest. To do this, we can add the following to the CMakeLists.txt.
+With pFUnit, we name a test within the CMakeLists.txt. In the example below we define
+a test with the name `pfunit_my_src_procedure_tests`.
 
 ```cmake
-# Create a list of tests
-set(
-  tests
-  "my_src_procedure"
-)
-#...
-# Define test executable and Link library 
-#...
-# Define tests using the veggies test executable
-foreach(t IN LISTS tests)
-  add_test(NAME "veggies_${t}" COMMAND "test_${PROJECT_NAME}-veggies" "-f" "${t}")
-endforeach()
+find_package(PFUNIT REQUIRED)
+enable_testing()
 
-# Or define tests using the test-drive executable
-foreach(t IN LISTS tests)
-  add_test(NAME "testdrive_${t}" COMMAND "test_${PROJECT_NAME}-test-drive" "${t}" WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
-endforeach()
+# Filter out the main.f90 files. We can only have one main() function in our tests
+set(PROJ_SRC_FILES_EXEC_MAIN ${PROJ_SRC_FILES})
+list(FILTER PROJ_SRC_FILES_EXEC_MAIN EXCLUDE REGEX ".*main.f90")
+
+# Create library for src code
+add_library (sut STATIC ${PROJ_SRC_FILES_EXEC_MAIN})
+
+# List all  test files
+file(GLOB
+  test_srcs
+  "${PROJECT_SOURCE_DIR}/test/pfunit/*.pf"
+)
+
+# evolve_board tests
+set(test_my_src_procedure ${test_srcs})
+list(FILTER test_my_src_procedure INCLUDE REGEX ".*test_my_src_procedure.pf")
+
+add_pfunit_ctest (pfunit_my_src_procedure_tests
+  TEST_SOURCES ${test_my_src_procedure}
+  LINK_LIBRARIES sut # your application library
+  )
 ```
+
+The other aspect of a pFUnit test in which we can add a descriptor is the string
+printed to describe an individual test case. This is defined within the toString
+function. In the example below, we directly print a description contained within
+the parameter set itself.
+
+```F90
+function test_my_src_procedure_params_toString(this) result(string)
+    class(test_my_src_procedure_params), intent(in) :: this
+    character(:), allocatable :: string
+
+    string = trim(this%description)
+end function test_my_src_procedure_params_toString
+```
+
 
 :::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::
