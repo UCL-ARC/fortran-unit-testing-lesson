@@ -51,6 +51,7 @@ screen, especially if there are many tests failing and you want to tackle them o
 a time.
 
 ::::::::::::::::::::::::::::: spoiler
+
 #### Veggies
 
 Veggies comes with a built-in mechanism for filtering tests via the CLI flag `-f`.
@@ -65,6 +66,86 @@ Veggies comes with a built-in mechanism for filtering tests via the CLI flag `-f
 
 :::::::::::::::::::::::::::::::::::::
 
+::::::::::::::::::::::::::::: spoiler
+
+#### test-drive
+
+test-drive does not come with  mechanism for filtering individual tests out-of-the-box. However, we are able to add this functionality ourselves by implementing a custom test
+runner. The example provided below allows running a single testsuite or an individual
+test.
+
+```F90
+program test_main
+    use testdrive, only : run_testsuite, new_testsuite, testsuite_type, &
+            & select_suite, run_selected, get_argument
+
+    use test_my_src_procedure, only : test_my_src_procedure_testsuite
+
+    implicit none
+
+    type(testsuite_type), allocatable :: testsuites(:)
+
+    testsuites = [ &
+        new_testsuite("my_src_procedure", test_my_src_procedure_testsuite) &
+    ]
+
+    call run_tests(testsuites)
+
+contains
+
+    subroutine run_tests(testsuites)
+        use, intrinsic :: iso_fortran_env, only : error_unit
+
+        type(testsuite_type), allocatable, intent(in) :: testsuites(:)
+
+        integer :: stat, is
+        character(len=:), allocatable :: suite_name, test_name
+        character(len=*), parameter :: fmt = '("#", *(1x, a))'
+
+        stat = 0
+
+        call get_argument(1, suite_name)
+        call get_argument(2, test_name)
+
+        write(error_unit, fmt) "Running testdrive tests suite"
+        if (allocated(suite_name)) then
+            is = select_suite(testsuites, suite_name)
+            if (is > 0 .and. is <= size(testsuites)) then
+                if (allocated(test_name)) then
+                    write(error_unit, fmt) "Suite:", testsuites(is)%name
+                    call run_selected(testsuites(is)%collect, test_name, error_unit, stat)
+                    if (stat < 0) then
+                        error stop 1
+                    end if
+                else
+                    write(error_unit, fmt) "Testing:", testsuites(is)%name
+                    call run_testsuite(testsuites(is)%collect, error_unit, stat)
+                end if
+            else
+                write(error_unit, fmt) "Available testsuites"
+                do is = 1, size(testsuites)
+                    write(error_unit, fmt) "-", testsuites(is)%name
+                end do
+                error stop 1
+            end if
+        else
+            do is = 1, size(testsuites)
+                write(error_unit, fmt) "Testing:", testsuites(is)%name
+                call run_testsuite(testsuites(is)%collect, error_unit, stat)
+            end do
+        end if
+
+        if (stat > 0) then
+            write(error_unit, '(i0, 1x, a)') stat, "test(s) failed!"
+            error stop 1
+        end if
+    end subroutine run_tests
+
+end program test_main
+```
+
+:::::::::::::::::::::::::::::::::::::
+
 ::::::::::::::::::::::::::::::::::::: challenge
 
 ### Challenge 1: Where do we define the name and description of a test
@@ -73,6 +154,10 @@ Use the previous exercises we've worked through to identify where, in each of th
 three frameworks, we define the name and description of a test.
 
 :::::::::::::::::::::::::::::::: solution
+
+Expands the boxes below to see the solution for each framework
+
+::::::::::::::::::::::::::::: spoiler
 
 #### Veggies
 
@@ -106,6 +191,44 @@ we could filter for this specific test with the following command
 fpm test -- -f "my_src_procedure" -f "specific inputs"
 ```
 
+:::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::: spoiler
+
+#### test-drive
+
+With test-drive, we can name both a testsuite and an individual test within a testsuite.
+The testuite name is applied within the program. In the example below we are giving the
+testuite defined by `test_my_src_procedure_testsuite` the name `my_src_procedure`. 
+
+```F90
+!...
+type(testsuite_type), allocatable :: testsuites(:)
+
+testsuites = [ &
+    new_testsuite("my_src_procedure", test_my_src_procedure_testsuite) &
+]
+!...
+```
+
+Within the test suite `test_my_src_procedure_testsuite` we can then give names to each
+test. In the example below we have defined two tests `"a special test case"` and 
+`"another special test case"`.
+
+```F90
+subroutine test_my_src_procedure_testsuite(testsuite)
+    type(unittest_type), allocatable, intent(out) :: testsuite(:)
+
+    testsuite =[ &
+        new_unittest("a special test case", test_transpose_special_case), &
+        new_unittest("another special test case", test_transpose_other_special_case) &
+    ]
+end subroutine test_my_src_procedure_testsuite
+```
+:::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::: spoiler
+
 #### Filtering with ctest
 
 To maintian the ability to run our tests individually, we can add named tests to
@@ -131,6 +254,7 @@ foreach(t IN LISTS tests)
 endforeach()
 ```
 
+:::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
