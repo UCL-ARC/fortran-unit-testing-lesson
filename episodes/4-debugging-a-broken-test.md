@@ -1,5 +1,5 @@
 ---
-title: "Debugging a broken test"
+title: "Understanding test output"
 teaching:
 exercises:
 ---
@@ -315,6 +315,38 @@ end function test_my_src_procedure_params_toString
 :::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
+
+## Debugging a failing test
+
+As with the output of a passing test, the output of a failing test differs
+depending on the framework used to write them. As shown above, the
+information we get from a test output is highly configurable. The more effort we
+put in when writing tests the easier it will be to debug should it fail.
+
+The more detail we provide for a failed assertion, the better. For example, it's
+clear which of the following options will be easier to debug should the assertion
+fail.
+
+```F90
+! This will not be very clear
+do row = 1, nrow
+    do col = 1, ncol
+        call check(error, params%expected_output_matrix(row, col), actual_output(row, col), &
+            "Actual and expected output matrices did not match")
+        if (allocated(error)) return
+    end do
+end do
+
+! This is much better
+do row = 1, nrow
+    do col = 1, ncol
+        write(failure_message,'(a,i1,a,i1,a,F3.1,a,F3.1)') "Unexpected value for output(", row, ",", col, "), got ", &
+            actual_output(row, col), " expected ", params%expected_output_matrix(row, col)
+        call check(error, params%expected_output_matrix(row, col), actual_output(row, col), failure_message)
+        if (allocated(error)) return
+    end do
+end do
+```
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
