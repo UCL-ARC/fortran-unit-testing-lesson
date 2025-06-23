@@ -13,26 +13,17 @@ exercises:
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- [ ] Can build and edit the provided repo for the walkthrough.
-    - *Assessment:* Following the build instructions successfully builds the code.
-    - *Assessment:* Following the instructions successfully runs the pre-existing tests.
-- [ ] Capable of determining where in the tests or src code the failure is occurring.
-    - *Assessment:* Starting from a failing test, find the failing test-suite/module/procedure/line
-- [ ] Can fix a failing test.
-    - *Assessment:* Starting from a failing test, update the code so the test passes
-- [ ] Understand where a test is defined in the build system (CMake and FPM).
-    - *Assessment:* Add a new test to the build system
-    - *Assessment:* Update the name of a test in the build system
-    - *Assessment:* Enabled and fix a disabled test which is broken.
-- [ ] Understand the failure output of a Fortran unit test written in...
-    - *Assessment:* Starting from a failing test, update the code so the test passes
+- Understand where the name and description of a test is defined for each framework.
+- Understand the success and failure output of a test for each framework.
+- Able to filter which tests are run at a time. 
+- Able to follow the output of a failing test through to the cause of the failure.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Test output
 
-Each of the three frameworks print the test output to the terminal in different formats.
-We have a lot of control over the contents of this output and what it looks like, whether
+Each of the three frameworks print the output of their tests to the terminal in
+different formats. We have a lot of control over the contents of this output, whether
 that's for a failing test or a passing test.
 
 Several aspects of the output can be defined by us for all frameworks,
@@ -40,14 +31,238 @@ Several aspects of the output can be defined by us for all frameworks,
 - The name and description of each test.
 - The message printed in the event of a failed assertion.
 
-For test-drive in particular, we have even more control over the output, as we are
-required to write the test runner ourselves.
+## Defining the name and description of a test
+
+Each of the three frameworks offer the ability to give a name to a test and to add a
+description which gives a more detailed explanation of what exactly is being tested. 
+
+::::::::::::::::::::::::::::: spoiler
+
+#### Veggies
+
+The name and description of a Veggies test are defined within the testsuite function.
+
+```F90
+function my_test_suite() result(tests)
+    type(test_item_t) :: tests
+    type(example_t) :: my_test_data(1)
+    
+    ! Given input is 1, output is 2
+    my_test_data(1) = example_t(my_test_params(1, 2))
+
+    tests = describe( &
+        "my_src_procedure", &
+        [ it( &
+            "with specific inputs causes something else specific to happen", &
+            my_test_data, &
+            check_my_src_procedure &
+        )] &
+    )
+end function my_test_suite
+```
+
+The first argument given to `describe` defines an overarching name which is applied
+to all the tests within it, in the case `"my_src_procedure"`. Each `it` then defines
+its own descriptor which tells us exactly which scenario we are testing, in this case
+`"with specific inputs causes something else specific to happen"`. This results in the
+output.
+
+```bash
+$ fpm test
+Test that
+    my_src_procedure
+        with specific inputs causes something else specific to happen
+
+A total of 1 test cases
+
+All Passed
+Took 4.47e-4 seconds
+```
+
+:::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::: spoiler
+
+#### test-drive
+
+With test-drive, we can name both a testsuite and an individual test within a testsuite.
+The testuite name is applied within the program. In the example below we are giving the
+testuite defined by `test_my_src_procedure_testsuite` the name `my_src_procedure`. 
+
+```F90
+!...
+type(testsuite_type), allocatable :: testsuites(:)
+
+testsuites = [ &
+    new_testsuite("my_src_procedure", test_my_src_procedure_testsuite) &
+]
+!...
+```
+
+Within the test suite `test_my_src_procedure_testsuite` we can then give names to each
+test. In the example below we have defined two tests `"a special test case"` and 
+`"another special test case"`.
+
+```F90
+subroutine test_my_src_procedure_testsuite(testsuite)
+    type(unittest_type), allocatable, intent(out) :: testsuite(:)
+
+    testsuite =[ &
+        new_unittest("a special test case", test_transpose_special_case), &
+        new_unittest("another special test case", test_transpose_other_special_case) &
+    ]
+end subroutine test_my_src_procedure_testsuite
+```
+
+This results in the following output
+
+```bash
+$ fpm test
+# Running testdrive tests suite
+# Testing: my_src_procedure
+  Starting a special test case ... (1/2)
+       ... a special test case [PASSED]
+  Starting another special test case ... (2/2)
+       ... another special test case [PASSED]
+```
+
+:::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::: spoiler
+
+#### pFUnit
+
+With pFUnit, we name a test within the CMakeLists.txt. In the example below we define
+a test with the name `pfunit_my_src_procedure_tests`.
+
+```cmake
+find_package(PFUNIT REQUIRED)
+enable_testing()
+
+# Filter out the main.f90 files. We can only have one main() function in our tests
+set(PROJ_SRC_FILES_EXEC_MAIN ${PROJ_SRC_FILES})
+list(FILTER PROJ_SRC_FILES_EXEC_MAIN EXCLUDE REGEX ".*main.f90")
+
+# Create library for src code
+add_library (sut STATIC ${PROJ_SRC_FILES_EXEC_MAIN})
+
+# List all  test files
+file(GLOB
+  test_srcs
+  "${PROJECT_SOURCE_DIR}/test/pfunit/*.pf"
+)
+
+# evolve_board tests
+set(test_my_src_procedure ${test_srcs})
+list(FILTER test_my_src_procedure INCLUDE REGEX ".*test_my_src_procedure.pf")
+
+add_pfunit_ctest (pfunit_my_src_procedure_tests
+  TEST_SOURCES ${test_my_src_procedure}
+  LINK_LIBRARIES sut # your application library
+  )
+```
+
+The other aspect of a pFUnit test in which we can add a descriptor is the string
+printed to describe an individual test case. This is defined within the toString
+function. In the example below, we directly print a description contained within
+the parameter set itself.
+
+```F90
+@testParameter
+type, extends(AbstractTestParameter) :: test_my_src_procedure_params
+    integer :: input, output
+    character(len=100) :: description
+contains
+    procedure :: toString => test_my_src_procedure_params_toString
+end type test_my_src_procedure_params
+!..
+function test_my_src_procedure_testsuite() result(params)
+    !...
+    ! Define a set of input params within the testsuite function
+    params(1) = test_my_src_procedure_params(input, output, "Some description")
+    !...
+end function test_my_src_procedure_testsuite
+!..
+function test_my_src_procedure_params_toString(this) result(string)
+    class(test_my_src_procedure_params), intent(in) :: this
+    character(:), allocatable :: string
+
+    string = trim(this%description)
+end function test_my_src_procedure_params_toString
+!..
+```
+
+This results in the output
+
+```bash
+$ ctest 
+Test project /Users/connoraird/work/fortran-unit-testing-exercises/episodes/4-debugging-a-broken-test/challenge-1/build-cmake
+    Start 2: pfunit_transpose_tests
+1/1 Test #2: pfunit_transpose_tests ...........   Passed    0.24 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   0.55 sec
+```
+
+Notice that this is the output from ctest and if there are no test failures, only
+a short summary is outputted. In the event of a failure we can get more detail
+via the `--output-on-failure` flag
+
+```bash
+$ ctest --output-on-failure
+    Start 1: pfunit_my_src_procedure_tests
+1/1 Test #1: pfunit_my_src_procedure_tests ...........***Failed  Error regular expression found in output. Regex=[Encountered 1 or more failures/errors during testing]  0.01 sec
+ 
+
+ Start: <test_my_src_procedure.TestMySrcProcedure[Some description][Some description]>
+. Failure in <test_my_src_procedure.TestMySrcProcedure[Some description][Some description]>
+F   end: <test_my_src_procedure.TestMySrcProcedure[Some description][Some description]>
+
+Time:         0.000 seconds
+  
+Failure
+ in: 
+test_my_src_procedure.TestMySrcProcedure[Some description][Some description]
+  Location: 
+[test_my_src_procedure.pf:59]
+ArrayAssertEqual failure:
+      Expected: <2.00000000>
+        Actual: <1.00000000>
+    Difference: <1.00000000> (greater than tolerance of 0.999999975E-5)
+  
+ FAILURES!!!
+Tests run: 1, Failures: 1, Errors: 0
+, Disabled: 0
+STOP *** Encountered 1 or more failures/errors during testing. ***
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.02 sec
+
+The following tests FAILED:
+          1 - pfunit_my_src_procedure_tests (Failed)
+Errors while running CTest
+```
+
+:::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+### Challenge 1: Rename a test and improve its output.
+
+Using one of the previous exercises we've looked at, try to rename a test in each of
+the three frameworks. Can you improve the information outputted in the event of a
+test failure?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Filtering tests
 
-Each of the three frameworks offer the ability to filter the tests that run. This can
+Each of the three frameworks offer the ability to filter which tests run. This can
 be useful when debugging a failing test in order to reduce the noise on the terminal
-screen, especially if there are many tests failing and you want to tackle them one at
+screen, especially if there are many tests failing and you wish to tackle them one at
 a time.
 
 ::::::::::::::::::::::::::::: spoiler
@@ -62,6 +277,13 @@ Veggies comes with a built-in mechanism for filtering tests via the CLI flag `-f
                               expression. This option may be provided
                               multiple times to filter repeatedly before
                               executing the suite.
+```
+
+Using the example above, we could filter for this specific test with the following
+command
+
+```sh
+fpm test -- -f "my_src_procedure" -f "specific inputs"
 ```
 
 :::::::::::::::::::::::::::::::::::::
@@ -144,6 +366,15 @@ contains
 end program test_main
 ```
 
+With this in place, as long as we run the test executable itself, we can then
+filter with the following command
+
+```bash
+/path/to/test/exec my_src_procedure "a special test case"
+```
+
+If we run with ctest, we are limited to ctest's filtering mechanism.
+
 :::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::: spoiler
@@ -184,148 +415,14 @@ endforeach()
 
 :::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::: challenge
-
-### Challenge 1: Where do we define the name and description of a test
-
-Use the previous exercises we've worked through to identify where, in each of the
-three frameworks, we define the name and description of a test.
-
-:::::::::::::::::::::::::::::::: solution
-
-::::::::::::::::::::::::::::: spoiler
-
-#### Veggies
-
-The terms on which we can filter Veggies tests are defined within the testsuite function.
-
-```F90
-function my_test_suite() result(tests)
-    type(test_item_t) :: tests
-    type(example_t) :: my_test_data(1)
-    
-    ! Given input is 1, output is 2
-    my_test_data(1) = example_t(my_test_params(1, 2))
-
-    tests = describe( &
-        "my_src_procedure", &
-        [ it( &
-            "with specific inputs something else specific should happen", &
-            my_test_data, &
-            check_my_src_procedure &
-        )] &
-    )
-end function my_test_suite
-```
-
-The first argument given to `describe` defines an overarching descriptor which is
-applied to all the tests within it. Each `it` then defines its own descriptor which
-allows further filtering on a scenario by scenario basis. With the above example,
-we could filter for this specific test with the following command
-
-```sh
-fpm test -- -f "my_src_procedure" -f "specific inputs"
-```
-
-:::::::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::: spoiler
-
-#### test-drive
-
-With test-drive, we can name both a testsuite and an individual test within a testsuite.
-The testuite name is applied within the program. In the example below we are giving the
-testuite defined by `test_my_src_procedure_testsuite` the name `my_src_procedure`. 
-
-```F90
-!...
-type(testsuite_type), allocatable :: testsuites(:)
-
-testsuites = [ &
-    new_testsuite("my_src_procedure", test_my_src_procedure_testsuite) &
-]
-!...
-```
-
-Within the test suite `test_my_src_procedure_testsuite` we can then give names to each
-test. In the example below we have defined two tests `"a special test case"` and 
-`"another special test case"`.
-
-```F90
-subroutine test_my_src_procedure_testsuite(testsuite)
-    type(unittest_type), allocatable, intent(out) :: testsuite(:)
-
-    testsuite =[ &
-        new_unittest("a special test case", test_transpose_special_case), &
-        new_unittest("another special test case", test_transpose_other_special_case) &
-    ]
-end subroutine test_my_src_procedure_testsuite
-```
-:::::::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::: spoiler
-
-#### pFUnit
-
-With pFUnit, we name a test within the CMakeLists.txt. In the example below we define
-a test with the name `pfunit_my_src_procedure_tests`.
-
-```cmake
-find_package(PFUNIT REQUIRED)
-enable_testing()
-
-# Filter out the main.f90 files. We can only have one main() function in our tests
-set(PROJ_SRC_FILES_EXEC_MAIN ${PROJ_SRC_FILES})
-list(FILTER PROJ_SRC_FILES_EXEC_MAIN EXCLUDE REGEX ".*main.f90")
-
-# Create library for src code
-add_library (sut STATIC ${PROJ_SRC_FILES_EXEC_MAIN})
-
-# List all  test files
-file(GLOB
-  test_srcs
-  "${PROJECT_SOURCE_DIR}/test/pfunit/*.pf"
-)
-
-# evolve_board tests
-set(test_my_src_procedure ${test_srcs})
-list(FILTER test_my_src_procedure INCLUDE REGEX ".*test_my_src_procedure.pf")
-
-add_pfunit_ctest (pfunit_my_src_procedure_tests
-  TEST_SOURCES ${test_my_src_procedure}
-  LINK_LIBRARIES sut # your application library
-  )
-```
-
-The other aspect of a pFUnit test in which we can add a descriptor is the string
-printed to describe an individual test case. This is defined within the toString
-function. In the example below, we directly print a description contained within
-the parameter set itself.
-
-```F90
-function test_my_src_procedure_params_toString(this) result(string)
-    class(test_my_src_procedure_params), intent(in) :: this
-    character(:), allocatable :: string
-
-    string = trim(this%description)
-end function test_my_src_procedure_params_toString
-```
-
-
-:::::::::::::::::::::::::::::::::::::
-:::::::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::
-
 ## Debugging a failing test
 
 As with the output of a passing test, the output of a failing test differs
 depending on the framework used to write them. As shown above, the
 information we get from a test output is highly configurable. The more effort we
-put in when writing tests the easier it will be to debug should it fail.
-
-The more detail we provide for a failed assertion, the better. For example, it's
-clear which of the following options will be easier to debug should the assertion
-fail.
+put in when writing tests the easier it will be to debug should it fail. For
+example, it's clear which of the following options will be easier to debug should
+the assertion fail.
 
 ```F90
 ! This will not be very clear
