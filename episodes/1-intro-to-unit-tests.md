@@ -119,7 +119,12 @@ This is much clearer. We immediately have an idea of what could be going wrong a
 
 Take a look at [1-into-to-unit-tests/challenge-2](https://github.com/UCL-ARC/fortran-unit-testing-exercises/episodes/1-into-to-unit-tests/challenge-2) in the exercises repository.
 
-::::::::::::::::::::::::::::::::::::::::::::::: 
+:::::::::::::::::::::::::::::::: solution
+
+A solution is provided in [episodes/1-into-to-unit-tests/challenge-2/test/maths_test_solution.f90](https://github.com/UCL-ARC/fortran-unit-testing-exercises/episodes/1-into-to-unit-tests/challenge-2/test/maths_test_solution.f90).
+
+:::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## References 
 
