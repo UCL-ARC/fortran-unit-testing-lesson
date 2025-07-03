@@ -28,7 +28,7 @@ This walkthrough aims to...
 
 ## Putting it into practice
 
-Throughout this walkthrough, we will use a repository containing example exercises written in Fortran - [UCL-ARC/fortran-unit-testing-exercises](https://github.com/UCL-ARC/fortran-unit-testing-exercises).
+Throughout this walkthrough, we will use the repository [UCL-ARC/fortran-unit-testing-exercises](https://github.com/UCL-ARC/fortran-unit-testing-exercises) which contains example exercises written in Fortran.
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
@@ -67,7 +67,8 @@ To following along with this lesson's exercises you will require the following
 Try to install the dependencies listed above. 
 
 - FPM [Install instructions](https://fpm.fortran-lang.org/install/index.html)
-- pFUnit, a bash script is provided in the exercises repo [build-pfunit.sh](https://github.com/UCL-ARC/fortran-unit-testing-exercises/build-pfunit.sh).
+- CMake can be installed via [homebrew](https://formulae.brew.sh/formula/cmake) on mac or your package manager (apt, etc) on Linux.
+- pFUnit can be install via the bash script provided in the exercises repo [build-pfunit.sh](https://github.com/UCL-ARC/fortran-unit-testing-exercises/build-pfunit.sh).
 
 :::::::::::::::::::::::::::: solution
 
@@ -79,7 +80,7 @@ $ cmake --version
 cmake version 3.27.0
 
 $ ./build-pfunit.sh -t
-TODO
+TODO: Add output from tetsing pfunit and implement testing pFUnit.
 ```
 
 :::::::::::::::::::::::::::::::::::::
