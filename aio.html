@@ -252,6 +252,18 @@
 </div>
 <!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush3">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading3">
+        <a href="1-intro-to-unit-tests.html">2. Introduction to Unit Testing</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
                 </div>
               </div>
             </div>
@@ -375,7 +387,7 @@ repository</h3>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -429,7 +441,7 @@ repo <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/build-pf
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -451,7 +463,237 @@ repo <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/build-pf
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
-</section></section>
+</section></section><section id="aio-1-intro-to-unit-tests"><p>Content from <a href="1-intro-to-unit-tests.html">Introduction to Unit Testing</a></p>
+<hr>
+<p>Last updated on 2025-07-03 |
+
+        <a href="https://github.com/carpentries/workbench-template-md/edit/main/episodes/1-intro-to-unit-tests.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+<div class="text-end">
+          <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
+        </div>
+<div class="overview card">
+<h2 class="card-header">Overview</h2>
+<div class="row g-0">
+<div class="col-md-4">
+<div class="card-body">
+<div class="inner">
+<h3 class="card-title">Questions</h3>
+<ul>
+<li>What is unit testing?</li>
+<li>Why do we need unit tests?</li>
+<li>What makes src code difficult to unit test?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-md-8">
+<div class="card-body">
+<div class="inner bordered">
+<h3 class="card-title">Objectives</h3>
+<ul>
+<li>Define the key aspects of a good unit test (isolated, testing
+minimal functionality, fast, etc).</li>
+<li>Understand the key anatomy of a unit test in any language.</li>
+<li>Explain the benefit of unit tests on top of integration/e2e
+tests.</li>
+<li>Understand when to run unit tests.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section><h2 class="section-heading" id="what-is-unit-testing">What is unit testing?<a class="anchor" aria-label="anchor" href="#what-is-unit-testing"></a>
+</h2>
+<hr class="half-width">
+<p>Unit testing is a way of verifying the validity of a code base by
+testing its smallest individual components, or
+<strong>units</strong>.</p>
+<blockquote>
+<p><em>“If the parts don’t work by themselves, they probably won’t work
+well together”</em> (Thomas and Hunt, 2019, Topic 51).</p>
+</blockquote>
+<p>Several key aspects define a unit test. They should be…</p>
+<ul>
+<li>
+<strong>Isolated</strong> - Does not rely on any other unit of code
+within the repository.</li>
+<li>
+<strong>Minimal</strong> - Tests only one unit of code.</li>
+<li>
+<strong>Fast</strong> - Run on the scale of ms or s.</li>
+</ul>
+<div id="other-forms-of-testing" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<div id="other-forms-of-testing" class="callout-inner">
+<h3 class="callout-title">Other forms of testing</h3>
+<div class="callout-content">
+<p>There are other forms of testing, such as integration testing in
+which two or more units of a code base are tested to verify that they
+work together, or that they are correctly <strong>integrated</strong>.
+However, today we are focusing on unit tests as it is often the case
+that many of these larger tests are written using the same test tools
+and frameworks, hence we will make progress with both by starting with
+unit testing.</p>
+</div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="what-does-a-unit-test-look-like">What does a unit test look like?<a class="anchor" aria-label="anchor" href="#what-does-a-unit-test-look-like"></a>
+</h3>
+<p>All unit tests tend to follow the same pattern of
+Given-When-Then.</p>
+<ul>
+<li>
+<strong>Given</strong> we are in some specific starting state
+<ul>
+<li>Units of code almost always have some inputs. These inputs may be
+scalars to be passed into a function, but they may also be an external
+dependency such as a database, file or array which must be
+allocated.</li>
+<li>This database, file or array memory must exist before the unit can
+be tested. Hence, we must set up this state in advance of calling the
+unit we are testing.</li>
+</ul>
+</li>
+<li>
+<strong>When</strong> we carry out a specific action
+<ul>
+<li>This is the step in which we call the unit of code to be tested,
+such as a call to a function or subroutine.</li>
+<li>We should limit the number of actions being performed here to ensure
+it is easy to determine which unit is failing in the event that a test
+fails.</li>
+</ul>
+</li>
+<li>
+<strong>Then</strong> some specific event/outcome will have
+occurred.
+<ul>
+<li>Once we have called our unit of code, we must check that what we
+expected to happen did indeed happen.</li>
+<li>This could mean comparing a scalar or vector quantity returned from
+the called unit against some expected value. However, it could be
+something more complex such as validating the contents of a database or
+outputted file.</li>
+</ul>
+</li>
+</ul>
+<div id="challenge-1-write-a-unit-test-in-sudo-code." class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<div id="challenge-1-write-a-unit-test-in-sudo-code." class="callout-inner">
+<h3 class="callout-title">Challenge 1: Write a unit test in sudo
+code.</h3>
+<div class="callout-content">
+<p>Assuming you have a function <code>reverse_array</code> which
+reverses the order of an allocated array. Write a unit test in sudo code
+for <code>reverse_array</code>.</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
+  <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
+</button>
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div class="accordion-body">
+<pre><code>! Given
+Allocate the input array input_array
+Fill input_array, for example with (1,2,3,4)
+Allocate the expected output array expected_output_array
+Fill expected_output_array with the correct expected output, i.e. (4,3,2,1)
+
+! When
+Call reverse_array with input_array
+
+! Then
+for each element in input_array:
+   Assert that the corrosponding element of expected_output_array matches that of input_array</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="when-should-unit-tests-be-run">When should unit tests be run?<a class="anchor" aria-label="anchor" href="#when-should-unit-tests-be-run"></a>
+</h3>
+<p>A major benefit of unit tests is the ability to identify bugs at the
+earliest possible stage. Therefore, unit tests should be run frequently
+throughout the development process. Passing unit tests give you and your
+collaborators confidence that changes to your code are correct and have
+not broken any existing features, so run your unit tests…</p>
+<ul>
+<li>if you make a change locally</li>
+<li>if you raise a merge request</li>
+<li>if you plan to do a release</li>
+<li>if you are reviewing someone else’s changes</li>
+<li>if you have recently installed your code into a new environment</li>
+</ul>
+<p>Basically, all the time.</p>
+</div>
+<div class="section level3">
+<h3 id="do-we-really-need-unit-tests">Do we really need unit tests?<a class="anchor" aria-label="anchor" href="#do-we-really-need-unit-tests"></a>
+</h3>
+<p>Yes!</p>
+<p>You may be thinking that you don’t require unit tests as you already
+have some well-defined end-to-end test cases which demonstrate that your
+code base works as expected. However, consider the case where this
+end-to-end test begins to fail. The message for this failure is likely
+to be something along the lines of</p>
+<pre><code>Expected my_special_number to be 1.234 but got 5.678</code></pre>
+<p>If you have a comprehensive understanding of your code, perhaps this
+is all you need. However, assuming the newest feature that caused this
+failure was not written by you, it’s going to be difficult to identify
+what is going wrong without some lengthy debugging.</p>
+<p>Now imagine the situation where this developer added unit tests for
+their new code. When running these unit tests, you may see something
+like</p>
+<pre><code>test_populate_arrays Failed: Expected 1 for index 1 but got 0</code></pre>
+<p>This is much clearer. We immediately have an idea of what could be
+going wrong and the unit test itself will help us determine the
+problematic code to investigate.</p>
+<div id="challenge-2-unit-test-bad-practices" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<div id="challenge-2-unit-test-bad-practices" class="callout-inner">
+<h3 class="callout-title">Challenge 2: Unit test bad practices</h3>
+<div class="callout-content">
+<p>Take a look at <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/episodes/1-into-to-unit-tests/challenge-2" class="external-link">1-into-to-unit-tests/challenge-2</a>
+in the exercises repository.</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
+  <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
+</button>
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div class="accordion-body">
+<p>A solution is provided in <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/episodes/1-into-to-unit-tests/challenge-2/test/maths_test_solution.f90" class="external-link">episodes/1-into-to-unit-tests/challenge-2/test/maths_test_solution.f90</a>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<hr class="half-width">
+<ul>
+<li>David Thomas and Andrew Hunt (2019). The Pragmatic Programmer: your
+journey to mastery, 20th Anniversary Edition, 2nd Edition.
+Addison-Wesley Professional.</li>
+</ul>
+<!--
+Place links that you need to refer to multiple times across pages here. Delete
+any links that you are not going to use.
+ --></section></section>
 </div>
     </main>
 </div>
