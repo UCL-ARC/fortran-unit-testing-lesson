@@ -67,6 +67,7 @@ contact: 'c.aird@ucl.ac.uk'
 # Order of episodes in your lesson
 episodes: 
 - introduction.md
+- 1-intro-to-unit-tests.md
 
 # Information for Learners
 learners: 
