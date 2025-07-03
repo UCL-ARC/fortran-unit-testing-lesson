@@ -1,113 +1,87 @@
 ---
-title: "Using Markdown"
-teaching: 10
-exercises: 2
+title: "Introduction"
+teaching:
+exercises:
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How do you write a lesson using Markdown and `{sandpaper}`?
+- How can you follow along with this walkthrough?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-
+- Can clone the exercises repo for the walkthrough.
+- Understand the objectives of this walkthrough.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Introduction
 
-This is a lesson created via The Carpentries Workbench. It is written in
-[Pandoc-flavored Markdown](https://pandoc.org/MANUAL.html) for static files and
-[R Markdown][r-markdown] for dynamic files that can render code into output. 
-Please refer to the [Introduction to The Carpentries 
-Workbench](https://carpentries.github.io/sandpaper-docs/) for full documentation.
+This walkthrough aims to...
 
-What you need to know is that there are three sections required for a valid
-Carpentries lesson:
+- Demonstrate the importance of testing Fortran codes with unit tests.
+- Show how to write unit tests for Fortran Code using three different frameworks: test-drive, veggies and pFUnit. 
+- Show how to integrate these tests with both CMake and FPM build systems.
+- Highlight the differences between writing unit tests for parallel and serial Fortran code.
 
- 1. `questions` are displayed at the beginning of the episode to prime the
-    learner for the content.
- 2. `objectives` are the learning objectives for an episode displayed with
-    the questions.
- 3. `keypoints` are displayed at the end of the episode to reinforce the
-    objectives.
+## Putting it into practice
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
+Throughout this walkthrough, we will use the repository [UCL-ARC/fortran-unit-testing-exercises](https://github.com/UCL-ARC/fortran-unit-testing-exercises) which contains example exercises written in Fortran.
 
-Inline instructor notes can help inform instructors of timing challenges
-associated with the lessons. They appear in the "Instructor View"
+::::::::::::::::::::::::::::::::::::: challenge
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+### Challenge 1: Can you clone the exercises repository
 
-::::::::::::::::::::::::::::::::::::: challenge 
+Try to clone the exercises we will use throughout this lesson.
 
-## Challenge 1: Can you do it?
+:::::::::::::::::::::::::::: solution
 
-What is the output of this command?
-
-```r
-paste("This", "new", "lesson", "looks", "good")
+```bash
+$ git clone https://github.com/UCL-ARC/fortran-unit-testing-exercises.git
+Cloning into 'fortran-unit-testing-exercises'...
+remote: Enumerating objects: 256, done.
+remote: Counting objects: 100% (256/256), done.
+remote: Compressing objects: 100% (140/140), done.
+remote: Total 256 (delta 98), reused 229 (delta 71), pack-reused 0 (from 0)
+Receiving objects: 100% (256/256), 45.96 KiB | 4.18 MiB/s, done.
+Resolving deltas: 100% (98/98), done.
 ```
 
-:::::::::::::::::::::::: solution 
+:::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::
 
-## Output
- 
-```output
-[1] "This new lesson looks good"
+## Dependencies
+
+To following along with this lesson's exercises you will require the following
+
+- Fortran Package Manager (FPM)
+- CMake
+- pFUnit
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+### Challenge 2: Can you install the above dependencies?
+
+Try to install the dependencies listed above. 
+
+- FPM [Install instructions](https://fpm.fortran-lang.org/install/index.html)
+- CMake can be installed via [homebrew](https://formulae.brew.sh/formula/cmake) on mac or your package manager (apt, etc) on Linux.
+- pFUnit can be install via the bash script provided in the exercises repo [build-pfunit.sh](https://github.com/UCL-ARC/fortran-unit-testing-exercises/build-pfunit.sh).
+
+:::::::::::::::::::::::::::: solution
+
+```bash
+$ fpm --version
+Version:     0.12.0, alpha
+
+$ cmake --version
+cmake version 3.27.0
+
+$ ./build-pfunit.sh -t
+TODO: Add output from tetsing pfunit and implement testing pFUnit.
 ```
 
-:::::::::::::::::::::::::::::::::
-
-
-## Challenge 2: how do you nest solutions within challenge blocks?
-
-:::::::::::::::::::::::: solution 
-
-You can add a line with at least three colons and a `solution` tag.
-
-:::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-## Figures
-
-You can use standard markdown for static figures with the following syntax:
-
-`![optional caption that appears below the figure](figure url){alt='alt text for
-accessibility purposes'}`
-
-![You belong in The Carpentries!](https://raw.githubusercontent.com/carpentries/logo/master/Badge_Carpentries.svg){alt='Blue Carpentries hex person logo with no text.'}
-
-::::::::::::::::::::::::::::::::::::: callout
-
-Callout sections can highlight information.
-
-They are sometimes used to emphasise particularly important points
-but are also used in some lessons to present "asides": 
-content that is not central to the narrative of the lesson,
-e.g. by providing the answer to a commonly-asked question.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-
-## Math
-
-One of our episodes contains $\LaTeX$ equations when describing how to create
-dynamic reports with {knitr}, so we now use mathjax to describe this:
-
-`$\alpha = \dfrac{1}{(1 - \beta)^2}$` becomes: $\alpha = \dfrac{1}{(1 - \beta)^2}$
-
-Cool, right?
-
-::::::::::::::::::::::::::::::::::::: keypoints 
-
-- Use `.md` files for episodes when you want static content
-- Use `.Rmd` files for episodes when you need to generate output
-- Run `sandpaper::check_lesson()` to identify any issues with your lesson
-- Run `sandpaper::build_lesson()` to preview your lesson locally
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-[r-markdown]: https://rmarkdown.rstudio.com/
+:::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::
