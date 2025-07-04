@@ -25,7 +25,8 @@ exercises:
 
 Unit testing is a way of verifying the validity of a code base by testing its smallest individual components, or **units**.
 
->*"If the parts don't work by themselves, they probably won't work well together"* (Thomas and Hunt, 2019, Topic 51).
+>*"If the parts don't work by themselves, they probably won't work well together"*
+> --  (Thomas and Hunt, 2019, [The pragmatic programmer](https://search.worldcat.org/search?q=bn:9780135957059), Topic 51).
 
 Several key aspects define a unit test. They should be...
 
@@ -37,7 +38,8 @@ Several key aspects define a unit test. They should be...
 
 #### Other forms of testing
 
-There are other forms of testing, such as integration testing in which two or more units of a code base are tested to verify that they work together, or that they are correctly **integrated**. However, today we are focusing on unit tests as it is often the case that many of these larger tests are written using the same test tools and frameworks, hence we will make progress with both by starting with unit testing.
+There are other forms of testing, such as integration testing in which two or more units of a code base are tested to verify that they work together, or that they are correctly **integrated**.
+However, today we are focusing on unit tests as it is often the case that many of these larger tests are written using the same test tools and frameworks, hence we will make progress with both by starting with unit testing.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -59,23 +61,23 @@ All unit tests tend to follow the same pattern of Given-When-Then.
 
 #### Challenge 1: Write a unit test in sudo code.
 
-Assuming you have a function `reverse_array` which reverses the order of an allocated array. Write a unit test in sudo code for `reverse_array`.
+Assuming you have a function `reverse_array` which reverses the order of an allocated array. Write a unit test in pseudo code for `reverse_array` using the pattern above.
 
 :::::::::::::::::::::::: solution 
  
  ```
 ! Given
-Allocate the input array input_array
-Fill input_array, for example with (1,2,3,4)
-Allocate the expected output array expected_output_array
-Fill expected_output_array with the correct expected output, i.e. (4,3,2,1)
+Allocate the input array `input_array`
+Fill `input_array`, for example with `(1,2,3,4)`
+Allocate the expected output array `expected_output_array`
+Fill `expected_output_array` with the correct expected output, i.e., `(4,3,2,1)`
 
 ! When
-Call reverse_array with input_array
+Call `reverse_array` with `input_array`
 
 ! Then
-for each element in input_array:
-    Assert that the corrosponding element of expected_output_array matches that of input_array
+for each element in `input_array`:
+    Assert that the corrosponding element of `expected_output_array` matches that of `input_array`
 ```
 
 :::::::::::::::::::::::::::::::::
@@ -128,4 +130,4 @@ A solution is provided in [episodes/1-into-to-unit-tests/challenge-2/test/soluti
 
 ## References 
 
-- David Thomas and Andrew Hunt (2019). The Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 2nd Edition. Addison-Wesley Professional.
+- David Thomas and Andrew Hunt (2019). [The Pragmatic Programmer: your journey to mastery](https://search.worldcat.org/search?q=bn:9780135957059), 20th Anniversary Edition, 2nd Edition. Addison-Wesley Professional.
