@@ -68,7 +68,7 @@ contact: 'c.aird@ucl.ac.uk'
 episodes: 
 - introduction.md
 - 1-intro-to-unit-tests.md
-- 2-into-to-fortran-unit-tests.md
+- 2-intro-to-fortran-unit-tests.md
 
 # Information for Learners
 learners: 
