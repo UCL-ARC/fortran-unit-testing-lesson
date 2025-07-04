@@ -23,12 +23,12 @@ exercises:
 
 Many Fortran codes don't yet have unit tests. This can be for a number of reasons...
 
-- Lack of time and/or money.
+- Lack of resources (time and/or money).
     - Funding is earmarked for furthering science.
 - The code is not able be unit tested in its current state.
     - Code is written in Fortran 77 or uses outdated paradigms which make unit testing near impossible.
 - Lack of skills.
-    - Developers don't have the skills or time to implement unit tests.
+    - Developers don't have the skills to implement unit tests.
 
 ## What's the matter with Fortran?
 
@@ -43,7 +43,7 @@ Various bad practices can make it difficult to unit test Fortran including...
 
 #### Challenge 1: Identify bad practice for unit testing Fortran
 
-Take a look at [2-intro-to-fortran-unit-tests/challenge-1](https://github.com/UCL-ARC/fortran-unit-testing-exercises/episodes/2-intro-to-fortran-unit-tests/challenge-1) in the exercises repository.
+Take a look at [2-intro-to-fortran-unit-tests/challenge-1](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/2-intro-to-fortran-unit-tests/challenge-1) in the exercises repository.
 
 ::::::::::::::::::::::::::::::::::::::::::
 
@@ -58,7 +58,7 @@ Unit tests do not need to be added to a Fortran project in one huge implementati
 3. Ensure end-to-end test covers this procedure
     - Try to break the procedure and check your test fails as expected.
 4. Remove all non-local state in the procedure
-5. Check end-2-end test passes
+5. Check end-to-end test passes
 6. Write unit test(s) for procedure
 7. Repeat steps 1-6
 
@@ -68,7 +68,7 @@ This incremental approach will, over time, become smoother. As more unit tests e
 
 ### Working effectively with legacy code
 
-Untested codebase is effectively legacy code. Therefore, a great resource for us is *Working Effectively with Legacy Code* (Feathers, 2004)
+Untested codebase is effectively legacy code. Therefore, a great resource for us is *[Working Effectively with Legacy Code](https://search.worldcat.org/title/660166658)* (Feathers, 2004)
 
 If you don't have time to read the entire book, there is a good summary of the key point in this blog post [The key points of Working Effectively with Legacy Code](https://understandlegacycode.com/blog/key-points-of-working-effectively-with-legacy-code/)
 
@@ -76,4 +76,4 @@ If you don't have time to read the entire book, there is a good summary of the k
 
 ## References 
 
-- Michael Feathers (2004). Working Effectively with Legacy Code. Pearson.
+- Michael Feathers (2004). [Working Effectively with Legacy Code](https://search.worldcat.org/title/660166658). Pearson.
