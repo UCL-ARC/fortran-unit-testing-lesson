@@ -43,8 +43,13 @@ Various bad practices can make it difficult to unit test Fortran including...
 
 #### Challenge 1: Identify bad practice for unit testing Fortran
 
-Take a look at [2-intro-to-fortran-unit-tests/challenge-1](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/2-intro-to-fortran-unit-tests/challenge-1) in the exercises repository.
+Take a look at [2-intro-to-fortran-unit-tests/challenge-1/challenge](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/2-intro-to-fortran-unit-tests/challenge-1/challenge) in the exercises repository.
 
+:::::::::::::::::::::::::::::::: solution
+
+A solution is provided in [2-intro-to-fortran-unit-tests/challenge-1/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/2-intro-to-fortran-unit-tests/challenge-1/solution).
+
+:::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::
 
 ## How to start improving
