@@ -77,7 +77,7 @@ Call `reverse_array` with `input_array`
 
 ! Then
 for each element in `input_array`:
-    Assert that the corrosponding element of `expected_output_array` matches that of `input_array`
+    Assert that the corresponding element of `expected_output_array` matches that of `input_array`
 ```
 
 :::::::::::::::::::::::::::::::::
