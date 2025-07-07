@@ -467,7 +467,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-1-intro-to-unit-tests"><p>Content from <a href="1-intro-to-unit-tests.html">Introduction to Unit Testing</a></p>
 <hr>
-<p>Last updated on 2025-07-04 |
+<p>Last updated on 2025-07-07 |
 
         <a href="https://github.com/carpentries/workbench-template-md/edit/main/episodes/1-intro-to-unit-tests.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -513,7 +513,8 @@ testing its smallest individual components, or
 <strong>units</strong>.</p>
 <blockquote>
 <p><em>“If the parts don’t work by themselves, they probably won’t work
-well together”</em> (Thomas and Hunt, 2019, Topic 51).</p>
+well together”</em> – (Thomas and Hunt, 2019, <a href="https://search.worldcat.org/search?q=bn:9780135957059" class="external-link">The
+pragmatic programmer</a>, Topic 51).</p>
 </blockquote>
 <p>Several key aspects define a unit test. They should be…</p>
 <ul>
@@ -592,8 +593,8 @@ outputted file.</li>
 code.</h3>
 <div class="callout-content">
 <p>Assuming you have a function <code>reverse_array</code> which
-reverses the order of an allocated array. Write a unit test in sudo code
-for <code>reverse_array</code>.</p>
+reverses the order of an allocated array. Write a unit test in pseudo
+code for <code>reverse_array</code> using the pattern above.</p>
 </div>
 </div>
 </div>
@@ -602,20 +603,20 @@ for <code>reverse_array</code>.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <pre><code>! Given
-Allocate the input array input_array
-Fill input_array, for example with (1,2,3,4)
-Allocate the expected output array expected_output_array
-Fill expected_output_array with the correct expected output, i.e. (4,3,2,1)
+Allocate the input array `input_array`
+Fill `input_array`, for example with `(1,2,3,4)`
+Allocate the expected output array `expected_output_array`
+Fill `expected_output_array` with the correct expected output, i.e., `(4,3,2,1)`
 
 ! When
-Call reverse_array with input_array
+Call `reverse_array` with `input_array`
 
 ! Then
-for each element in input_array:
-   Assert that the corrosponding element of expected_output_array matches that of input_array</code></pre>
+for each element in `input_array`:
+   Assert that the corresponding element of `expected_output_array` matches that of `input_array`</code></pre>
 </div>
 </div>
 </div>
@@ -627,14 +628,15 @@ for each element in input_array:
 <p>A major benefit of unit tests is the ability to identify bugs at the
 earliest possible stage. Therefore, unit tests should be run frequently
 throughout the development process. Passing unit tests give you and your
-collaborators confidence that changes to your code are correct and have
-not broken any existing features, so run your unit tests…</p>
+collaborators confidence that changes to your code aren’t modifying the
+previously expected behaviour, so run your unit tests…</p>
 <ul>
 <li>if you make a change locally</li>
 <li>if you raise a merge request</li>
 <li>if you plan to do a release</li>
 <li>if you are reviewing someone else’s changes</li>
 <li>if you have recently installed your code into a new environment</li>
+<li>if your dependencies have been updated</li>
 </ul>
 <p>Basically, all the time.</p>
 </div>
@@ -666,7 +668,7 @@ problematic code to investigate.</p>
 <div id="challenge-2-unit-test-bad-practices" class="callout-inner">
 <h3 class="callout-title">Challenge 2: Unit test bad practices</h3>
 <div class="callout-content">
-<p>Take a look at <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/episodes/1-into-to-unit-tests/challenge-2" class="external-link">1-into-to-unit-tests/challenge-2</a>
+<p>Take a look at <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/1-into-to-unit-tests/challenge-2" class="external-link">1-into-to-unit-tests/challenge-2</a>
 in the exercises repository.</p>
 </div>
 </div>
@@ -676,9 +678,9 @@ in the exercises repository.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
-<p>A solution is provided in <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/episodes/1-into-to-unit-tests/challenge-2/test/solution" class="external-link">episodes/1-into-to-unit-tests/challenge-2/test/solution</a>.</p>
+<p>A solution is provided in <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/1-into-to-unit-tests/challenge-2/test/solution" class="external-link">episodes/1-into-to-unit-tests/challenge-2/test/solution</a>.</p>
 </div>
 </div>
 </div>
@@ -688,9 +690,9 @@ in the exercises repository.</p>
 </h2>
 <hr class="half-width">
 <ul>
-<li>David Thomas and Andrew Hunt (2019). The Pragmatic Programmer: your
-journey to mastery, 20th Anniversary Edition, 2nd Edition.
-Addison-Wesley Professional.</li>
+<li>David Thomas and Andrew Hunt (2019). <a href="https://search.worldcat.org/search?q=bn:9780135957059" class="external-link">The
+Pragmatic Programmer: your journey to mastery</a>, 20th Anniversary
+Edition, 2nd Edition. Addison-Wesley Professional.</li>
 </ul>
 <!--
 Place links that you need to refer to multiple times across pages here. Delete
@@ -743,8 +745,8 @@ any links that you are not going to use.
   "url": "https://carpentries.github.io/workbench-template-md/instructor/aio.html",
   "identifier": "https://carpentries.github.io/workbench-template-md/instructor/aio.html",
   "dateCreated": "2025-05-09",
-  "dateModified": "2025-07-04",
-  "datePublished": "2025-07-04"
+  "dateModified": "2025-07-07",
+  "datePublished": "2025-07-07"
 }
 
   </script><script>
