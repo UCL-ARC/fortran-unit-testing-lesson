@@ -61,24 +61,13 @@ syntax between the three frameworks.
 
 ### Define types to act as test parameters (and test case for pfunit)
 
-This step is similar for all three frameworks and uses standard Fortran syntax to define a [derived type](https://fortran-lang.org/learn/quickstart/derived_types). The key differences are...
+This step is similar for all three frameworks and uses standard Fortran syntax to define a [derived type](https://fortran-lang.org/learn/quickstart/derived_types). The key differences are:
 
 - Whether the derived type extends another type or not.
 - The required [type-bound procedures](https://fortran-lang.org/learn/quickstart/derived_types/#type-bound-procedures).
 - Whether a test case derived type is needed.
 
-::::::::::::::::::::::::::::::::::::: callout
-
-If we want to add a constructor for these types, it must be declared, at this point as an interface to
-the derived-type
-
-```F90
-interface my_test_params
-    module procedure my_test_params_constructor
-end interface my_test_params
-```
-
-:::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::: spoiler
 
 #### Veggies
 
@@ -88,6 +77,9 @@ type, extends(input_t) :: my_test_params
 end type my_test_params
 ```
 
+:::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::: spoiler
+
 #### test-drive
 
 ```F90
@@ -95,6 +87,9 @@ type :: my_test_params
     integer :: input, expected_output
 end my_test_params
 ```
+
+:::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::: spoiler
 
 #### pFUnit
 
@@ -112,11 +107,15 @@ type, extends(ParameterizedTestCase) :: my_test_case
 end type my_test_case
 ```
 
+:::::::::::::::::::::::::::::::::::::
+
 ### Define a test suite (collection of tests) to be returned from a procedure
 
 In this section we define our suite of tests to test the unit in question. This can return a single test but
 it's likely that there are multiple scenarios and edge cases we would like to test. Therefore, we return an
 array of tests rather than a single test.
+
+::::::::::::::::::::::::::::: spoiler
 
 #### Veggies
 
@@ -143,6 +142,9 @@ function my_test_suite() result(tests)
     )
 end function my_test_suite
 ```
+
+:::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::: spoiler
 
 #### test-drive
 
@@ -172,9 +174,12 @@ subroutine test_my_procedure_with_input_1(error)
 end subroutine test_my_procedure_with_input_1
 ```
 
+:::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::: spoiler
+
 #### pFUnit
 
-For pFUnit, we define a function which simply returns an array of our test parameter derived-type.
+For pFUnit, we define a function which returns an array of our test parameter derived-type.
 
 ```F90
 function my_test_suite() result(params)
@@ -186,9 +191,13 @@ function my_test_suite() result(params)
 end function my_test_suite
 ```
 
+:::::::::::::::::::::::::::::::::::::
+
 ### Define the actual test execution code which will call the src and execute assertions
 
 This is where we actually call our src procedure and carry out assertions.
+
+::::::::::::::::::::::::::::: spoiler
 
 #### Veggies
 
@@ -215,6 +224,9 @@ function check_my_src_procedure(params) result(result_)
 
 end function check_my_src_procedure
 ```
+
+:::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::: spoiler
 
 #### test-drive
 
@@ -248,6 +260,9 @@ if (allocated(error)) return
 
 :::::::::::::::::::::::::::::::::::::::::::::
 
+:::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::: spoiler
+
 #### pFUnit
 
 For pFUnit, we define a subroutine which takes an instance of our test case derived-type and is annotated
@@ -266,19 +281,55 @@ subroutine TestMySrcProcedure(this)
 end subroutine TestMySrcProcedure
 ```
 
-## Define constructors for your derived types (test parameters/cases)
+:::::::::::::::::::::::::::::::::::::
+
+### Define constructors for your derived types (test parameters/cases)
 
 For **Veggies** and **test-drive**, this step is not always required but can be useful to simplify
 populating multiple different test cases. For example, if we wished to test a subroutine which
 performs some operations on a large matrix we could create a constructor to populate this matrix
-with random values. We would then just need to call this constructor with different
+with random values. We would then need to call this constructor with different
 inputs to generate multiple test cases.
+
+If we want to add a constructor for these types, it must be declared, at this point as an interface to
+the derived-type
+
+::::::::::::::::::::::::::::: spoiler
+
+### Veggies and test-drive
+
+Shown here is how to create an arbitrarily simple constructor. This would not actually be necessary as
+compilers can handle this for us. However, we use the same syntax for more complex derived types. First,
+declare your constructor,
+
+```f90
+interface my_test_params
+    module procedure my_test_params_constructor 
+end interface my_test_params
+```
+
+Then, implement your constructor,
+
+```f90
+contains
+    function my_test_params_constructor(input, expected_output) result(params)
+        integer, intent(in) :: input, expected_output
+
+        type(my_test_params) :: params
+
+        my_test_params%input = input
+        my_test_params%expected_output = expected_output
+    end function check_for_steady_state_in_out_constructor
+```
+
+:::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::: spoiler
 
 #### pFUnit
 
 For pFUnit, we are required to define two functions
 
-- A conversion from test parameters to both a test case
+- A conversion from test parameters to a test case
 - A conversion from test parameters to a string
 
 ```F90
@@ -300,11 +351,17 @@ function my_test_params_toString(testParameter) result(string)
     string = trim(buffer)
 end function my_test_params_toString
 ```
+:::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-#### Challenge: Write Fortran unit tests in multiple frameworks.
+## Challenge: Write Fortran unit tests in multiple frameworks.
 
-Take a look at [3-fortran-unit-test-syntax/challenge-1](https://github.com/UCL-ARC/fortran-unit-testing-exercises/episodes/3-fortran-unit-test-syntax/challenge-1) in the exercises repository.
+Take a look at [3-fortran-unit-test-syntax/challenge-1/challenge](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-fortran-unit-test-syntax/challenge-1/challenge).
 
+:::::::::::::::::::::::::::::::: solution
+
+A solution is provided in [3-fortran-unit-test-syntax/challenge-1/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-fortran-unit-test-syntax/challenge-1/solution).
+
+:::::::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::
