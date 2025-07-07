@@ -449,11 +449,11 @@ end do
 
 ### Challenge 2: Debug and fix a failing test.
 
-Take a look at the [4-debugging-a-broken-test/challenge-1 README.md](https://github.com/UCL-ARC/fortran-unit-testing-exercises/episodes/4-debugging-a-broken-test/challenge-1/README.md) in the exercises repository.
+Take a look at the [4-debugging-a-broken-test/challenge-1 README.md](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/4-debugging-a-broken-test/challenge-1/README.md) in the exercises repository.
 
 :::::::::::::::::::::::::::::::: solution
 
-A solution is provided in [README-solution.md](https://github.com/UCL-ARC/fortran-unit-testing-exercises/episodes/4-debugging-a-broken-test/challenge-1/README-solution.md).
+A solution is provided in [README-solution.md](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/4-debugging-a-broken-test/challenge-1/README-solution.md).
 
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
