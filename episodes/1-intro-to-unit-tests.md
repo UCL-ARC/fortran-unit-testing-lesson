@@ -85,7 +85,7 @@ for each element in `input_array`:
 
 ### When should unit tests be run?
 
-A major benefit of unit tests is the ability to identify bugs at the earliest possible stage. Therefore, unit tests should be run frequently throughout the development process. Passing unit tests give you and your collaborators confidence that changes to your code are correct (or rather, aren't modifying the previously expected behaviour) and have not broken any existing features, so run your unit tests...
+A major benefit of unit tests is the ability to identify bugs at the earliest possible stage. Therefore, unit tests should be run frequently throughout the development process. Passing unit tests give you and your collaborators confidence that changes to your code aren't modifying the previously expected behaviour, so run your unit tests...
 
 - if you make a change locally
 - if you raise a merge request
