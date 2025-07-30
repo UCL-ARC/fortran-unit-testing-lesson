@@ -70,6 +70,7 @@ episodes:
 - 1-intro-to-unit-tests.md
 - 2-intro-to-fortran-unit-tests.md
 - 3-fortran-unit-test-syntax.md
+- 4-debugging-a-broken-test.md
 
 # Information for Learners
 learners: 
