@@ -29,9 +29,9 @@ almost always contain some functionality in which processes, or ranks, communica
 passing is often complex and will always benefit from testing.
 
 There is added complexity when testing MPI code compared to serial as the logical path through the code is changed
-depending on the number of ranks with which the code is executed. Therefore, it is important that need to test for a
-range of numbers of ranks. This will require controlling the number of ranks running the src and is not something we
-want implement ourselves. This limits the tools available to us as pFUnit is currently the only tool which supports
+depending on the number of ranks with which the code is executed. Therefore, it is important that we test for a range
+of numbers of ranks. This will require controlling the number of ranks running the src and is not something we want
+to implement ourselves. This limits the tools available to us. pFUnit is currently the only tool which supports
 testing MPI code. Therefore, we will be focusing on pFUnit for this section.
 
 ## Tips for writing testable MPI code
@@ -49,7 +49,6 @@ to use the communicator provided by pFUnit or some other communicator specific t
 
 Creating types to wrap this information along with any other MPI specific information (neighbour ranks, etc) can be a
 convenient approach. 
-
 
 ## Syntax of writing MPI enabled pFUnit tests
 
@@ -101,7 +100,7 @@ end function my_test_suite
 
 We also need to change how we define our test case:
 
-- We now use `MPITestParameter` instead of `AbstractTestParameter`
+- We now use `MPITestCase` instead of `ParameterizedTestCase`
 
 ```F90
 @TestCase(testParameters={my_test_suite()}, constructor=my_test_params_to_my_test_case)
