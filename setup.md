@@ -1,54 +1,63 @@
 ---
-title: Setup
+title: "Setup"
 ---
 
-FIXME: Setup instructions live in this document. Please specify the tools and
-the data sets the Learner needs to have installed.
+## Exercises repository
 
-## Data Sets
+Throughout this walkthrough, we will use the repository [UCL-ARC/fortran-unit-testing-exercises](https://github.com/UCL-ARC/fortran-unit-testing-exercises) which contains example exercises written in Fortran.
 
-<!--
-FIXME: place any data you want learners to use in `episodes/data` and then use
-       a relative link ( [data zip file](data/lesson-data.zip) ) to provide a
-       link to it, replacing the example.com link.
--->
-Download the [data zip file](https://example.com/FIXME) and unzip it to your Desktop
+::::::::::::::::::::::::::::::::::::: challenge
+
+### Challenge 1: Can you clone the exercises repository
+
+Try to clone the exercises we will use throughout this lesson.
+
+:::::::::::::::::::::::::::: solution
+
+```bash
+$ git clone https://github.com/UCL-ARC/fortran-unit-testing-exercises.git
+Cloning into 'fortran-unit-testing-exercises'...
+remote: Enumerating objects: 256, done.
+remote: Counting objects: 100% (256/256), done.
+remote: Compressing objects: 100% (140/140), done.
+remote: Total 256 (delta 98), reused 229 (delta 71), pack-reused 0 (from 0)
+Receiving objects: 100% (256/256), 45.96 KiB | 4.18 MiB/s, done.
+Resolving deltas: 100% (98/98), done.
+```
+
+:::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Software Setup
 
-::::::::::::::::::::::::::::::::::::::: discussion
+To following along with this lesson's exercises you will require the following
 
-### Details
+- Fortran Package Manager (FPM)
+- CMake
+- pFUnit
 
-Setup for different systems can be presented in dropdown menus via a `spoiler`
-tag. They will join to this discussion block, so you can give a general overview
-of the software used in this lesson here and fill out the individual operating
-systems (and potentially add more, e.g. online setup) in the solutions blocks.
+::::::::::::::::::::::::::::::::::::: challenge
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::
+### Challenge 2: Can you install the above dependencies?
 
-:::::::::::::::: spoiler
+Try to install the dependencies listed above. 
 
-### Windows
+- FPM [Install instructions](https://fpm.fortran-lang.org/install/index.html)
+- CMake can be installed via [homebrew](https://formulae.brew.sh/formula/cmake) on mac or your package manager (apt, etc) on Linux.
+- pFUnit can be install via the bash script provided in the exercises repo [build-pfunit.sh](https://github.com/UCL-ARC/fortran-unit-testing-exercises/build-pfunit.sh).
 
-Use PuTTY
+:::::::::::::::::::::::::::: solution
 
-::::::::::::::::::::::::
+```bash
+$ fpm --version
+Version:     0.12.0, alpha
 
-:::::::::::::::: spoiler
+$ cmake --version
+cmake version 3.27.0
 
-### MacOS
+$ ./build-pfunit.sh -t
+TODO: Add output from tetsing pfunit and implement testing pFUnit.
+```
 
-Use Terminal.app
-
-::::::::::::::::::::::::
-
-
-:::::::::::::::: spoiler
-
-### Linux
-
-Use Terminal
-
-::::::::::::::::::::::::
-
+:::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::
