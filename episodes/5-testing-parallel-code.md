@@ -16,8 +16,6 @@ exercises:
 ::::::::::::::::::::::::::::::::::::: objectives
 
 - Understand what is different when testing parallel vs serial code.
-    - Assessment: Provide a test and/or a command to run a test for serial code and ask what needs to change to test parallel code
-    - Assessment: Provide two versions of a code (serial and parallel) with a test for the serial version and ask learners to write a test for the parallel version.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -55,6 +53,8 @@ convenient approach.
 Firstly, we must change how we define our test parameters:
 
 - We now use `MPITestParameter` instead of `AbstractTestParameter`.
+    - `MPITestParameter` inherits from `AbstractTestParameter` and provides an additional parameter in its constructor which
+    corresponds to the number of processors for which a particular test should be ran.
 - We can't know for certain the rank of each process for the pFUnit communicator until the test case runs. Therefore, we
   now need to build arrays of input parameters with the rank of a process matching the index of the parameter array. For
   example, rank 0 would access index 1 of the input array during testing, rank 1 would access index 2 and so on. See below
@@ -101,6 +101,10 @@ end function my_test_suite
 We also need to change how we define our test case:
 
 - We now use `MPITestCase` instead of `ParameterizedTestCase`
+    - `MPITestCase` provides several helpful methods for us to use whilst testing
+        - `getProcessRank()` returns the rank of the current process allowing per rank selection of inputs and expected outputs.
+        - `getMpiCommunicator()` returns the MPI communicator created by pFUnit to control the number of ranks per test.
+        - `getNumProcesses()` returns the number of MPI ranks for the current test.
 
 ```F90
 @TestCase(testParameters={my_test_suite()}, constructor=my_test_params_to_my_test_case)
@@ -130,11 +134,11 @@ end subroutine TestMySrcProcedure
 
 ### Challenge 1: Testing MPI parallel code
 
-Take a look at [5-testing-parallel-code/challenge-1](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/5-testing-parallel-code/challenge-1) in the exercises repository.
+Take a look at [5-testing-parallel-code/challenge-1](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/5-testing-parallel-code/) in the exercises repository.
 
 :::::::::::::::::::::::::::::::: solution
 
-A solution is provided in [episodes/5-testing-parallel-code/challenge-1/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/5-testing-parallel-code/challenge-1/solution).
+A solution is provided in [episodes/5-testing-parallel-code/challenge-1/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/5-testing-parallel-code/solution).
 
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
