@@ -288,6 +288,18 @@
 </div>
 <!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush6">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading6">
+        <a href="5-testing-parallel-code.html">5. Testing parallel code</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
                 </div>
               </div>
             </div>
@@ -480,7 +492,7 @@ code for <code>reverse_array</code> using the pattern above.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <pre><code>! Given
 Allocate the input array `input_array`
@@ -555,7 +567,7 @@ in the exercises repository.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>A solution is provided in <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/1-into-to-unit-tests/solution" class="external-link">1-into-to-unit-tests/solution</a>.</p>
 </div>
@@ -662,7 +674,7 @@ in the exercises repository.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>A solution is provided in <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/2-intro-to-fortran-unit-tests/solution" class="external-link">2-intro-to-fortran-unit-tests/solution</a>.</p>
 </div>
@@ -1779,6 +1791,223 @@ README.md</a> in the exercises repository.</p>
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
+</section></section><section id="aio-5-testing-parallel-code"><p>Content from <a href="5-testing-parallel-code.html">Testing parallel code</a></p>
+<hr>
+<p>Last updated on 2025-08-05 |
+
+        <a href="https://github.com/carpentries/workbench-template-md/edit/main/episodes/5-testing-parallel-code.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+<div class="text-end">
+          <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
+        </div>
+<div class="overview card">
+<h2 class="card-header">Overview</h2>
+<div class="row g-0">
+<div class="col-md-4">
+<div class="card-body">
+<div class="inner">
+<h3 class="card-title">Questions</h3>
+<ul>
+<li>How do I unit test a procedure which makes MPI calls?</li>
+<li>How do I easily test different numbers of MPI ranks?</li>
+<li>How do I test a procedure which uses OMP directives?</li>
+<li>How do I easily test different numbers of OMP threads?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-md-8">
+<div class="card-body">
+<div class="inner bordered">
+<h3 class="card-title">Objectives</h3>
+<ul>
+<li>Understand what is different when testing parallel vs serial
+code.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section><h2 class="section-heading" id="whats-the-difference">What’s the difference?<a class="anchor" aria-label="anchor" href="#whats-the-difference"></a>
+</h2>
+<hr class="half-width">
+<p>Depending on the parallelisation tool and strategy employed, the
+implementation of parallel code can be very different to that of serial
+code. This is especially true for code which utilises the message
+passing interface (MPI). These codes almost always contain some
+functionality in which processes, or ranks, communicate by exchanging
+messages. This message passing is often complex and will always benefit
+from testing.</p>
+<p>There is added complexity when testing MPI code compared to serial as
+the logical path through the code is changed depending on the number of
+ranks with which the code is executed. Therefore, it is important that
+we test for a range of numbers of ranks. This will require controlling
+the number of ranks running the src and is not something we want to
+implement ourselves. This limits the tools available to us. pFUnit is
+currently the only tool which supports testing MPI code. Therefore, we
+will be focusing on pFUnit for this section.</p>
+</section><section><h2 class="section-heading" id="tips-for-writing-testable-mpi-code">Tips for writing testable MPI code<a class="anchor" aria-label="anchor" href="#tips-for-writing-testable-mpi-code"></a>
+</h2>
+<hr class="half-width">
+<div class="section level3">
+<h3 id="where-possible-separate-calls-to-the-mpi-library-into-units-subroutines-or-functions-">Where possible, separate calls to the MPI library into units
+(subroutines or functions).<a class="anchor" aria-label="anchor" href="#where-possible-separate-calls-to-the-mpi-library-into-units-subroutines-or-functions-"></a>
+</h3>
+<p>If a procedure does not contain any calls to the MPI library, then it
+can be tested with a serial unit test. Therefore, separating MPI calls
+into their own units makes for a simpler test suite for most of your
+logic. Only, procedures with MPI library calls will require the more
+complex parallel pFUnit tests.</p>
+</div>
+<div class="section level3">
+<h3 id="pass-the-mpi-communicator-information-into-each-procedure-to-be-tested-">Pass the MPI communicator information into each procedure to be
+tested.<a class="anchor" aria-label="anchor" href="#pass-the-mpi-communicator-information-into-each-procedure-to-be-tested-"></a>
+</h3>
+<p>If we pass the MPI communicator into a procedure, we can define this
+to be whatever we wish in our tests. This allows us to use the
+communicator provided by pFUnit or some other communicator specific to
+our problem.</p>
+<p>Creating types to wrap this information along with any other MPI
+specific information (neighbour ranks, etc) can be a convenient
+approach.</p>
+<p>## Syntax of writing MPI enabled pFUnit tests</p>
+<p>Firstly, we must change how we define our test parameters:</p>
+<ul>
+<li>We now use <code>MPITestParameter</code> instead of
+<code>AbstractTestParameter</code>.
+<ul>
+<li>
+<code>MPITestParameter</code> inherits from
+<code>AbstractTestParameter</code> and provides an additional parameter
+in its constructor which corresponds to the number of processors for
+which a particular test should be ran.</li>
+</ul>
+</li>
+<li>We can’t know for certain the rank of each process for the pFUnit
+communicator until the test case runs. Therefore, we now need to build
+arrays of input parameters with the rank of a process matching the index
+of the parameter array. For example, rank 0 would access index 1 of the
+input array during testing, rank 1 would access index 2 and so on. See
+below for an example.</li>
+</ul>
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>@testParameter(constructor<span class="kw">=</span>new_exchange_boundaries_test_params)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="dt">type</span>, <span class="dt">extends(MPITestParameter)</span> <span class="dt">::</span> my_test_params</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    <span class="dt">integer</span>, <span class="dt">allocatable</span> <span class="dt">::</span> input(:), expected_output(:)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="kw">contains</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>    <span class="dt">procedure</span> <span class="dt">::</span> toString <span class="kw">=</span><span class="op">&gt;</span> my_test_params_toString</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="dt">end type</span> my_test_params</span></code></pre>
+</div>
+<p>We therefore need to update how we populate our test parameters to
+take into account the rank indexing:</p>
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="kw">function</span> my_test_suite() <span class="kw">result</span>(params)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>    <span class="dt">type(my_test_params)</span>, <span class="dt">allocatable</span> <span class="dt">::</span> params(:)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="dt">integer</span>, <span class="dt">allocatable</span> <span class="dt">::</span> input(:), expected_output(:)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="dt">integer</span>, max_number_of_ranks</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    max_number_of_ranks <span class="kw">=</span> <span class="dv">2</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    <span class="kw">allocate</span>(params(max_number_of_ranks))</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    <span class="kw">allocate</span>(input(max_number_of_ranks))</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="kw">allocate</span>(expected_output(max_number_of_ranks))</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    <span class="co">! Tests with one rank</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>    input(<span class="dv">1</span>) <span class="kw">=</span> <span class="dv">1</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>    expected_output(<span class="dv">1</span>) <span class="kw">=</span> <span class="dv">2</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>    params(<span class="dv">1</span>) <span class="kw">=</span> my_test_params(<span class="dv">1</span>, input, expected_output)</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>    <span class="co">! Tests with two ranks</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>    <span class="co">!     rank 0</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>    input(<span class="dv">1</span>) <span class="kw">=</span> <span class="dv">1</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>    expected_output(<span class="dv">1</span>) <span class="kw">=</span> <span class="dv">1</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>    <span class="co">!     rank 1</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>    input(<span class="dv">2</span>) <span class="kw">=</span> <span class="dv">1</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>    expected_output(<span class="dv">2</span>) <span class="kw">=</span> <span class="dv">1</span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>    params(<span class="dv">2</span>) <span class="kw">=</span> my_test_params(<span class="dv">2</span>, input, expected_output)</span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="kw">end function</span> my_test_suite</span></code></pre>
+</div>
+<p>We also need to change how we define our test case:</p>
+<ul>
+<li>We now use <code>MPITestCase</code> instead of
+<code>ParameterizedTestCase</code>
+<ul>
+<li>
+<code>MPITestCase</code> provides several helpful methods for us to
+use whilst testing
+<ul>
+<li>
+<code>getProcessRank()</code> returns the rank of the current
+process allowing per rank selection of inputs and expected outputs.</li>
+<li>
+<code>getMpiCommunicator()</code> returns the MPI communicator
+created by pFUnit to control the number of ranks per test.</li>
+<li>
+<code>getNumProcesses()</code> returns the number of MPI ranks for
+the current test.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="codewrapper sourceCode" id="cb3">
+<h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>@TestCase(testParameters<span class="kw">={</span>my_test_suite()<span class="kw">}</span>, constructor<span class="kw">=</span>my_test_params_to_my_test_case)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="dt">type</span>, <span class="dt">extends(MPITestCase)</span> <span class="dt">::</span> my_test_case</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>    <span class="dt">type(my_test_params)</span> <span class="dt">::</span> params</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="dt">end type</span> my_test_case</span></code></pre>
+</div>
+<p>Finally, we ensure each process accesses the correct rank index
+parameters during the test</p>
+<div class="codewrapper sourceCode" id="cb4">
+<h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>@Test</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="kw">subroutine</span> TestMySrcProcedure(this)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    <span class="dt">class (my_test_case)</span>, <span class="dt">intent(inout)</span> <span class="dt">::</span> this</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="dt">integer</span> <span class="dt">::</span> actual_output, rank_index</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>    rank_index <span class="kw">=</span> this<span class="op">%</span>getProcessRank() <span class="kw">+</span> <span class="dv">1</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>    <span class="kw">call</span> my_src_<span class="dt">procedure</span>(this<span class="op">%</span>params<span class="op">%</span>input(rank_index), actual_output)</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    @assertEqual(this<span class="op">%</span>params<span class="op">%</span>expected_output(rank_index), actual_output, <span class="st">"Unexpected output from my_src_procedure"</span>)</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="kw">end subroutine</span> TestMySrcProcedure</span></code></pre>
+</div>
+<div id="challenge-1-testing-mpi-parallel-code" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<div id="challenge-1-testing-mpi-parallel-code" class="callout-inner">
+<h3 class="callout-title">Challenge 1: Testing MPI parallel code</h3>
+<div class="callout-content">
+<p>Take a look at <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/5-testing-parallel-code/challenge" class="external-link">5-testing-parallel-code/challenge</a>
+in the exercises repository.</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
+  <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
+</button>
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div class="accordion-body">
+<p>A solution is provided in <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/5-testing-parallel-code/solution" class="external-link">5-testing-parallel-code/solution</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<!--
+Place links that you need to refer to multiple times across pages here. Delete
+any links that you are not going to use.
+ -->
+</div>
 </section></section>
 </div>
     </main>

@@ -251,6 +251,15 @@
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush6">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading6">
+        <a href="5-testing-parallel-code.html">5. Testing parallel code</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
                 </div>
               </div>
             </div>
@@ -394,7 +403,60 @@ repo <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/build-pf
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">cmake</span> version 3.27.0</span>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
 <span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="ex">$</span> ./build-pfunit.sh <span class="at">-t</span></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="ex">TODO:</span> Add output from tetsing pfunit and implement testing pFUnit.</span></code></pre>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="bu">[</span>  0%] Built target <span class="er">posix_predefined.x</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="bu">[</span>  0%] Built target <span class="er">generate_posix_parameters</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="bu">[</span> 19%] Built target <span class="er">funit-core</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="bu">[</span> 33%] Built target <span class="er">fhamcrest</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="bu">[</span> 55%] Built target <span class="er">asserts</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="bu">[</span> 56%] Built target <span class="er">funit-main</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="bu">[</span> 56%] Built target <span class="er">funit</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="bu">[</span> 57%] Built target <span class="er">pfunit-core</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="bu">[</span> 58%] Built target <span class="er">pfunit</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="bu">[</span> 59%] Built target <span class="er">new_ptests</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="bu">[</span> 60%] Built target <span class="er">new_ptests.x</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="bu">[</span> 62%] Built target <span class="er">other_shared</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="bu">[</span> 67%] Built target <span class="er">funit_tests</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="bu">[</span> 68%] Built target <span class="er">funit_tests.x</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="bu">[</span> 69%] Built target <span class="er">robust</span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="bu">[</span> 70%] Built target <span class="er">remote.x</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="bu">[</span> 72%] Built target <span class="er">robust_tests.x</span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="bu">[</span> 88%] Built target <span class="er">new_tests.x</span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="bu">[</span> 97%] Built target <span class="er">fhamcrest_tests.x</span></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="bu">[</span> 99%] Built target <span class="er">pfunittests</span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="ex">[100%]</span> Built target parallel_tests.x</span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="ex">[100%]</span> Built target build-tests</span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a>      <span class="ex">Start</span>  1: unit_test_processor</span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a> <span class="ex">1/14</span> Test  <span class="co">#1: unit_test_processor ........................   Passed    0.09 sec</span></span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a>      <span class="ex">Start</span>  2: processor_test_MpiParameterizedTestCaseC</span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a> <span class="ex">2/14</span> Test  <span class="co">#2: processor_test_MpiParameterizedTestCaseC ...   Passed    0.32 sec</span></span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a>      <span class="ex">Start</span>  3: processor_test_MpiTestCaseB</span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a> <span class="ex">3/14</span> Test  <span class="co">#3: processor_test_MpiTestCaseB ................   Passed    0.08 sec</span></span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a>      <span class="ex">Start</span>  4: processor_test_ParameterizedTestCaseB</span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a> <span class="ex">4/14</span> Test  <span class="co">#4: processor_test_ParameterizedTestCaseB ......   Passed    0.06 sec</span></span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a>      <span class="ex">Start</span>  5: processor_test_TestA</span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a> <span class="ex">5/14</span> Test  <span class="co">#5: processor_test_TestA .......................   Passed    0.07 sec</span></span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a>      <span class="ex">Start</span>  6: processor_test_TestCaseA</span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a> <span class="ex">6/14</span> Test  <span class="co">#6: processor_test_TestCaseA ...................   Passed    0.06 sec</span></span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a>      <span class="ex">Start</span>  7: processor_test_beforeAfter</span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a> <span class="ex">7/14</span> Test  <span class="co">#7: processor_test_beforeAfter .................   Passed    0.06 sec</span></span>
+<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a>      <span class="ex">Start</span>  8: processor_test_simple</span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a> <span class="ex">8/14</span> Test  <span class="co">#8: processor_test_simple ......................   Passed    0.06 sec</span></span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a>      <span class="ex">Start</span>  9: old_tests</span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a> <span class="ex">9/14</span> Test  <span class="co">#9: old_tests ..................................   Passed    0.05 sec</span></span>
+<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a>      <span class="ex">Start</span> 10: robust_tests.x</span>
+<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a><span class="ex">10/14</span> Test <span class="co">#10: robust_tests.x .............................   Passed    0.02 sec</span></span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a>      <span class="ex">Start</span> 11: new_tests.x</span>
+<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a><span class="ex">11/14</span> Test <span class="co">#11: new_tests.x ................................   Passed    0.03 sec</span></span>
+<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a>      <span class="ex">Start</span> 12: fhamcrest_tests.x</span>
+<span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a><span class="ex">12/14</span> Test <span class="co">#12: fhamcrest_tests.x ..........................   Passed    0.02 sec</span></span>
+<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a>      <span class="ex">Start</span> 13: mpi-tests</span>
+<span id="cb2-55"><a href="#cb2-55" tabindex="-1"></a><span class="ex">13/14</span> Test <span class="co">#13: mpi-tests ..................................   Passed    0.19 sec</span></span>
+<span id="cb2-56"><a href="#cb2-56" tabindex="-1"></a>      <span class="ex">Start</span> 14: new_ptests</span>
+<span id="cb2-57"><a href="#cb2-57" tabindex="-1"></a><span class="ex">14/14</span> Test <span class="co">#14: new_ptests .................................   Passed    0.12 sec</span></span>
+<span id="cb2-58"><a href="#cb2-58" tabindex="-1"></a></span>
+<span id="cb2-59"><a href="#cb2-59" tabindex="-1"></a><span class="ex">100%</span> tests passed, 0 tests failed out of 14</span>
+<span id="cb2-60"><a href="#cb2-60" tabindex="-1"></a></span>
+<span id="cb2-61"><a href="#cb2-61" tabindex="-1"></a><span class="ex">Total</span> Test time <span class="er">(</span><span class="ex">real</span><span class="kw">)</span> <span class="ex">=</span>   1.26 sec</span></code></pre>
 </div>
 </div>
 </div>
