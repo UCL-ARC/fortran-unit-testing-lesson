@@ -357,11 +357,11 @@ end function my_test_params_toString
 
 ## Challenge: Write Fortran unit tests in multiple frameworks.
 
-Take a look at [3-fortran-unit-test-syntax/challenge-1/challenge](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-fortran-unit-test-syntax/challenge-1/challenge).
+Take a look at [3-fortran-unit-test-syntax/challenge](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-fortran-unit-test-syntax/challenge).
 
 :::::::::::::::::::::::::::::::: solution
 
-A solution is provided in [3-fortran-unit-test-syntax/challenge-1/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-fortran-unit-test-syntax/challenge-1/solution).
+A solution is provided in [3-fortran-unit-test-syntax/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-fortran-unit-test-syntax/solution).
 
 :::::::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::
