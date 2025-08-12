@@ -4,31 +4,28 @@ title: "Setup"
 
 ## Exercises repository
 
-Throughout this walkthrough, we will use the repository [UCL-ARC/fortran-unit-testing-exercises](https://github.com/UCL-ARC/fortran-unit-testing-exercises) which contains example exercises written in Fortran.
+Throughout this walkthrough, we will use the repository 
+[UCL-ARC/fortran-unit-testing-exercises](https://github.com/UCL-ARC/fortran-unit-testing-exercises) which contains example 
+exercises written in Fortran.
 
-::::::::::::::::::::::::::::::::::::: challenge
+### Codespaces
 
-### Challenge 1: Can you clone the exercises repository
+The exercises repository is setup to work via GitHub codespaces. This process is documented in the 
+[README.md of the exercises repo](https://github.com/UCL-ARC/fortran-unit-testing-exercises/blob/main/README.md).
 
-Try to clone the exercises we will use throughout this lesson.
+#### TL;DR
 
-:::::::::::::::::::::::::::: solution
+You can open the exercises repository within a container running on a GitHub server with all dependencies pre-built and installed.
+To do this, click select the `<> Code` drop-down within the repository home page. Then, from the codespaces tab, select
+`Create codespace on main`. 
 
-```bash
-$ git clone https://github.com/UCL-ARC/fortran-unit-testing-exercises.git
-Cloning into 'fortran-unit-testing-exercises'...
-remote: Enumerating objects: 256, done.
-remote: Counting objects: 100% (256/256), done.
-remote: Compressing objects: 100% (140/140), done.
-remote: Total 256 (delta 98), reused 229 (delta 71), pack-reused 0 (from 0)
-Receiving objects: 100% (256/256), 45.96 KiB | 4.18 MiB/s, done.
-Resolving deltas: 100% (98/98), done.
-```
+::::::::::::::::::::::::::::::::::::::::::::::: spoiler
 
-:::::::::::::::::::::::::::::::::::::
-:::::::::::::::::::::::::::::::::::::::::::::::
+### Running locally outside of container
 
-## Software Setup
+If you do not wish to use GitHub Codespaces or the VSCode devcontainer, you can build/install the relevant dependencies on your local machine.
+
+#### Software Setup
 
 To following along with this lesson's exercises you will require the following
 
@@ -38,13 +35,13 @@ To following along with this lesson's exercises you will require the following
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-### Challenge 2: Can you install the above dependencies?
+#### Challenge: Install the above dependencies.
 
 Try to install the dependencies listed above. 
 
 - FPM [Install instructions](https://fpm.fortran-lang.org/install/index.html)
 - CMake can be installed via [homebrew](https://formulae.brew.sh/formula/cmake) on mac or your package manager (apt, etc) on Linux.
-- pFUnit can be install via the bash script provided in the exercises repo [build-pfunit.sh](https://github.com/UCL-ARC/fortran-unit-testing-exercises/build-pfunit.sh).
+- pFUnit can be install via the bash script provided in the exercises repo [build-pfunit.sh](https://github.com/UCL-ARC/fortran-unit-testing-exercises/blob/main/scripts/build-pfunit.sh).
 
 :::::::::::::::::::::::::::: solution
 
@@ -55,7 +52,7 @@ Version:     0.12.0, alpha
 $ cmake --version
 cmake version 3.27.0
 
-$ ./build-pfunit.sh -t
+$ ./build-pfunit.sh -t -p <path/to/pfunit/src/dir>
 [  0%] Built target posix_predefined.x
 [  0%] Built target generate_posix_parameters
 [ 19%] Built target funit-core
@@ -114,3 +111,4 @@ Total Test time (real) =   1.26 sec
 
 :::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::
