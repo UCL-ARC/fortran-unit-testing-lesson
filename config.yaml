@@ -24,17 +24,17 @@ title: 'Unit Testing in Fortran'
 created: '2025-05-09'
 
 # Comma-separated list of keywords for the lesson
-keywords: 'software, data, lesson, The Carpentries, Fortran, unit testing' # FIXME
+keywords: 'software, data, lesson, The Carpentries, Fortran, unit testing'
 
 # Life cycle stage of the lesson
 # possible values: pre-alpha, alpha, beta, stable
-life_cycle: 'pre-alpha' # FIXME
+life_cycle: 'pre-alpha'
 
 # License of the lesson
 license: 'CC-BY 4.0'
 
 # Link to the source repository for this lesson
-source: 'https://github.com/carpentries/workbench-template-md' # FIXME
+source: 'https://github.com/UCL-ARC/fortran-unit-testing-lesson/'
 
 # Default branch of your lesson
 branch: 'main'
