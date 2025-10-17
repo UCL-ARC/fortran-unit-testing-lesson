@@ -1,5 +1,5 @@
 ---
-title: "Introduction to Unit Testing"
+title: "What is a Unit Test"
 teaching: 
 exercises: 
 ---
@@ -8,7 +8,6 @@ exercises:
 
 - What is unit testing?
 - Why do we need unit tests?
-- What makes src code difficult to unit test?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -16,7 +15,7 @@ exercises:
 
 - Define the key aspects of a good unit test (isolated, testing minimal functionality, fast, etc).
 - Understand the key anatomy of a unit test in any language.
-- Explain the benefit of unit tests on top of integration/e2e tests.
+- Explain the benefit of unit tests on top of other types of tests.
 - Understand when to run unit tests.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
