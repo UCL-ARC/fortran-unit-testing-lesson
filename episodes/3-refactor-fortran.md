@@ -313,6 +313,293 @@ This can be achieved with the following diff
 :::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::
 
+### 3. Break large procedures into smaller units
+
+**Smell**: A function or subroutine no longer fits on a page in your editor.
+
+**Smell**: Multiple dummy arguments are updated (i.e. multiple `intent(out)` arguments).
+
+**Smell**: A line of code is deeply indented.
+
+**Smell**: A piece of code interacts with the surrounding code through just a few variables.
+
+:::::::::::::::::::::::::::::::::::::::::::: spoiler
+#### Before:
+
+```f90
+program large_procedure_demo
+    implicit none
+
+    call process_data()
+
+contains
+    subroutine process_data()
+        integer :: i, j, n
+        real :: sum, avg, maxval, minval, temp
+        real, allocatable :: user_data(:)
+
+        print *, 'Enter number of user_data points:'
+        read *, n
+        allocate(user_data(n))
+
+        ! --- Read user_data ---
+        print *, 'Enter the user_data values:'
+        do i = 1, n
+            read *, user_data(i)
+        end do
+
+        ! --- Compute statistics (mean, max, min, sum) ---
+        sum = 0.0
+        maxval = user_data(1)
+        minval = user_data(1)
+        do i = 1, n
+            sum = sum + user_data(i)
+            if (user_data(i) > maxval) maxval = user_data(i)
+            if (user_data(i) < minval) minval = user_data(i)
+        end do
+        avg = sum / n
+
+        ! --- Display statistics ---
+        print *, 'Sum = ', sum
+        print *, 'Average = ', avg
+        print *, 'Maximum = ', maxval
+        print *, 'Minimum = ', minval
+
+        ! --- Sort the user_data ---
+        do i = 1, n-1
+            do j = 1, n-i
+                if (user_data(j) > user_data(j+1)) then
+                    temp = user_data(j)
+                    user_data(j) = user_data(j+1)
+                    user_data(j+1) = temp
+                end if
+            end do
+        end do
+
+        ! --- Compute and display differences between consecutive values ---
+        print *, 'Differences between consecutive sorted values:'
+        do i = 2, n
+            print *, user_data(i) - user_data(i-1)
+        end do
+
+        ! --- Clean up ---
+        deallocate(user_data)
+    end subroutine process_data
+end program large_procedure_demo
+```
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::: spoiler
+#### After:
+
+```f90
+program modular_procedure_demo
+    implicit none
+    integer :: n
+    real, allocatable :: data(:)
+    real :: sum, avg, maxval, minval
+
+    ! --- Input ---
+    call read_data(data, n)
+
+    ! --- Computation ---
+    call compute_statistics(data, n, sum, avg, maxval, minval)
+
+    ! --- Output ---
+    call display_statistics(sum, avg, maxval, minval)
+
+    ! --- Sort and show differences ---
+    call sort_data(data, n)
+    call display_differences(data, n)
+
+    ! --- Clean up ---
+    deallocate(data)
+contains
+
+    subroutine read_data(data, n)
+        integer, intent(out) :: n
+        real, allocatable, intent(out) :: data(:)
+        integer :: i
+
+        print *, 'Enter number of data points:'
+        read *, n
+        allocate(data(n))
+
+        print *, 'Enter the data values:'
+        do i = 1, n
+            read *, data(i)
+        end do
+    end subroutine read_data
+
+    subroutine compute_statistics(data, n, sum, avg, maxval, minval)
+        integer, intent(in) :: n
+        real, intent(in) :: data(n)
+        real, intent(out) :: sum, avg, maxval, minval
+        integer :: i
+
+        sum = 0.0
+        maxval = data(1)
+        minval = data(1)
+
+        do i = 1, n
+            sum = sum + data(i)
+            if (data(i) > maxval) maxval = data(i)
+            if (data(i) < minval) minval = data(i)
+        end do
+
+        avg = sum / n
+    end subroutine compute_statistics
+
+    subroutine display_statistics(sum, avg, maxval, minval)
+        real, intent(in) :: sum, avg, maxval, minval
+
+        print *, '--- Statistics ---'
+        print *, 'Sum      = ', sum
+        print *, 'Average  = ', avg
+        print *, 'Maximum  = ', maxval
+        print *, 'Minimum  = ', minval
+    end subroutine display_statistics
+
+    subroutine sort_data(arr, n)
+        implicit none
+        integer, intent(in) :: n
+        real, intent(inout) :: arr(n)
+        integer :: i, j
+        real :: temp
+
+        do i = 1, n - 1
+            do j = 1, n - i
+                if (arr(j) > arr(j+1)) then
+                    temp = arr(j)
+                    arr(j) = arr(j+1)
+                    arr(j+1) = temp
+                end if
+            end do
+        end do
+    end subroutine sort_data
+
+    subroutine display_differences(data, n)
+        integer, intent(in) :: n
+        real, intent(in) :: data(n)
+        integer :: i
+
+        print *, '--- Differences between consecutive sorted values ---'
+        do i = 2, n
+            print *, data(i) - data(i-1)
+        end do
+    end subroutine display_differences
+end program modular_procedure_demo
+```
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+#### Challenge
+
+Update John's code to reduce the responsibilities of any procedures to one
+
+:::::::::::::::::::::::: solution 
+
+This can be achieved with the following diff
+
+```diff
+@@ -94,7 +94,10 @@ program game_of_life
+         mod_ms_step = mod(date_time_values(8), ms_per_step)
+ 
+         if (mod_ms_step == 0) then
+-            call run_next_iteration()
++            call evolve_board()
++            call check_for_steady_state()
++            current_board = new_board
++            call draw_board()
+ 
+             generation_number = generation_number + 1
+         end if
+@@ -113,27 +116,9 @@ program game_of_life
+ contains
+ 
+     !> Evolve the board into the state of the next iteration
+-    subroutine run_next_iteration()
++    subroutine evolve_board()
+         integer :: row, col, sum
+-        character(nrow) :: output
+ 
+-        ! Clear the terminal screen
+-        call system("clear")
+-
+-        ! Draw the current board
+-        do row=1, nrow
+-            output = ""
+-            do col=1, ncol
+-                if (current_board(row,col) == 1) then
+-                    output = trim(output)//"#"
+-                else
+-                    output = trim(output)//"."
+-                endif
+-            enddo
+-            print *, output
+-        enddo
+-
+-        ! Calculate the new board
+         do row=2, nrow-1
+             do col=2, ncol-1
+                 sum = 0
+@@ -157,21 +142,43 @@ contains
+             enddo
+         enddo
+ 
+-        ! Check for steady state
+-        steady_state = .true.
++        return
++    end subroutine evolve_board
++
++    !> Check if we have reached steady state, i.e. current and new board match
++    subroutine check_for_steady_state()
++        integer :: row, col
++
+         do row=1, nrow
+             do col=1, ncol
+                 if (.not. current_board(row, col) == new_board(row, col)) then
+                     steady_state = .false.
+-                    exit
++                    return
+                 end if
+             end do
+-            if (.not. steady_state) exit
+         end do
++        steady_state = .true.
++    end subroutine check_for_steady_state
+ 
+-        current_board = new_board
++    !> Output the current board to the terminal
++    subroutine draw_board()
++        integer :: row, col
++        character(nrow) :: output
+ 
+-        return
+-    end subroutine run_next_iteration
++        ! Clear the terminal screen
++        call system("clear")
++
++        do row=1, nrow
++            output = ""
++            do col=1, ncol
++                if (current_board(row,col) == 1) then
++                    output = trim(output)//"#"
++                else
++                    output = trim(output)//"."
++                endif
++            enddo
++            print *, output
++        enddo
++    end subroutine draw_board
+ 
+ end program game_of_life
+```
+
+:::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::
+
 ## References
 
 - Martin Gardner, 1970. [The fantastic combinations of John Conway’s new solitaire game “life” by Martin Gardner](https://web.stanford.edu/class/sts145/Library/life.pdf). Scientific American, 223, pp.120–123.
