@@ -90,6 +90,8 @@ Replace all magic numbers in John's game of life code with constants.
 This can be achieved with the following diff
 
 ```diff
+--- a/episodes/7-refactoring-fortran/solution/src/game_of_life.f90
++++ b/episodes/7-refactoring-fortran/solution/src/game_of_life.f90
 @@ -9,13 +9,14 @@ program game_of_life
      implicit none
  
@@ -167,7 +169,7 @@ velocity = velocity + acceleration * dt
 
 #### Challenge
 
-Update any poorly names variables in John's code to have clear names
+Update any poorly named variables in John's code to have clear names
 which make it clear what they are.
 
 :::::::::::::::::::::::: solution 
@@ -175,6 +177,8 @@ which make it clear what they are.
 This can be achieved with the following diff
 
 ```diff
+--- a/episodes/7-refactoring-fortran/solution/src/game_of_life.f90
++++ b/episodes/7-refactoring-fortran/solution/src/game_of_life.f90
 @@ -11,7 +11,7 @@ program game_of_life
      !! Board args
      integer, parameter :: max_generations = 100, max_nrows = 100, max_ncols = 100
@@ -313,7 +317,302 @@ This can be achieved with the following diff
 :::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::
 
-### 3. Break large procedures into smaller units
+### 3. Wrap program functionality in procedures
+
+**Smell**: Logic is repeated outside a procedure.
+
+**Smell**: Loops appear outside a procedure.
+
+**Smell**: Lots of inline comments requited to explain what is happening in the main program.
+
+
+:::::::::::::::::::::::::::::::::::::::::::: spoiler
+#### Before 
+
+```f90
+program wrap_logic_in_procedures
+    use data_processing_mod, only : process_data
+    implicit none
+
+    integer :: n, i
+    real, allocatable :: data(:)
+
+
+    print *, 'Enter number of data points:'
+    read *, n
+    allocate(data(n))
+
+    print *, 'Enter the data values:'
+    do i = 1, n
+        read *, data(i)
+    end do
+
+    call process_data(data)
+
+end program wrap_logic_in_procedures
+```
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::: spoiler
+
+#### After
+
+```f90 
+program wrap_logic_in_procedures
+    use data_processing_mod, only : process_data
+    implicit none
+
+    real, allocatable :: data(:)
+
+
+    call read_data(data)
+
+    call process_data(data)
+
+contains
+    subroutine read_data(data)
+        implicit none
+        real, allocatable, intent(out) :: data(:)
+        integer :: i, n
+
+        print *, 'Enter number of data points:'
+        read *, n
+        allocate(data(n))
+
+        print *, 'Enter the data values:'
+        do i = 1, n
+            read *, data(i)
+        end do
+    end subroutine read_data
+end program wrap_logic_in_procedures
+```
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+#### Challenge
+
+Update John's code to reduce the responsibilities of any procedures to one
+
+:::::::::::::::::::::::: solution 
+
+This can be achieved with the following diff
+
+```diff
+--- a/episodes/7-refactoring-fortran/solution/src/game_of_life.f90
++++ b/episodes/7-refactoring-fortran/solution/src/game_of_life.f90
+@@ -10,24 +10,17 @@ program game_of_life
+ 
+     !! Board args
+     integer, parameter :: max_generations = 100, max_nrows = 100, max_ncols = 100
+-    integer :: nrow, ncol
+-    integer :: row, generation_number
++    integer :: nrow, ncol, generation_number
+     integer, dimension(:,:), allocatable :: current_board, new_board
+-
+-    !! Animation args
+-    integer, dimension(8) :: date_time_values
+-    integer :: mod_ms_step, ms_per_step = 250
+     logical :: steady_state = .false.
+ 
++    !> Whether to animate the board
++    logical, parameter :: animate = .true.
++
+     !! CLI args
+     integer                       :: argl
+     character(len=:), allocatable :: cli_arg_temp_store, input_filename
+ 
+-    !! File IO args
+-    character(len=80) :: text_to_discard
+-    integer :: input_file_io
+-    integer :: iostat
+-
+     ! Get current_board file path from command line
+     if (command_argument_count() == 1) then
+         call get_command_argument(1, length=argl)
+@@ -43,77 +36,116 @@ program game_of_life
+         stop
+     end if
+ 
+-    ! Open input file
+-    open(unit=input_file_io,   &
+-         file=input_filename, &
+-         status='old',  &
+-         IOSTAT=iostat)
+-
+-    if( iostat /= 0) then
+-        write(*,'(a)') ' *** Error when opening '//input_filename
+-        stop 1
+-    end if
+-
+-    ! Read in current_board from file
+-    read(input_file_io,'(a)') text_to_discard ! Skip first line
+-    read(input_file_io,*) nrow, ncol
++    call read_model_from_file()
+ 
+-    ! Verify the number of rows read from the file
+-    if (nrow < 1 .or. nrow > max_nrows) then
+-        write (*,'(a,i6,a,i6)') "nrow must be a positive integer less than ", max_nrows," found ", nrow
+-        stop 1
+-    end if
++    call find_steady_state()
+ 
+-    ! Verify the number of columns read from the file
+-    if (ncol < 1 .or. ncol > max_ncols) then
+-        write (*,'(a,i6,a,i6)') "ncol must be a positive integer less than ", max_ncols," found ", ncol
+-        stop 1
++    if (steady_state) then
++        write(*,'(a,i6,a)') "Reached steady after ", generation_number, " generations"
++    else
++        write(*,'(a,i6,a)') "Did NOT Reach steady after ", generation_number, " generations"
+     end if
+ 
+-    allocate(current_board(nrow, ncol))
+-    allocate(new_board(nrow, ncol))
+-
+-    read(input_file_io,'(a)') text_to_discard ! Skip next line
+-    ! Populate the boards starting state
+-    do row = 1, nrow
+-        read(input_file_io,*) current_board(row, :)
+-    end do
+-
+-    close(input_file_io)
++    deallocate(current_board)
++    deallocate(new_board)
+ 
+-    new_board = 0
+-    generation_number = 0
++contains
+ 
+-    ! Clear the terminal screen
+-    call system ("clear")
++    !> Populate the board from a provided file
++    subroutine read_model_from_file()
++        !> A flag to indicate if reading the file was successful
++        character(len=:), allocatable :: io_error_message
++
++        ! Board definition args
++        integer :: row
++
++        ! File IO args
++        integer :: input_file_io, iostat
++        character(len=80) :: text_to_discard
++
++        input_file_io = 1111
++
++        ! Open input file
++        open(unit=input_file_io,   &
++            file=input_filename, &
++            status='old',  &
++            IOSTAT=iostat)
++
++        if( iostat == 0) then
++            ! Read in board from file
++            read(input_file_io,'(a)') text_to_discard ! Skip first line
++            read(input_file_io,*) nrow, ncol
++
++            ! Verify the number of rows and columns read from the file
++            if (nrow < 1 .or. nrow > max_nrows) then
++                allocate(character(100) :: io_error_message)
++                write (io_error_message,'(a,i6,a,i6)') "nrow must be a positive integer less than ", max_nrows, " found ", nrow
++            elseif (ncol < 1 .or. ncol > max_ncols) then
++                allocate(character(100) :: io_error_message)
++                write (io_error_message,'(a,i6,a,i6)') "ncol must be a positive integer less than ", max_ncols, " found ", ncol
++            end if
++        else
++            allocate(character(100) :: io_error_message)
++            write(io_error_message,'(a)') ' *** Error when opening '//input_filename
++        endif
++
++        if (.not. allocated(io_error_message)) then
++
++            allocate(current_board(nrow, ncol))
++
++            read(input_file_io,'(a)') text_to_discard ! Skip next line
++            ! Populate the boards starting state
++            do row = 1, nrow
++                read(input_file_io,*) current_board(row, :)
++            end do
+ 
+-    ! Iterate until we reach a steady state
+-    do while(.not. steady_state .and. generation_number < max_generations)
+-        ! Advance the simulation in the steps of the requested number of milliseconds
+-        call date_and_time(VALUES=date_time_values)
+-        mod_ms_step = mod(date_time_values(8), ms_per_step)
++        end if
+ 
+-        if (mod_ms_step == 0) then
+-            call evolve_board()
+-            call check_for_steady_state()
+-            current_board = new_board
+-            call draw_board()
++        close(input_file_io)
+ 
+-            generation_number = generation_number + 1
++        if (allocated(io_error_message)) then
++            write (*,*) io_error_message
++            deallocate(io_error_message)
++            stop
+         end if
++    end subroutine read_model_from_file
+ 
+-    end do
++    !> Find the steady state of the Game of Life board
++    subroutine find_steady_state()
+ 
+-    if (steady_state) then
+-        write(*,'(a,i6,a)') "Reached steady after ", generation_number, " generations"
+-    else
+-        write(*,'(a,i6,a)') "Did NOT Reach steady after ", generation_number, " generations"
+-    end if
++        !! Animation args
++        integer, dimension(8) :: date_time_values
++        integer :: mod_ms_step
++        integer, parameter :: ms_per_step = 250
+ 
+-    deallocate(current_board)
+-    deallocate(new_board)
++        allocate(new_board(size(current_board,1), size(current_board, 2)))
++        new_board = 0
+ 
+-contains
++        ! Clear the terminal screen
++        if (animate) call system ("clear")
++
++        ! Iterate until we reach a steady state
++        steady_state = .false.
++        generation_number = 0
++        mod_ms_step = 0
++        do while(.not. steady_state .and. generation_number < max_generations)
++            if (animate) then
++                ! Advance the simulation in the steps of the requested number of milliseconds
++                call date_and_time(VALUES=date_time_values)
++                mod_ms_step = mod(date_time_values(8), ms_per_step)
++            end if
++
++            if (mod_ms_step == 0) then
++                call evolve_board()
++                call check_for_steady_state()
++                current_board = new_board
++                if (animate) call draw_board()
++
++                generation_number = generation_number + 1
++            end if
++
++        end do
++    end subroutine find_steady_state
+ 
+     !> Evolve the board into the state of the next iteration
+     subroutine evolve_board()
+
+```
+
+:::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::
+
+### 4. Break large procedures into smaller units
 
 **Smell**: A function or subroutine no longer fits on a page in your editor.
 
@@ -327,26 +626,17 @@ This can be achieved with the following diff
 #### Before:
 
 ```f90
-program large_procedure_demo
+module data_processing_mod
     implicit none
 
-    call process_data()
-
 contains
-    subroutine process_data()
+    subroutine process_data(data)
+        real, allocatable, intent(in) :: user_data(:)
+
         integer :: i, j, n
         real :: sum, avg, maxval, minval, temp
-        real, allocatable :: user_data(:)
 
-        print *, 'Enter number of user_data points:'
-        read *, n
-        allocate(user_data(n))
-
-        ! --- Read user_data ---
-        print *, 'Enter the user_data values:'
-        do i = 1, n
-            read *, user_data(i)
-        end do
+        n = size(user_data, 1)
 
         ! --- Compute statistics (mean, max, min, sum) ---
         sum = 0.0
@@ -385,7 +675,7 @@ contains
         ! --- Clean up ---
         deallocate(user_data)
     end subroutine process_data
-end program large_procedure_demo
+end module data_processing_mod
 ```
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -393,50 +683,17 @@ end program large_procedure_demo
 #### After:
 
 ```f90
-program modular_procedure_demo
+module data_processing_mod
     implicit none
-    integer :: n
-    real, allocatable :: data(:)
-    real :: sum, avg, maxval, minval
 
-    ! --- Input ---
-    call read_data(data, n)
-
-    ! --- Computation ---
-    call compute_statistics(data, n, sum, avg, maxval, minval)
-
-    ! --- Output ---
-    call display_statistics(sum, avg, maxval, minval)
-
-    ! --- Sort and show differences ---
-    call sort_data(data, n)
-    call display_differences(data, n)
-
-    ! --- Clean up ---
-    deallocate(data)
 contains
 
-    subroutine read_data(data, n)
-        integer, intent(out) :: n
-        real, allocatable, intent(out) :: data(:)
-        integer :: i
-
-        print *, 'Enter number of data points:'
-        read *, n
-        allocate(data(n))
-
-        print *, 'Enter the data values:'
-        do i = 1, n
-            read *, data(i)
-        end do
-    end subroutine read_data
-
-    subroutine compute_statistics(data, n, sum, avg, maxval, minval)
-        integer, intent(in) :: n
-        real, intent(in) :: data(n)
+    subroutine compute_statistics(data, sum, avg, maxval, minval)
+        real, allocatable, intent(in) :: data(:)
         real, intent(out) :: sum, avg, maxval, minval
-        integer :: i
+        integer :: i, n
 
+        n = size(data, 1)
         sum = 0.0
         maxval = data(1)
         minval = data(1)
@@ -460,12 +717,14 @@ contains
         print *, 'Minimum  = ', minval
     end subroutine display_statistics
 
-    subroutine sort_data(arr, n)
+    subroutine sort_data(arr)
         implicit none
-        integer, intent(in) :: n
-        real, intent(inout) :: arr(n)
-        integer :: i, j
+
+        real, allocatable, intent(inout) :: arr(:)
+        integer :: i, j, n
         real :: temp
+
+        n = size(arr, 1)
 
         do i = 1, n - 1
             do j = 1, n - i
@@ -479,16 +738,17 @@ contains
     end subroutine sort_data
 
     subroutine display_differences(data, n)
-        integer, intent(in) :: n
-        real, intent(in) :: data(n)
-        integer :: i
+        real, allocatable, intent(in) :: data(:)
+        integer :: i, n
+
+        n = size(arr, 1)
 
         print *, '--- Differences between consecutive sorted values ---'
         do i = 2, n
             print *, data(i) - data(i-1)
         end do
     end subroutine display_differences
-end program modular_procedure_demo
+end module data_processing_mod
 ```
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -503,6 +763,8 @@ Update John's code to reduce the responsibilities of any procedures to one
 This can be achieved with the following diff
 
 ```diff
+--- a/episodes/7-refactoring-fortran/solution/src/game_of_life.f90
++++ b/episodes/7-refactoring-fortran/solution/src/game_of_life.f90
 @@ -94,7 +94,10 @@ program game_of_life
          mod_ms_step = mod(date_time_values(8), ms_per_step)
  
