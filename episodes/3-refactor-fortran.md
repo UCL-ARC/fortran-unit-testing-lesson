@@ -330,26 +330,21 @@ This can be achieved with the following diff
 #### Before 
 
 ```f90
-program wrap_logic_in_procedures
-    use data_processing_mod, only : process_data
+program my_matrix_prog
+    use process_marices_mod, only : process_matrices
     implicit none
 
-    integer :: n, i
-    real, allocatable :: data(:)
+    character(len=200) :: temp_string
+    character(:), allocatable :: filename
 
 
-    print *, 'Enter number of data points:'
-    read *, n
-    allocate(data(n))
+    print *, 'Enter input filename:'
+    read (*,*) temp_string
+    filename = trim(temp_string)
 
-    print *, 'Enter the data values:'
-    do i = 1, n
-        read *, data(i)
-    end do
+    call process_matrices(filename)
 
-    call process_data(data)
-
-end program wrap_logic_in_procedures
+end program my_matrix_prog
 ```
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -358,34 +353,30 @@ end program wrap_logic_in_procedures
 
 #### After
 
-```f90 
-program wrap_logic_in_procedures
-    use data_processing_mod, only : process_data
+```f90
+program my_matrix_prog
+    use process_marices_mod, only : process_matrices
     implicit none
 
-    real, allocatable :: data(:)
+    character(:), allocatable :: filename
 
-
-    call read_data(data)
-
-    call process_data(data)
+    call read_filename(filename)
+    call process_matrices(filename)
 
 contains
-    subroutine read_data(data)
-        implicit none
-        real, allocatable, intent(out) :: data(:)
-        integer :: i, n
 
-        print *, 'Enter number of data points:'
-        read *, n
-        allocate(data(n))
+    subroutine read_filename(filename)
+        character(:), allocatable, intent(out) :: filename
 
-        print *, 'Enter the data values:'
-        do i = 1, n
-            read *, data(i)
-        end do
-    end subroutine read_data
-end program wrap_logic_in_procedures
+        character(len=200) :: temp_string
+
+        print *, 'Enter input filename:'
+        read (*,*) temp_string
+
+        filename = trim(temp_string)
+    end subroutine read_filename
+
+end program my_matrix_prog
 ```
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -626,56 +617,60 @@ This can be achieved with the following diff
 #### Before:
 
 ```f90
-module data_processing_mod
+module process_marices_mod
     implicit none
+    real, allocatable :: A(:,:), B(:,:), C(:,:)
 
 contains
-    subroutine process_data(data)
-        real, allocatable, intent(in) :: user_data(:)
+    subroutine process_matrices(filename)
+        character(len=*), intent(in) :: filename
+        integer :: n, iostat, i, j, k
+        integer :: unit
+        real :: trace
 
-        integer :: i, j, n
-        real :: sum, avg, maxval, minval, temp
+        open(newunit=unit, file=filename, status='old', action='read', iostat=iostat)
+        if (iostat /= 0) then
+            print *, 'Error opening file: ', trim(filename)
+            stop
+        end if
 
-        n = size(user_data, 1)
+        read(unit, *, iostat=iostat) n
+        if (iostat /= 0) stop 'Error reading matrix size.'
 
-        ! --- Compute statistics (mean, max, min, sum) ---
-        sum = 0.0
-        maxval = user_data(1)
-        minval = user_data(1)
+        allocate(A(n,n), B(n,n))
+
+        print *, 'Reading matrix A (', n, 'x', n, ')'
         do i = 1, n
-            sum = sum + user_data(i)
-            if (user_data(i) > maxval) maxval = user_data(i)
-            if (user_data(i) < minval) minval = user_data(i)
+            read(unit, *, iostat=iostat) (A(i,j), j=1,n)
+            if (iostat /= 0) stop 'Error reading matrix A.'
         end do
-        avg = sum / n
 
-        ! --- Display statistics ---
-        print *, 'Sum = ', sum
-        print *, 'Average = ', avg
-        print *, 'Maximum = ', maxval
-        print *, 'Minimum = ', minval
+        print *, 'Reading matrix B (', n, 'x', n, ')'
+        do i = 1, n
+            read(unit, *, iostat=iostat) (B(i,j), j=1,n)
+            if (iostat /= 0) stop 'Error reading matrix B.'
+        end do
 
-        ! --- Sort the user_data ---
-        do i = 1, n-1
-            do j = 1, n-i
-                if (user_data(j) > user_data(j+1)) then
-                    temp = user_data(j)
-                    user_data(j) = user_data(j+1)
-                    user_data(j+1) = temp
-                end if
+        close(unit)
+
+        C = 0.0
+        do i = 1, n
+            do j = 1, n
+                do k = 1, n
+                    C(i,j) = C(i,j) + A(i,k) * B(k,j)
+                end do
             end do
         end do
 
-        ! --- Compute and display differences between consecutive values ---
-        print *, 'Differences between consecutive sorted values:'
-        do i = 2, n
-            print *, user_data(i) - user_data(i-1)
+        n = size(C, 1)
+        trace = 0.0
+        do i = 1, n
+            trace = trace + C(i,i)
         end do
 
-        ! --- Clean up ---
-        deallocate(user_data)
-    end subroutine process_data
-end module data_processing_mod
+        print *, 'Trace of matrix C = ', trace
+    end subroutine process_matrices
+end module process_marices_mod
 ```
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -683,72 +678,72 @@ end module data_processing_mod
 #### After:
 
 ```f90
-module data_processing_mod
+module process_marices_mod
     implicit none
+    real, allocatable :: A(:,:), B(:,:), C(:,:)
 
 contains
 
-    subroutine compute_statistics(data, sum, avg, maxval, minval)
-        real, allocatable, intent(in) :: data(:)
-        real, intent(out) :: sum, avg, maxval, minval
-        integer :: i, n
+    subroutine read_matrices_from_file(filename)
+        character(len=*), intent(in) :: filename
+        integer :: n, iostat, i, j
+        integer :: unit
 
-        n = size(data, 1)
-        sum = 0.0
-        maxval = data(1)
-        minval = data(1)
+        open(newunit=unit, file=filename, status='old', action='read', iostat=iostat)
+        if (iostat /= 0) then
+            print *, 'Error opening file: ', trim(filename)
+            stop
+        end if
 
+        read(unit, *, iostat=iostat) n
+        if (iostat /= 0) stop 'Error reading matrix size.'
+
+        allocate(A(n,n), B(n,n))
+
+        print *, 'Reading matrix A (', n, 'x', n, ')'
         do i = 1, n
-            sum = sum + data(i)
-            if (data(i) > maxval) maxval = data(i)
-            if (data(i) < minval) minval = data(i)
+            read(unit, *, iostat=iostat) (A(i,j), j=1,n)
+            if (iostat /= 0) stop 'Error reading matrix A.'
         end do
 
-        avg = sum / n
-    end subroutine compute_statistics
+        print *, 'Reading matrix B (', n, 'x', n, ')'
+        do i = 1, n
+            read(unit, *, iostat=iostat) (B(i,j), j=1,n)
+            if (iostat /= 0) stop 'Error reading matrix B.'
+        end do
 
-    subroutine display_statistics(sum, avg, maxval, minval)
-        real, intent(in) :: sum, avg, maxval, minval
+        close(unit)
+    end subroutine read_matrices_from_file
 
-        print *, '--- Statistics ---'
-        print *, 'Sum      = ', sum
-        print *, 'Average  = ', avg
-        print *, 'Maximum  = ', maxval
-        print *, 'Minimum  = ', minval
-    end subroutine display_statistics
+    subroutine multiply_matrices()
+        integer :: i, j, k, n
+        n = size(A, 1)
 
-    subroutine sort_data(arr)
-        implicit none
+        allocate(C(n,n))
 
-        real, allocatable, intent(inout) :: arr(:)
-        integer :: i, j, n
-        real :: temp
-
-        n = size(arr, 1)
-
-        do i = 1, n - 1
-            do j = 1, n - i
-                if (arr(j) > arr(j+1)) then
-                    temp = arr(j)
-                    arr(j) = arr(j+1)
-                    arr(j+1) = temp
-                end if
+        C = 0.0
+        do i = 1, n
+            do j = 1, n
+                do k = 1, n
+                    C(i,j) = C(i,j) + A(i,k) * B(k,j)
+                end do
             end do
         end do
-    end subroutine sort_data
+    end subroutine multiply_matrices
 
-    subroutine display_differences(data, n)
-        real, allocatable, intent(in) :: data(:)
+    subroutine display_trace()
         integer :: i, n
+        real :: trace
 
-        n = size(arr, 1)
-
-        print *, '--- Differences between consecutive sorted values ---'
-        do i = 2, n
-            print *, data(i) - data(i-1)
+        n = size(C, 1)
+        trace = 0.0
+        do i = 1, n
+            trace = trace + C(i,i)
         end do
-    end subroutine display_differences
-end module data_processing_mod
+
+        print *, 'Trace of matrix C = ', trace
+    end subroutine display_trace
+end module process_marices_mod
 ```
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -857,6 +852,442 @@ This can be achieved with the following diff
 +    end subroutine draw_board
  
  end program game_of_life
+```
+
+:::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::
+
+### 5. Replace repeated code with a procedure
+
+**Smell:** Fragments of repeated code appear.
+
+:::::::::::::::::::::::::::::::::::::::::::: spoiler
+
+#### Before
+
+```f90
+subroutine read_matrices_from_file(filename)
+    character(len=*), intent(in) :: filename
+    integer :: n, iostat, i, j
+    integer :: unit
+
+    open(newunit=unit, file=filename, status='old', action='read', iostat=iostat)
+    if (iostat /= 0) then
+        print *, 'Error opening file: ', trim(filename)
+        stop
+    end if
+
+    read(unit, *, iostat=iostat) n
+    if (iostat /= 0) stop 'Error reading matrix size.'
+
+    allocate(A(n,n), B(n,n))
+
+    print *, 'Reading matrix A (', n, 'x', n, ')'
+    do i = 1, n
+        read(unit, *, iostat=iostat) (A(i,j), j=1,n)
+        if (iostat /= 0) stop 'Error reading matrix A.'
+    end do
+
+    print *, 'Reading matrix B (', n, 'x', n, ')'
+    do i = 1, n
+        read(unit, *, iostat=iostat) (B(i,j), j=1,n)
+        if (iostat /= 0) stop 'Error reading matrix B.'
+    end do
+
+    close(unit)
+end subroutine read_matrices_from_file
+```
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::: spoiler
+
+#### After
+
+```f90
+subroutine read_matrices_from_file(filename)
+    character(len=*), intent(in) :: filename
+    integer :: n, iostat, i, j
+    integer :: unit
+
+    open(newunit=unit, file=filename, status='old', action='read', iostat=iostat)
+    if (iostat /= 0) then
+        print *, 'Error opening file: ', trim(filename)
+        stop
+    end if
+
+    read(unit, *, iostat=iostat) n
+    if (iostat /= 0) stop 'Error reading matrix size.'
+
+    allocate(A(n,n), B(n,n))
+
+    print *, 'Reading matrix A (', n, 'x', n, ')'
+    call read_next_matrix_from_file(A, unit)
+
+    print *, 'Reading matrix B (', n, 'x', n, ')'
+    call read_next_matrix_from_file(B, unit)
+
+    close(unit)
+end subroutine read_matrices_from_file
+
+subroutine read_next_matrix_from_file(matrix, unit)
+    real, allocatable, intent(inout) :: matrix(:,:)
+    integer, intent(in) :: unit
+
+    integer :: i, j, iostat, n
+
+    n = size(matrix, 1)
+
+    do i = 1, n
+        read(unit, *, iostat=iostat) (matrix(i,j), j=1,n)
+        if (iostat /= 0) stop 'Error reading matrix.'
+    end do
+end subroutine read_next_matrix_from_file
+```
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: callout
+
+John's code appears to not have any repeated code, so there's nothing to do
+for this refactoring principle. If you've spotted some, well Done!
+
+:::::::::::::::::::::::::::::::::::::::::::::
+
+
+### 6. Replace global variables with procedure arguments
+
+**Smell:** A global variable is assigned and then used inside a called function.
+
+**Smell:** A variable is edited within a procedure in which it is not declared.
+
+:::::::::::::::::::::::::::::::::::::::::::: spoiler
+#### Before:
+
+```f90
+subroutine multiply_matrices()
+    integer :: i, j, k, n
+    n = size(A, 1)
+
+    allocate(C(n,n))
+
+    C = 0.0
+    do i = 1, n
+        do j = 1, n
+            do k = 1, n
+                C(i,j) = C(i,j) + A(i,k) * B(k,j)
+            end do
+        end do
+    end do
+end subroutine multiply_matrices
+```
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::: spoiler
+#### After:
+
+```f90
+subroutine multiply_matrices(A, B, C)
+    real, allocatable, intent(int) :: A(:,:), B(:,:)
+    real, allocatable, intent(out) :: C(:,:)
+
+    integer :: i, j, k, n
+    n = size(A, 1)
+
+    allocate(C(n,n))
+    
+    C = 0.0
+    do i = 1, n
+        do j = 1, n
+            do k = 1, n
+                C(i,j) = C(i,j) + A(i,k) * B(k,j)
+            end do
+        end do
+    end do
+end subroutine multiply_matrices
+```
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+#### Challenge
+
+Update John's code to replace any global variables accessed within procedures
+with dummy arguments.
+
+:::::::::::::::::::::::: solution 
+
+This can be achieved with the following diff
+
+```diff
+--- a/episodes/7-refactoring-fortran/solution/src/game_of_life.f90
++++ b/episodes/7-refactoring-fortran/solution/src/game_of_life.f90
+@@ -8,11 +8,15 @@ program game_of_life
+ 
+     implicit none
+ 
+-    logical, parameter :: animate = .true.
+-    integer, dimension(:,:), allocatable :: starting_board
+-    integer :: generation_number
++    !! Board args
++    integer, parameter :: max_generations = 100, max_nrows = 100, max_ncols = 100
++    integer :: nrow, ncol, generation_number
++    integer, dimension(:,:), allocatable :: current_board, new_board
+     logical :: steady_state = .false.
+ 
++    !> Whether to animate the board
++    logical, parameter :: animate = .true.
++
+     !! CLI args
+     character(len=:), allocatable :: executable_name, input_filename
+ 
+@@ -26,9 +30,9 @@ program game_of_life
+         stop
+     end if
+ 
+-    call read_model_from_file(input_filename, starting_board)
++    call read_model_from_file()
+ 
+-    call find_steady_state(steady_state, generation_number, starting_board, animate)
++    call find_steady_state()
+ 
+     if (steady_state) then
+         write(*,'(a,i6,a)') "Reached steady after ", generation_number, " generations"
+@@ -39,7 +43,7 @@ program game_of_life
+ contains
+ 
+     !> Read a cli arg at a given index and return it as a string (character array)
+-    subroutine read_cli_arg(arg_index, arg)
++    recursive subroutine read_cli_arg(arg_index, arg)
+         !> The index of the cli arg to try and read
+         integer, intent(in) :: arg_index
+         !> The string into which to store the cli arg
+@@ -55,16 +59,12 @@ contains
+     end subroutine read_cli_arg
+ 
+     !> Populate the board from a provided file
+-    subroutine read_model_from_file(input_filename, board)
+-        character(len=:), allocatable, intent(in) :: input_filename
+-        integer, dimension(:,:), allocatable, intent(out) :: board
+-
++    subroutine read_model_from_file()
+         !> A flag to indicate if reading the file was successful
+         character(len=:), allocatable :: io_error_message
+ 
+         ! Board definition args
+-        integer :: row, nrow, ncol
+-        integer, parameter :: max_nrows = 100, max_ncols = 100
++        integer :: row
+ 
+         ! File IO args
+         integer :: input_file_io, iostat
+@@ -98,12 +98,12 @@ contains
+ 
+         if (.not. allocated(io_error_message)) then
+ 
+-            allocate(board(nrow, ncol))
++            allocate(current_board(nrow, ncol))
+ 
+             read(input_file_io,'(a)') text_to_discard ! Skip next line
+             ! Populate the boards starting state
+             do row = 1, nrow
+-                read(input_file_io,*) board(row, :)
++                read(input_file_io,*) current_board(row, :)
+             end do
+ 
+         end if
+@@ -118,27 +118,14 @@ contains
+     end subroutine read_model_from_file
+ 
+     !> Find the steady state of the Game of Life board
+-    subroutine find_steady_state(steady_state, generation_number, input_board, animate)
+-        !> Whether the board has reached a steady state
+-        logical, intent(out) :: steady_state
+-        !> The number of generations that have been processed
+-        integer, intent(out) :: generation_number
+-        !> The starting state of the board
+-        integer, dimension(:,:), allocatable, intent(in) :: input_board
+-        !> Whether to animate the board
+-        logical, intent(in) :: animate
+-
+-        integer, dimension(:,:), allocatable :: current_board, new_board
+-        integer, parameter :: max_generations = 100
++    subroutine find_steady_state()
+ 
+         !! Animation args
+         integer, dimension(8) :: date_time_values
+         integer :: mod_ms_step
+         integer, parameter :: ms_per_step = 250
+ 
+-        allocate(current_board(size(input_board,1), size(input_board, 2)))
+-        allocate(new_board(size(input_board,1), size(input_board, 2)))
+-        current_board = input_board
++        allocate(new_board(size(current_board,1), size(current_board, 2)))
+         new_board = 0
+ 
+         ! Clear the terminal screen
+@@ -156,10 +143,10 @@ contains
+             end if
+ 
+             if (mod_ms_step == 0) then
+-                call evolve_board(current_board, new_board)
+-                call check_for_steady_state(steady_state, current_board, new_board)
++                call evolve_board()
++                call check_for_steady_state()
+                 current_board = new_board
+-                if (animate) call draw_board(current_board)
++                if (animate) call draw_board()
+ 
+                 generation_number = generation_number + 1
+             end if
+@@ -168,16 +155,8 @@ contains
+     end subroutine find_steady_state
+ 
+     !> Evolve the board into the state of the next iteration
+-    subroutine evolve_board(current_board, new_board)
+-        !> The current state of the board
+-        integer, dimension(:,:), allocatable, intent(in) :: current_board
+-        !> The new state of the board
+-        integer, dimension(:,:), allocatable, intent(inout) :: new_board
+-
+-        integer :: row, col, sum, nrow, ncol
+-
+-        nrow = size(current_board, 1)
+-        ncol = size(current_board, 2)
++    subroutine evolve_board()
++        integer :: row, col, sum
+ 
+         do row=2, nrow-1
+             do col=2, ncol-1
+@@ -206,18 +185,8 @@ contains
+     end subroutine evolve_board
+ 
+     !> Check if we have reached steady state, i.e. current and new board match
+-    subroutine check_for_steady_state(steady_state, current_board, new_board)
+-        !> Whether the board has reached a steady state
+-        logical, intent(out) :: steady_state
+-        !> The current state of the board
+-        integer, dimension(:,:), allocatable, intent(in) :: current_board
+-        !> The new state of the board
+-        integer, dimension(:,:), allocatable, intent(inout) :: new_board
+-
+-        integer :: row, col, nrow, ncol
+-
+-        nrow = size(current_board, 1)
+-        ncol = size(current_board, 2)
++    subroutine check_for_steady_state()
++        integer :: row, col
+ 
+         do row=1, nrow
+             do col=1, ncol
+@@ -231,17 +200,9 @@ contains
+     end subroutine check_for_steady_state
+ 
+     !> Output the current board to the terminal
+-    subroutine draw_board(board)
+-        !> The current state of the board
+-        integer, dimension(:,:), allocatable, intent(in) :: board
+-
+-        integer :: row, col, nrow, ncol
+-        character(:), allocatable :: output
+-
+-        nrow = size(board, 1)
+-        ncol = size(board, 2)
+-
+-        allocate(character(nrow) :: output)
++    subroutine draw_board()
++        integer :: row, col
++        character(nrow) :: output
+ 
+         ! Clear the terminal screen
+         call system("clear")
+@@ -249,7 +210,7 @@ contains
+         do row=1, nrow
+             output = ""
+             do col=1, ncol
+-                if (board(row,col) == 1) then
++                if (current_board(row,col) == 1) then
+                     output = trim(output)//"#"
+                 else
+                     output = trim(output)//"."
+```
+
+:::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::
+
+### 7. Separate code concepts into files or modules
+
+**Smell:** You find it hard to locate a piece of code.
+
+**Smell:** You get a lot of version control conflicts.
+
+::::::::::::::::::::::::::::::::::::: spoiler 
+
+#### Before
+
+Using the example we have seen so far, we start with two files
+`my_matrix_prog.f90` and `process_marices_mod.f90`.
+
+```
+|-- project/directory/
+    |-- my_matrix_prog.f90
+    |   |-- subroutine read_filename
+    |-- process_marices_mod.f90
+        |-- subroutine read_matrices_from_file
+        |-- subroutine read_next_matrix_from_file
+        |-- subroutine multiply_matrices
+        |-- subroutine display_trace
+```
+
+:::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: spoiler 
+
+#### After
+
+If we split the procedures in these files across multiple modules which focus
+on different tasks, we could end up with something like this.
+
+```
+|-- project/directory/
+    |-- my_matrix_prog.f90
+    |-- io.f90
+    |   |-- subroutine read_filename
+    |   |-- subroutine read_matrices_from_file
+    |   |-- subroutine read_next_matrix_from_file
+    |-- matrix_operations.f90
+        |-- subroutine multiply_matrices
+        |-- subroutine display_trace
+```
+
+> Note: there isn't one correct way to group these subroutines. For example, we
+> could place `display_trace` in `io.f90`.
+
+:::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+#### Challenge
+
+Update John's code to separate code concepts into modules.
+
+:::::::::::::::::::::::: solution
+
+You should end up with a module structure. For example, like this...
+```
+|-- src/
+    |-- main.f90
+    |-- animation.f90
+    |   |-- subroutine draw_board
+    |-- cli.f90
+    |   |-- subroutine read_cli_arg
+    |-- game_of_life.f90
+    |   |-- subroutine find_steady_state
+    |   |-- subroutine evolve_board
+    |   |-- subroutine check_for_steady_state
+    |-- io.f90
+        |-- subroutine read_model_from_file
 ```
 
 :::::::::::::::::::::::::::::::::
