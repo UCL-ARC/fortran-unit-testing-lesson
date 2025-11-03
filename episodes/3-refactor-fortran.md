@@ -47,6 +47,34 @@ See the [Wikipedia article](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Lif
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+:::::::::::::::::::::::::::::::::::::::::::: callout
+
+### Checking we haven't broken anything
+
+To ensure we don't break anything during our refactoring we need to have some way to test our code.
+Since we don't have any automated tests in place we will need to do this manually. Firstly, let's
+generate a starting state which we know to be correct.
+
+```sh
+cd episodes/7-refactoring-fortran/challenge
+cmake -B build
+cmake --build build
+./build/game-of-life ../models/model-1.dat > initial-state.out
+```
+
+Then, whenever we make a change, we can test if the code still works as expected
+
+```sh
+cmake --build build
+./build/game-of-life ../models/model-1.dat > new-state.out
+diff initial-state.out new-state.out
+```
+
+If there are no differences, we can assume we haven't broken anything.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
 ## The known refactorings
 
 The next few sections will present some known refactorings.
