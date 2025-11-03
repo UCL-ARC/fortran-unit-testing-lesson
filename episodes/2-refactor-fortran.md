@@ -1321,6 +1321,21 @@ You should end up with a module structure. For example, like this...
 :::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::
 
+::::::::::::::::::::::: callout
+
+## Working effectively with legacy code
+
+When working with Fortran it is very common that you will be working with legacy code and a
+large scale refactor can feel daunting. Therefore, a great resource for us is
+*[Working Effectively with Legacy Code](https://search.worldcat.org/title/660166658)*
+(Feathers, 2004)
+
+If you don't have time to read the entire book, there is a good summary of the key point in this blog post 
+[The key points of Working Effectively with Legacy Code](https://understandlegacycode.com/blog/key-points-of-working-effectively-with-legacy-code/)
+
+:::::::::::::::::::::::::::::::
+
 ## References
 
 - Martin Gardner, 1970. [The fantastic combinations of John Conway’s new solitaire game “life” by Martin Gardner](https://web.stanford.edu/class/sts145/Library/life.pdf). Scientific American, 223, pp.120–123.
+- Michael Feathers (2004). [Working Effectively with Legacy Code](https://search.worldcat.org/title/660166658). Pearson.
