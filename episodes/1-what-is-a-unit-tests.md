@@ -20,7 +20,6 @@ exercises:
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## What is unit testing?
 
 Unit testing is a way of verifying the validity of a code base by testing its smallest individual components, or **units**.
 
@@ -35,14 +34,14 @@ Several key aspects define a unit test. They should be...
 
 ::::::::::::::::::::::::::::::::::::: callout
 
-#### Other forms of testing
+### Other forms of testing
 
 There are other forms of testing, such as integration testing in which two or more units of a code base are tested to verify that they work together, or that they are correctly **integrated**.
 However, today we are focusing on unit tests as it is often the case that many of these larger tests are written using the same test tools and frameworks, hence we will make progress with both by starting with unit testing.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-### What does a unit test look like?
+## What does a unit test look like?
 
 All unit tests tend to follow the same pattern of Given-When-Then.
 
@@ -58,7 +57,7 @@ All unit tests tend to follow the same pattern of Given-When-Then.
 
 ::::::::::::::::::::::::::::::::::::: challenge 
 
-#### Challenge 1: Write a unit test in sudo code.
+### Challenge 1: Write a unit test in sudo code.
 
 Assuming you have a function `reverse_array` which reverses the order of an allocated array. Write a unit test in pseudo code for `reverse_array` using the pattern above.
 
@@ -82,7 +81,7 @@ for each element in `input_array`:
 :::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::
 
-### When should unit tests be run?
+## When should unit tests be run?
 
 A major benefit of unit tests is the ability to identify bugs at the earliest possible stage. Therefore, unit tests should be run frequently throughout the development process. Passing unit tests give you and your collaborators confidence that changes to your code aren't modifying the previously expected behaviour, so run your unit tests...
 
@@ -95,7 +94,7 @@ A major benefit of unit tests is the ability to identify bugs at the earliest po
 
 Basically, all the time.
 
-### Do we really need unit tests?
+## Do we really need unit tests?
 
 Yes! 
 
@@ -117,7 +116,7 @@ This is much clearer. We immediately have an idea of what could be going wrong a
 
 ::::::::::::::::::::::::::::::::::::: challenge 
 
-### Challenge 2: Unit test bad practices
+## Challenge 2: Unit test bad practices
 
 Take a look at [1-into-to-unit-tests/challenge](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/1-into-to-unit-tests/challenge) in the exercises repository.
 
