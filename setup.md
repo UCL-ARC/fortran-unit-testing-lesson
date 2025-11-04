@@ -29,7 +29,6 @@ If you do not wish to use GitHub Codespaces or the VSCode devcontainer, you can 
 
 To following along with this lesson's exercises you will require the following
 
-- Fortran Package Manager (FPM)
 - CMake
 - pFUnit
 
@@ -39,16 +38,12 @@ To following along with this lesson's exercises you will require the following
 
 Try to install the dependencies listed above. 
 
-- FPM [Install instructions](https://fpm.fortran-lang.org/install/index.html)
 - CMake can be installed via [homebrew](https://formulae.brew.sh/formula/cmake) on mac or your package manager (apt, etc) on Linux.
 - pFUnit can be install via the bash script provided in the exercises repo [build-pfunit.sh](https://github.com/UCL-ARC/fortran-unit-testing-exercises/blob/main/scripts/build-pfunit.sh).
 
 :::::::::::::::::::::::::::: solution
 
 ```bash
-$ fpm --version
-Version:     0.12.0, alpha
-
 $ cmake --version
 cmake version 3.27.0
 
