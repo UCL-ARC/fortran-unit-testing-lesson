@@ -19,13 +19,25 @@
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/3-fortran-unit-test-syntax.html</loc>
   </url>
   <url>
+    <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/3-writing-your-first-unit-test.html</loc>
+  </url>
+  <url>
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/4-debugging-a-broken-test.html</loc>
+  </url>
+  <url>
+    <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/4-fortran-unit-test-syntax.html</loc>
   </url>
   <url>
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/404.html</loc>
   </url>
   <url>
+    <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/5-debugging-a-broken-test.html</loc>
+  </url>
+  <url>
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/5-testing-parallel-code.html</loc>
+  </url>
+  <url>
+    <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/6-testing-parallel-code.html</loc>
   </url>
   <url>
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/CODE_OF_CONDUCT.html</loc>
@@ -35,6 +47,9 @@
   </url>
   <url>
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/aio.html</loc>
+  </url>
+  <url>
+    <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/citation.html</loc>
   </url>
   <url>
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/images.html</loc>
@@ -61,13 +76,25 @@
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/3-fortran-unit-test-syntax.html</loc>
   </url>
   <url>
+    <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/3-writing-your-first-unit-test.html</loc>
+  </url>
+  <url>
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/4-debugging-a-broken-test.html</loc>
+  </url>
+  <url>
+    <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/4-fortran-unit-test-syntax.html</loc>
   </url>
   <url>
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/404.html</loc>
   </url>
   <url>
+    <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/5-debugging-a-broken-test.html</loc>
+  </url>
+  <url>
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/5-testing-parallel-code.html</loc>
+  </url>
+  <url>
+    <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/6-testing-parallel-code.html</loc>
   </url>
   <url>
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/CODE_OF_CONDUCT.html</loc>
@@ -77,6 +104,9 @@
   </url>
   <url>
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/aio.html</loc>
+  </url>
+  <url>
+    <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/citation.html</loc>
   </url>
   <url>
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/images.html</loc>
