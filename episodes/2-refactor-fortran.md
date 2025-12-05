@@ -83,7 +83,15 @@ We'll show before and after code, present any new coding techniques needed to do
 
 ### 1. Replace magic numbers with constants
 
-**Smell**: Raw numbers appear in your code.
+#### Smells
+
+- Raw numbers appear in your code.
+
+#### Benefits
+
+- When we use constant with a clear name, it is instantly clear what that value represents.
+- If we use a constant in more than one place, when that value needs to be changed, there is only one
+  place we need to make an update.
 
 :::::::::::::::::::::::::::::::::::::::::::: spoiler
 #### Before:
@@ -122,7 +130,14 @@ This can be achieved with the changes shown in this [commit](https://github.com/
 
 ### 2. Change of variable name
 
-**Smell**: Code needs a comment to explain what it is for.
+#### Smells
+
+- Code needs a comment to explain what it is for.
+
+#### Benefits
+
+- Someone reading your code can instantly understand what a variable represents and is much more likely
+  to understand the logic employed.
 
 :::::::::::::::::::::::::::::::::::::::::::: spoiler
 #### Before:
@@ -156,13 +171,18 @@ This can be achieved with the changes shown in this [commit](https://github.com/
 
 ### 3. Break large procedures into smaller units
 
-**Smell**: A function or subroutine no longer fits on a page in your editor.
+#### Smells
 
-**Smell**: Multiple dummy arguments are updated (i.e. multiple `intent(out)` arguments).
+- A function or subroutine no longer fits on a page in your editor.
+- Multiple dummy arguments are updated (i.e. multiple `intent(out)` arguments)
+- A line of code is deeply indented
+- A piece of code interacts with the surrounding code through just a few variables.
 
-**Smell**: A line of code is deeply indented.
+#### Benefits
 
-**Smell**: A piece of code interacts with the surrounding code through just a few variables.
+- Procedures with only one purpose will be much easier to fix should a bug be introduced.
+- Unit testing becomes easier as there are less input/output variables and scenarios to consider
+  when writing your tests.
 
 :::::::::::::::::::::::::::::::::::::::::::: spoiler
 #### Before:
@@ -313,12 +333,16 @@ This can be achieved with the changes shown in this [commit](https://github.com/
 
 ### 4. Wrap program functionality in procedures
 
-**Smell**: Logic is repeated outside a procedure.
+#### Smell
 
-**Smell**: Loops appear outside a procedure.
+- Logic is repeated outside a procedure.
+- Loops appear outside a procedure.
+- Lots of inline comments requited to explain what is happening in the main program.
 
-**Smell**: Lots of inline comments requited to explain what is happening in the main program.
+#### Benefits
 
+- More of your code can be tested.
+- It becomes harder to introduce side effects which may impact other aspects of your code.
 
 :::::::::::::::::::::::::::::::::::::::::::: spoiler
 #### Before 
@@ -391,7 +415,14 @@ This can be achieved with the changes shown in this [commit](https://github.com/
 
 ### 5. Replace repeated code with a procedure
 
-**Smell:** Fragments of repeated code appear.
+#### Smells
+
+- Fragments of repeated code appear.
+
+#### Benefits
+
+- If logic needs to be updated in the future, there is now just one place this needs to be done
+- More of your code can be unit tested.
 
 :::::::::::::::::::::::::::::::::::::::::::: spoiler
 
@@ -501,9 +532,15 @@ This can be achieved with the changes shown in this [commit](https://github.com/
 
 ### 6. Replace global variables with procedure arguments
 
-**Smell:** A global variable is assigned and then used inside a called function.
+#### Smells
 
-**Smell:** A variable is edited within a procedure in which it is not declared.
+- A global variable is assigned and then used inside a called function.
+- A variable is edited within a procedure in which it is not declared.
+
+#### Benefits
+
+- Testing becomes much easier because your code is more isolated and thus less code is required within your tests to setup state.
+- You get more help from your compiler and it t is much clearer what your code is doing as you can provide more information about dummy arguments such as their `intent`.
 
 :::::::::::::::::::::::::::::::::::::::::::: spoiler
 #### Before:
@@ -570,9 +607,15 @@ This can be achieved with the changes shown in this [commit](https://github.com/
 
 ### 7. Separate code concepts into files or modules
 
-**Smell:** You find it hard to locate a piece of code.
+#### Smells
 
-**Smell:** You get a lot of version control conflicts.
+- You find it hard to locate a piece of code.
+- You get a lot of version control conflicts.
+
+#### Benefits
+
+- This adds further clarity about what each unit of code is responsible for.
+- Allows further isolation of code as you can scope some procedures or variables to be private.
 
 ::::::::::::::::::::::::::::::::::::: spoiler 
 
