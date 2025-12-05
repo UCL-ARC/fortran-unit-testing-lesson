@@ -134,11 +134,11 @@ end subroutine TestMySrcProcedure
 
 ### Challenge 1: Testing MPI parallel code
 
-Take a look at [5-testing-parallel-code/challenge](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/5-testing-parallel-code/challenge) in the exercises repository.
+Take a look at [6-testing-parallel-code/challenge](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/6-testing-parallel-code/challenge) in the exercises repository.
 
 :::::::::::::::::::::::::::::::: solution
 
-A solution is provided in [5-testing-parallel-code/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/5-testing-parallel-code/solution).
+A solution is provided in [6-testing-parallel-code/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/6-testing-parallel-code/solution).
 
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::

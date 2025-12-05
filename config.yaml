@@ -68,9 +68,10 @@ contact: 'c.aird@ucl.ac.uk'
 episodes: 
 - 1-what-is-a-unit-tests.md
 - 2-refactor-fortran.md
-- 3-fortran-unit-test-syntax.md
-- 4-debugging-a-broken-test.md
-- 5-testing-parallel-code.md
+- 3-writing-your-first-unit-test.md
+- 4-fortran-unit-test-syntax.md
+- 5-debugging-a-broken-test.md
+- 6-testing-parallel-code.md
 
 # Information for Learners
 learners: 
