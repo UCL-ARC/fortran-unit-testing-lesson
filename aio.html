@@ -503,7 +503,7 @@ code for <code>reverse_array</code> using the pattern above.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <pre><code>! Given
 Allocate the input array `input_array`
@@ -577,7 +577,7 @@ in the exercises repository.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>A solution is provided in <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/1-into-to-unit-tests/solution" class="external-link">1-into-to-unit-tests/solution</a>.</p>
 </div>
@@ -597,7 +597,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  --></section></section><section id="aio-2-refactor-fortran"><p>Content from <a href="2-refactor-fortran.html">Refactoring Fortran</a></p>
 <hr>
-<p>Last updated on 2025-11-04 |
+<p>Last updated on 2025-12-05 |
 
         <a href="https://github.com/UCL-ARC/fortran-unit-testing-lesson/edit/main/episodes/2-refactor-fortran.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -645,7 +645,7 @@ mean by “bad practice” would be not limited to but could include…</p>
 <p>To demonstrate the benefits of refactoring Fortran and how it can be
 done, we’re going to help John to improve his Fortran implementation of
 the game of life. A copy of John’s code can be found in the exercises
-repo at <a href="">path/to/code</a>.</p>
+repo at <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/2-refactoring-fortran/challenge" class="external-link">2-refactoring-fortran/challenge</a>.</p>
 <div id="accordionSpoiler1" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
@@ -721,7 +721,22 @@ know you need to refactor.</p>
 <div class="section level3">
 <h3 id="replace-magic-numbers-with-constants">1. Replace magic numbers with constants<a class="anchor" aria-label="anchor" href="#replace-magic-numbers-with-constants"></a>
 </h3>
-<p><strong>Smell</strong>: Raw numbers appear in your code.</p>
+<div class="section level4">
+<h4 id="smells">Smells<a class="anchor" aria-label="anchor" href="#smells"></a>
+</h4>
+<ul>
+<li>Raw numbers appear in your code.</li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="benefits">Benefits<a class="anchor" aria-label="anchor" href="#benefits"></a>
+</h4>
+<ul>
+<li>When we use constant with a clear name, it is instantly clear what
+that value represents.</li>
+<li>If we use a constant in more than one place, when that value needs
+to be changed, there is only one place we need to make an update.</li>
+</ul>
 <div id="accordionSpoiler2" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
@@ -780,60 +795,7 @@ constants.</p>
 </button>
 <div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
-<p>This can be achieved with the following diff</p>
-<div class="codewrapper sourceCode" id="cb5">
-<h3 class="code-label">DIFF<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode diff" tabindex="0"><code class="sourceCode diff"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="kw">--- a/episodes/7-refactoring-fortran/solution/src/game_of_life.f90</span></span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="dt">+++ b/episodes/7-refactoring-fortran/solution/src/game_of_life.f90</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="dt">@@ -9,13 +9,14 @@ program game_of_life</span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>     implicit none</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a> </span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>     !! Board args</span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="va">+    integer, parameter :: max_generations = 100, max_nrows = 100, max_ncols = 100</span></span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>     integer :: nrow, ncol</span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>     integer :: i, generation_number</span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>     integer, dimension(:,:), allocatable :: current_board, new_board</span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a> </span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>     !! Animation args</span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>     integer, dimension(8) :: date_time_values</span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="st">-    integer :: mod_ms_step</span></span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="va">+    integer :: mod_ms_step, ms_per_step = 250</span></span>
-<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>     logical :: steady_state = .false.</span>
-<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a> </span>
-<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>     !! CLI args</span>
-<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="dt">@@ -58,14 +59,14 @@ program game_of_life</span></span>
-<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>     read(input_file_io,*) nrow, ncol</span>
-<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a> </span>
-<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>     ! Verify the number of rows read from the file</span>
-<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="st">-    if (nrow &lt; 1 .or. nrow &gt; 100) then</span></span>
-<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="st">-        write (*,'(a,i6)') "nrow must be a positive integer less than 100 found ", nrow</span></span>
-<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="va">+    if (nrow &lt; 1 .or. nrow &gt; max_nrows) then</span></span>
-<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="va">+        write (*,'(a,i6,a,i6)') "nrow must be a positive integer less than ", max_nrows," found ", nrow</span></span>
-<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a>         stop 1</span>
-<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a>     end if</span>
-<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a> </span>
-<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a>     ! Verify the number of columns read from the file</span>
-<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a><span class="st">-    if (ncol &lt; 1 .or. ncol &gt; 100) then</span></span>
-<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a><span class="st">-        write (*,'(a,i6)') "ncol must be a positive integer less than 100 found ", ncol</span></span>
-<span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a><span class="va">+    if (ncol &lt; 1 .or. ncol &gt; max_ncols) then</span></span>
-<span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a><span class="va">+        write (*,'(a,i6,a,i6)') "ncol must be a positive integer less than ", max_ncols," found ", ncol</span></span>
-<span id="cb5-35"><a href="#cb5-35" tabindex="-1"></a>         stop 1</span>
-<span id="cb5-36"><a href="#cb5-36" tabindex="-1"></a>     end if</span>
-<span id="cb5-37"><a href="#cb5-37" tabindex="-1"></a> </span>
-<span id="cb5-38"><a href="#cb5-38" tabindex="-1"></a><span class="dt">@@ -87,10 +88,10 @@ program game_of_life</span></span>
-<span id="cb5-39"><a href="#cb5-39" tabindex="-1"></a>     call system ("clear")</span>
-<span id="cb5-40"><a href="#cb5-40" tabindex="-1"></a> </span>
-<span id="cb5-41"><a href="#cb5-41" tabindex="-1"></a>     ! Iterate until we reach a steady state</span>
-<span id="cb5-42"><a href="#cb5-42" tabindex="-1"></a><span class="st">-    do while(.not. steady_state .and. generation_number &lt; 100)</span></span>
-<span id="cb5-43"><a href="#cb5-43" tabindex="-1"></a><span class="va">+    do while(.not. steady_state .and. generation_number &lt; max_generations)</span></span>
-<span id="cb5-44"><a href="#cb5-44" tabindex="-1"></a>         ! Advance the simulation in the steps of the requested number of milliseconds</span>
-<span id="cb5-45"><a href="#cb5-45" tabindex="-1"></a>         call date_and_time(VALUES=date_time_values)</span>
-<span id="cb5-46"><a href="#cb5-46" tabindex="-1"></a><span class="st">-        mod_ms_step = mod(date_time_values(8), 250)</span></span>
-<span id="cb5-47"><a href="#cb5-47" tabindex="-1"></a><span class="va">+        mod_ms_step = mod(date_time_values(8), ms_per_step)</span></span>
-<span id="cb5-48"><a href="#cb5-48" tabindex="-1"></a> </span>
-<span id="cb5-49"><a href="#cb5-49" tabindex="-1"></a>         if (mod_ms_step == 0) then</span>
-<span id="cb5-50"><a href="#cb5-50" tabindex="-1"></a>             call run_next_iteration()</span></code></pre>
+<p>This can be achieved with the changes shown in this <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/e9765a26a9e368571eb162771cd45cd3933c03c4" class="external-link">commit</a></p>
 </div>
 </div>
 </div>
@@ -843,8 +805,21 @@ constants.</p>
 <div class="section level3">
 <h3 id="change-of-variable-name">2. Change of variable name<a class="anchor" aria-label="anchor" href="#change-of-variable-name"></a>
 </h3>
-<p><strong>Smell</strong>: Code needs a comment to explain what it is
-for.</p>
+<div class="section level4">
+<h4 id="smells-1">Smells<a class="anchor" aria-label="anchor" href="#smells-1"></a>
+</h4>
+<ul>
+<li>Code needs a comment to explain what it is for.</li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="benefits-1">Benefits<a class="anchor" aria-label="anchor" href="#benefits-1"></a>
+</h4>
+<ul>
+<li>Someone reading your code can instantly understand what a variable
+represents and is much more likely to understand the logic
+employed.</li>
+</ul>
 <div id="accordionSpoiler4" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler4" aria-expanded="false" aria-controls="collapseSpoiler4">
@@ -852,10 +827,10 @@ for.</p>
 </button>
 <div id="collapseSpoiler4" class="accordion-collapse collapse" aria-labelledby="headingSpoiler4" data-bs-parent="#accordionSpoiler4">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>a <span class="kw">=</span> a <span class="kw">+</span> b<span class="kw">*</span>dt</span></code></pre>
+<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>a <span class="kw">=</span> a <span class="kw">+</span> b<span class="kw">*</span>dt</span></code></pre>
 </div>
 </div>
 </div>
@@ -868,10 +843,10 @@ for.</p>
 </button>
 <div id="collapseSpoiler5" class="accordion-collapse collapse" aria-labelledby="headingSpoiler5" data-bs-parent="#accordionSpoiler5">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>velocity <span class="kw">=</span> velocity <span class="kw">+</span> acceleration <span class="kw">*</span> dt</span></code></pre>
+<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>velocity <span class="kw">=</span> velocity <span class="kw">+</span> acceleration <span class="kw">*</span> dt</span></code></pre>
 </div>
 </div>
 </div>
@@ -897,145 +872,7 @@ which make it clear what they are.</p>
 </button>
 <div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
-<p>This can be achieved with the following diff</p>
-<div class="codewrapper sourceCode" id="cb8">
-<h3 class="code-label">DIFF<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode diff" tabindex="0"><code class="sourceCode diff"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="kw">--- a/episodes/7-refactoring-fortran/solution/src/game_of_life.f90</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="dt">+++ b/episodes/7-refactoring-fortran/solution/src/game_of_life.f90</span></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="dt">@@ -11,7 +11,7 @@ program game_of_life</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>     !! Board args</span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>     integer, parameter :: max_generations = 100, max_nrows = 100, max_ncols = 100</span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>     integer :: nrow, ncol</span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="st">-    integer :: i, generation_number</span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="va">+    integer :: row, generation_number</span></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>     integer, dimension(:,:), allocatable :: current_board, new_board</span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a> </span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>     !! Animation args</span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="dt">@@ -21,7 +21,7 @@ program game_of_life</span></span>
-<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a> </span>
-<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>     !! CLI args</span>
-<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>     integer                       :: argl</span>
-<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="st">-    character(len=:), allocatable :: cli_arg_temp_store, input_fname</span></span>
-<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="va">+    character(len=:), allocatable :: cli_arg_temp_store, input_filename</span></span>
-<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a> </span>
-<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>     !! File IO args</span>
-<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>     character(len=80) :: text_to_discard</span>
-<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="dt">@@ -31,8 +31,8 @@ program game_of_life</span></span>
-<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>     ! Get current_board file path from command line</span>
-<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>     if (command_argument_count() == 1) then</span>
-<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a>         call get_command_argument(1, length=argl)</span>
-<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="st">-        allocate(character(argl) :: input_fname)</span></span>
-<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="st">-        call get_command_argument(1, input_fname)</span></span>
-<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="va">+        allocate(character(argl) :: input_filename)</span></span>
-<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="va">+        call get_command_argument(1, input_filename)</span></span>
-<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a>     else</span>
-<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a>         write(*,'(A)') "Error: Invalid input"</span>
-<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a>         call get_command_argument(0, length=argl)</span>
-<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a><span class="dt">@@ -45,12 +45,12 @@ program game_of_life</span></span>
-<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a> </span>
-<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a>     ! Open input file</span>
-<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a>     open(unit=input_file_io,   &amp;</span>
-<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a><span class="st">-         file=input_fname, &amp;</span></span>
-<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a><span class="va">+         file=input_filename, &amp;</span></span>
-<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a>          status='old',  &amp;</span>
-<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a>          IOSTAT=iostat)</span>
-<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a> </span>
-<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a>     if( iostat /= 0) then</span>
-<span id="cb8-42"><a href="#cb8-42" tabindex="-1"></a><span class="st">-        write(*,'(a)') ' *** Error when opening '//input_fname</span></span>
-<span id="cb8-43"><a href="#cb8-43" tabindex="-1"></a><span class="va">+        write(*,'(a)') ' *** Error when opening '//input_filename</span></span>
-<span id="cb8-44"><a href="#cb8-44" tabindex="-1"></a>         stop 1</span>
-<span id="cb8-45"><a href="#cb8-45" tabindex="-1"></a>     end if</span>
-<span id="cb8-46"><a href="#cb8-46" tabindex="-1"></a> </span>
-<span id="cb8-47"><a href="#cb8-47" tabindex="-1"></a><span class="dt">@@ -75,8 +75,8 @@ program game_of_life</span></span>
-<span id="cb8-48"><a href="#cb8-48" tabindex="-1"></a> </span>
-<span id="cb8-49"><a href="#cb8-49" tabindex="-1"></a>     read(input_file_io,'(a)') text_to_discard ! Skip next line</span>
-<span id="cb8-50"><a href="#cb8-50" tabindex="-1"></a>     ! Populate the boards starting state</span>
-<span id="cb8-51"><a href="#cb8-51" tabindex="-1"></a><span class="st">-    do i = 1, nrow</span></span>
-<span id="cb8-52"><a href="#cb8-52" tabindex="-1"></a><span class="st">-        read(input_file_io,*) current_board(i, :)</span></span>
-<span id="cb8-53"><a href="#cb8-53" tabindex="-1"></a><span class="va">+    do row = 1, nrow</span></span>
-<span id="cb8-54"><a href="#cb8-54" tabindex="-1"></a><span class="va">+        read(input_file_io,*) current_board(row, :)</span></span>
-<span id="cb8-55"><a href="#cb8-55" tabindex="-1"></a>     end do</span>
-<span id="cb8-56"><a href="#cb8-56" tabindex="-1"></a> </span>
-<span id="cb8-57"><a href="#cb8-57" tabindex="-1"></a>     close(input_file_io)</span>
-<span id="cb8-58"><a href="#cb8-58" tabindex="-1"></a><span class="dt">@@ -114,17 +114,17 @@ contains</span></span>
-<span id="cb8-59"><a href="#cb8-59" tabindex="-1"></a> </span>
-<span id="cb8-60"><a href="#cb8-60" tabindex="-1"></a>     !&gt; Evolve the board into the state of the next iteration</span>
-<span id="cb8-61"><a href="#cb8-61" tabindex="-1"></a>     subroutine run_next_iteration()</span>
-<span id="cb8-62"><a href="#cb8-62" tabindex="-1"></a><span class="st">-        integer :: i, j, sum</span></span>
-<span id="cb8-63"><a href="#cb8-63" tabindex="-1"></a><span class="va">+        integer :: row, col, sum</span></span>
-<span id="cb8-64"><a href="#cb8-64" tabindex="-1"></a>         character(nrow) :: output</span>
-<span id="cb8-65"><a href="#cb8-65" tabindex="-1"></a> </span>
-<span id="cb8-66"><a href="#cb8-66" tabindex="-1"></a>         ! Clear the terminal screen</span>
-<span id="cb8-67"><a href="#cb8-67" tabindex="-1"></a>         call system("clear")</span>
-<span id="cb8-68"><a href="#cb8-68" tabindex="-1"></a> </span>
-<span id="cb8-69"><a href="#cb8-69" tabindex="-1"></a>         ! Draw the current board</span>
-<span id="cb8-70"><a href="#cb8-70" tabindex="-1"></a><span class="st">-        do i=1, nrow</span></span>
-<span id="cb8-71"><a href="#cb8-71" tabindex="-1"></a><span class="va">+        do row=1, nrow</span></span>
-<span id="cb8-72"><a href="#cb8-72" tabindex="-1"></a>             output = ""</span>
-<span id="cb8-73"><a href="#cb8-73" tabindex="-1"></a><span class="st">-            do j=1, ncol</span></span>
-<span id="cb8-74"><a href="#cb8-74" tabindex="-1"></a><span class="st">-                if (current_board(i,j) == 1) then</span></span>
-<span id="cb8-75"><a href="#cb8-75" tabindex="-1"></a><span class="va">+            do col=1, ncol</span></span>
-<span id="cb8-76"><a href="#cb8-76" tabindex="-1"></a><span class="va">+                if (current_board(row,col) == 1) then</span></span>
-<span id="cb8-77"><a href="#cb8-77" tabindex="-1"></a>                     output = trim(output)//"#"</span>
-<span id="cb8-78"><a href="#cb8-78" tabindex="-1"></a>                 else</span>
-<span id="cb8-79"><a href="#cb8-79" tabindex="-1"></a>                     output = trim(output)//"."</span>
-<span id="cb8-80"><a href="#cb8-80" tabindex="-1"></a><span class="dt">@@ -134,34 +134,34 @@ contains</span></span>
-<span id="cb8-81"><a href="#cb8-81" tabindex="-1"></a>         enddo</span>
-<span id="cb8-82"><a href="#cb8-82" tabindex="-1"></a> </span>
-<span id="cb8-83"><a href="#cb8-83" tabindex="-1"></a>         ! Calculate the new board</span>
-<span id="cb8-84"><a href="#cb8-84" tabindex="-1"></a><span class="st">-        do i=2, nrow-1</span></span>
-<span id="cb8-85"><a href="#cb8-85" tabindex="-1"></a><span class="st">-            do j=2, ncol-1</span></span>
-<span id="cb8-86"><a href="#cb8-86" tabindex="-1"></a><span class="va">+        do row=2, nrow-1</span></span>
-<span id="cb8-87"><a href="#cb8-87" tabindex="-1"></a><span class="va">+            do col=2, ncol-1</span></span>
-<span id="cb8-88"><a href="#cb8-88" tabindex="-1"></a>                 sum = 0</span>
-<span id="cb8-89"><a href="#cb8-89" tabindex="-1"></a><span class="st">-                sum = current_board(i, j-1)   &amp;</span></span>
-<span id="cb8-90"><a href="#cb8-90" tabindex="-1"></a><span class="st">-                    + current_board(i+1, j-1) &amp;</span></span>
-<span id="cb8-91"><a href="#cb8-91" tabindex="-1"></a><span class="st">-                    + current_board(i+1, j)   &amp;</span></span>
-<span id="cb8-92"><a href="#cb8-92" tabindex="-1"></a><span class="st">-                    + current_board(i+1, j+1) &amp;</span></span>
-<span id="cb8-93"><a href="#cb8-93" tabindex="-1"></a><span class="st">-                    + current_board(i, j+1)   &amp;</span></span>
-<span id="cb8-94"><a href="#cb8-94" tabindex="-1"></a><span class="st">-                    + current_board(i-1, j+1) &amp;</span></span>
-<span id="cb8-95"><a href="#cb8-95" tabindex="-1"></a><span class="st">-                    + current_board(i-1, j)   &amp;</span></span>
-<span id="cb8-96"><a href="#cb8-96" tabindex="-1"></a><span class="st">-                    + current_board(i-1, j-1)</span></span>
-<span id="cb8-97"><a href="#cb8-97" tabindex="-1"></a><span class="st">-                if(current_board(i,j)==1 .and. sum&lt;=1) then</span></span>
-<span id="cb8-98"><a href="#cb8-98" tabindex="-1"></a><span class="st">-                    new_board(i,j) = 0</span></span>
-<span id="cb8-99"><a href="#cb8-99" tabindex="-1"></a><span class="st">-                elseif(current_board(i,j)==1 .and. sum&lt;=3) then</span></span>
-<span id="cb8-100"><a href="#cb8-100" tabindex="-1"></a><span class="st">-                    new_board(i,j) = 1</span></span>
-<span id="cb8-101"><a href="#cb8-101" tabindex="-1"></a><span class="st">-                elseif(current_board(i,j)==1 .and. sum&gt;=4)then</span></span>
-<span id="cb8-102"><a href="#cb8-102" tabindex="-1"></a><span class="st">-                    new_board(i,j) = 0</span></span>
-<span id="cb8-103"><a href="#cb8-103" tabindex="-1"></a><span class="st">-                elseif(current_board(i,j)==0 .and. sum==3)then</span></span>
-<span id="cb8-104"><a href="#cb8-104" tabindex="-1"></a><span class="st">-                    new_board(i,j) = 1</span></span>
-<span id="cb8-105"><a href="#cb8-105" tabindex="-1"></a><span class="va">+                sum = current_board(row, col-1)   &amp;</span></span>
-<span id="cb8-106"><a href="#cb8-106" tabindex="-1"></a><span class="va">+                    + current_board(row+1, col-1) &amp;</span></span>
-<span id="cb8-107"><a href="#cb8-107" tabindex="-1"></a><span class="va">+                    + current_board(row+1, col)   &amp;</span></span>
-<span id="cb8-108"><a href="#cb8-108" tabindex="-1"></a><span class="va">+                    + current_board(row+1, col+1) &amp;</span></span>
-<span id="cb8-109"><a href="#cb8-109" tabindex="-1"></a><span class="va">+                    + current_board(row, col+1)   &amp;</span></span>
-<span id="cb8-110"><a href="#cb8-110" tabindex="-1"></a><span class="va">+                    + current_board(row-1, col+1) &amp;</span></span>
-<span id="cb8-111"><a href="#cb8-111" tabindex="-1"></a><span class="va">+                    + current_board(row-1, col)   &amp;</span></span>
-<span id="cb8-112"><a href="#cb8-112" tabindex="-1"></a><span class="va">+                    + current_board(row-1, col-1)</span></span>
-<span id="cb8-113"><a href="#cb8-113" tabindex="-1"></a><span class="va">+                if(current_board(row,col)==1 .and. sum&lt;=1) then</span></span>
-<span id="cb8-114"><a href="#cb8-114" tabindex="-1"></a><span class="va">+                    new_board(row,col) = 0</span></span>
-<span id="cb8-115"><a href="#cb8-115" tabindex="-1"></a><span class="va">+                elseif(current_board(row,col)==1 .and. sum&lt;=3) then</span></span>
-<span id="cb8-116"><a href="#cb8-116" tabindex="-1"></a><span class="va">+                    new_board(row,col) = 1</span></span>
-<span id="cb8-117"><a href="#cb8-117" tabindex="-1"></a><span class="va">+                elseif(current_board(row,col)==1 .and. sum&gt;=4)then</span></span>
-<span id="cb8-118"><a href="#cb8-118" tabindex="-1"></a><span class="va">+                    new_board(row,col) = 0</span></span>
-<span id="cb8-119"><a href="#cb8-119" tabindex="-1"></a><span class="va">+                elseif(current_board(row,col)==0 .and. sum==3)then</span></span>
-<span id="cb8-120"><a href="#cb8-120" tabindex="-1"></a><span class="va">+                    new_board(row,col) = 1</span></span>
-<span id="cb8-121"><a href="#cb8-121" tabindex="-1"></a>                 endif</span>
-<span id="cb8-122"><a href="#cb8-122" tabindex="-1"></a>             enddo</span>
-<span id="cb8-123"><a href="#cb8-123" tabindex="-1"></a>         enddo</span>
-<span id="cb8-124"><a href="#cb8-124" tabindex="-1"></a> </span>
-<span id="cb8-125"><a href="#cb8-125" tabindex="-1"></a>         ! Check for steady state</span>
-<span id="cb8-126"><a href="#cb8-126" tabindex="-1"></a>         steady_state = .true.</span>
-<span id="cb8-127"><a href="#cb8-127" tabindex="-1"></a><span class="st">-        do i=1, nrow</span></span>
-<span id="cb8-128"><a href="#cb8-128" tabindex="-1"></a><span class="st">-            do j=1, ncol</span></span>
-<span id="cb8-129"><a href="#cb8-129" tabindex="-1"></a><span class="st">-                if (.not. current_board(i, j) == new_board(i, j)) then</span></span>
-<span id="cb8-130"><a href="#cb8-130" tabindex="-1"></a><span class="va">+        do row=1, nrow</span></span>
-<span id="cb8-131"><a href="#cb8-131" tabindex="-1"></a><span class="va">+            do col=1, ncol</span></span>
-<span id="cb8-132"><a href="#cb8-132" tabindex="-1"></a><span class="va">+                if (.not. current_board(row, col) == new_board(row, col)) then</span></span>
-<span id="cb8-133"><a href="#cb8-133" tabindex="-1"></a>                     steady_state = .false.</span>
-<span id="cb8-134"><a href="#cb8-134" tabindex="-1"></a>                     exit</span>
-<span id="cb8-135"><a href="#cb8-135" tabindex="-1"></a>                 end if</span></code></pre>
+<p>This can be achieved with the changes shown in this <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/30cfcceb1fc80ef236230e21dae574bdebf64c87" class="external-link">commit</a></p>
 </div>
 </div>
 </div>
@@ -1043,18 +880,234 @@ which make it clear what they are.</p>
 </div>
 </div>
 <div class="section level3">
-<h3 id="wrap-program-functionality-in-procedures">3. Wrap program functionality in procedures<a class="anchor" aria-label="anchor" href="#wrap-program-functionality-in-procedures"></a>
+<h3 id="break-large-procedures-into-smaller-units">3. Break large procedures into smaller units<a class="anchor" aria-label="anchor" href="#break-large-procedures-into-smaller-units"></a>
 </h3>
-<p><strong>Smell</strong>: Logic is repeated outside a procedure.</p>
-<p><strong>Smell</strong>: Loops appear outside a procedure.</p>
-<p><strong>Smell</strong>: Lots of inline comments requited to explain
-what is happening in the main program.</p>
+<div class="section level4">
+<h4 id="smells-2">Smells<a class="anchor" aria-label="anchor" href="#smells-2"></a>
+</h4>
+<ul>
+<li>A function or subroutine no longer fits on a page in your
+editor.</li>
+<li>Multiple dummy arguments are updated (i.e. multiple
+<code>intent(out)</code> arguments)</li>
+<li>A line of code is deeply indented</li>
+<li>A piece of code interacts with the surrounding code through just a
+few variables.</li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="benefits-2">Benefits<a class="anchor" aria-label="anchor" href="#benefits-2"></a>
+</h4>
+<ul>
+<li>Procedures with only one purpose will be much easier to fix should a
+bug be introduced.</li>
+<li>Unit testing becomes easier as there are less input/output variables
+and scenarios to consider when writing your tests.</li>
+</ul>
 <div id="accordionSpoiler6" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler6" aria-expanded="false" aria-controls="collapseSpoiler6">
-  <h3 class="accordion-header" id="headingSpoiler6">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Before </h3>
+  <h3 class="accordion-header" id="headingSpoiler6">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Before: </h3>
 </button>
 <div id="collapseSpoiler6" class="accordion-collapse collapse" aria-labelledby="headingSpoiler6" data-bs-parent="#accordionSpoiler6">
+<div class="accordion-body">
+<div class="codewrapper sourceCode" id="cb7">
+<h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="kw">module</span> process_marices_mod</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>    <span class="kw">implicit</span> <span class="kw">none</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>    <span class="dt">real</span>, <span class="dt">allocatable</span> <span class="dt">::</span> A(:,:), B(:,:), C(:,:)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="kw">contains</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>    <span class="kw">subroutine</span> process_matrices(filename)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>        <span class="dt">character(len=*)</span>, <span class="dt">intent(in)</span> <span class="dt">::</span> filename</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>        <span class="dt">integer</span> <span class="dt">::</span> n, iostat, i, j, k</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>        <span class="dt">integer</span> <span class="dt">::</span> unit</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>        <span class="dt">real</span> <span class="dt">::</span> trace</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>        <span class="fu">open(</span>newunit<span class="kw">=</span><span class="fu">unit</span>, <span class="fu">file</span><span class="kw">=</span>filename, <span class="fu">status</span><span class="kw">=</span><span class="st">'old'</span>, <span class="fu">action</span><span class="kw">=</span><span class="st">'read'</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>        <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">then</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>            <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Error opening file: '</span>, <span class="fu">trim</span>(filename)</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>            <span class="kw">stop</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>        <span class="kw">end if</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>        <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> n</span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>        <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix size.'</span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a>        <span class="kw">allocate</span>(A(n,n), B(n,n))</span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a>        <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Reading matrix A ('</span>, n, <span class="st">'x'</span>, n, <span class="st">')'</span></span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a>        <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a>            <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> (A(i,j), j<span class="kw">=</span><span class="dv">1</span>,n)</span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a>            <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix A.'</span></span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a>        <span class="kw">end do</span></span>
+<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a></span>
+<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a>        <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Reading matrix B ('</span>, n, <span class="st">'x'</span>, n, <span class="st">')'</span></span>
+<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a>        <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a>            <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> (B(i,j), j<span class="kw">=</span><span class="dv">1</span>,n)</span>
+<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a>            <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix B.'</span></span>
+<span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a>        <span class="kw">end do</span></span>
+<span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="#cb7-35" tabindex="-1"></a>        <span class="fu">close(unit)</span></span>
+<span id="cb7-36"><a href="#cb7-36" tabindex="-1"></a></span>
+<span id="cb7-37"><a href="#cb7-37" tabindex="-1"></a>        C <span class="kw">=</span> <span class="fl">0.0</span></span>
+<span id="cb7-38"><a href="#cb7-38" tabindex="-1"></a>        <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb7-39"><a href="#cb7-39" tabindex="-1"></a>            <span class="kw">do</span> j <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb7-40"><a href="#cb7-40" tabindex="-1"></a>                <span class="kw">do</span> k <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb7-41"><a href="#cb7-41" tabindex="-1"></a>                    C(i,j) <span class="kw">=</span> C(i,j) <span class="kw">+</span> A(i,k) <span class="kw">*</span> B(k,j)</span>
+<span id="cb7-42"><a href="#cb7-42" tabindex="-1"></a>                <span class="kw">end do</span></span>
+<span id="cb7-43"><a href="#cb7-43" tabindex="-1"></a>            <span class="kw">end do</span></span>
+<span id="cb7-44"><a href="#cb7-44" tabindex="-1"></a>        <span class="kw">end do</span></span>
+<span id="cb7-45"><a href="#cb7-45" tabindex="-1"></a></span>
+<span id="cb7-46"><a href="#cb7-46" tabindex="-1"></a>        n <span class="kw">=</span> <span class="fu">size</span>(C, <span class="dv">1</span>)</span>
+<span id="cb7-47"><a href="#cb7-47" tabindex="-1"></a>        trace <span class="kw">=</span> <span class="fl">0.0</span></span>
+<span id="cb7-48"><a href="#cb7-48" tabindex="-1"></a>        <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb7-49"><a href="#cb7-49" tabindex="-1"></a>            trace <span class="kw">=</span> trace <span class="kw">+</span> C(i,i)</span>
+<span id="cb7-50"><a href="#cb7-50" tabindex="-1"></a>        <span class="kw">end do</span></span>
+<span id="cb7-51"><a href="#cb7-51" tabindex="-1"></a></span>
+<span id="cb7-52"><a href="#cb7-52" tabindex="-1"></a>        <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Trace of matrix C = '</span>, trace</span>
+<span id="cb7-53"><a href="#cb7-53" tabindex="-1"></a>    <span class="kw">end subroutine</span> process_matrices</span>
+<span id="cb7-54"><a href="#cb7-54" tabindex="-1"></a><span class="kw">end module</span> process_marices_mod</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="accordionSpoiler7" class="accordion spoiler-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler7" aria-expanded="false" aria-controls="collapseSpoiler7">
+  <h3 class="accordion-header" id="headingSpoiler7">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> After: </h3>
+</button>
+<div id="collapseSpoiler7" class="accordion-collapse collapse" aria-labelledby="headingSpoiler7" data-bs-parent="#accordionSpoiler7">
+<div class="accordion-body">
+<div class="codewrapper sourceCode" id="cb8">
+<h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="kw">module</span> process_marices_mod</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>    <span class="kw">implicit</span> <span class="kw">none</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>    <span class="dt">real</span>, <span class="dt">allocatable</span> <span class="dt">::</span> A(:,:), B(:,:), C(:,:)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="kw">contains</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>    <span class="kw">subroutine</span> read_matrices_from_file(filename)</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>        <span class="dt">character(len=*)</span>, <span class="dt">intent(in)</span> <span class="dt">::</span> filename</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>        <span class="dt">integer</span> <span class="dt">::</span> n, iostat, i, j</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>        <span class="dt">integer</span> <span class="dt">::</span> unit</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>        <span class="fu">open(</span>newunit<span class="kw">=</span><span class="fu">unit</span>, <span class="fu">file</span><span class="kw">=</span>filename, <span class="fu">status</span><span class="kw">=</span><span class="st">'old'</span>, <span class="fu">action</span><span class="kw">=</span><span class="st">'read'</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>        <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">then</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>            <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Error opening file: '</span>, <span class="fu">trim</span>(filename)</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>            <span class="kw">stop</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>        <span class="kw">end if</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>        <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> n</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>        <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix size.'</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>        <span class="kw">allocate</span>(A(n,n), B(n,n))</span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>        <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Reading matrix A ('</span>, n, <span class="st">'x'</span>, n, <span class="st">')'</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a>        <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a>            <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> (A(i,j), j<span class="kw">=</span><span class="dv">1</span>,n)</span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a>            <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix A.'</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a>        <span class="kw">end do</span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a>        <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Reading matrix B ('</span>, n, <span class="st">'x'</span>, n, <span class="st">')'</span></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a>        <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a>            <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> (B(i,j), j<span class="kw">=</span><span class="dv">1</span>,n)</span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a>            <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix B.'</span></span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a>        <span class="kw">end do</span></span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a></span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a>        <span class="fu">close(unit)</span></span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a>    <span class="kw">end subroutine</span> read_matrices_from_file</span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a></span>
+<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a>    <span class="kw">subroutine</span> multiply_matrices()</span>
+<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a>        <span class="dt">integer</span> <span class="dt">::</span> i, j, k, n</span>
+<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a>        n <span class="kw">=</span> <span class="fu">size</span>(A, <span class="dv">1</span>)</span>
+<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a></span>
+<span id="cb8-42"><a href="#cb8-42" tabindex="-1"></a>        <span class="kw">allocate</span>(C(n,n))</span>
+<span id="cb8-43"><a href="#cb8-43" tabindex="-1"></a></span>
+<span id="cb8-44"><a href="#cb8-44" tabindex="-1"></a>        C <span class="kw">=</span> <span class="fl">0.0</span></span>
+<span id="cb8-45"><a href="#cb8-45" tabindex="-1"></a>        <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb8-46"><a href="#cb8-46" tabindex="-1"></a>            <span class="kw">do</span> j <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb8-47"><a href="#cb8-47" tabindex="-1"></a>                <span class="kw">do</span> k <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb8-48"><a href="#cb8-48" tabindex="-1"></a>                    C(i,j) <span class="kw">=</span> C(i,j) <span class="kw">+</span> A(i,k) <span class="kw">*</span> B(k,j)</span>
+<span id="cb8-49"><a href="#cb8-49" tabindex="-1"></a>                <span class="kw">end do</span></span>
+<span id="cb8-50"><a href="#cb8-50" tabindex="-1"></a>            <span class="kw">end do</span></span>
+<span id="cb8-51"><a href="#cb8-51" tabindex="-1"></a>        <span class="kw">end do</span></span>
+<span id="cb8-52"><a href="#cb8-52" tabindex="-1"></a>    <span class="kw">end subroutine</span> multiply_matrices</span>
+<span id="cb8-53"><a href="#cb8-53" tabindex="-1"></a></span>
+<span id="cb8-54"><a href="#cb8-54" tabindex="-1"></a>    <span class="kw">subroutine</span> display_trace()</span>
+<span id="cb8-55"><a href="#cb8-55" tabindex="-1"></a>        <span class="dt">integer</span> <span class="dt">::</span> i, n</span>
+<span id="cb8-56"><a href="#cb8-56" tabindex="-1"></a>        <span class="dt">real</span> <span class="dt">::</span> trace</span>
+<span id="cb8-57"><a href="#cb8-57" tabindex="-1"></a></span>
+<span id="cb8-58"><a href="#cb8-58" tabindex="-1"></a>        n <span class="kw">=</span> <span class="fu">size</span>(C, <span class="dv">1</span>)</span>
+<span id="cb8-59"><a href="#cb8-59" tabindex="-1"></a>        trace <span class="kw">=</span> <span class="fl">0.0</span></span>
+<span id="cb8-60"><a href="#cb8-60" tabindex="-1"></a>        <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb8-61"><a href="#cb8-61" tabindex="-1"></a>            trace <span class="kw">=</span> trace <span class="kw">+</span> C(i,i)</span>
+<span id="cb8-62"><a href="#cb8-62" tabindex="-1"></a>        <span class="kw">end do</span></span>
+<span id="cb8-63"><a href="#cb8-63" tabindex="-1"></a></span>
+<span id="cb8-64"><a href="#cb8-64" tabindex="-1"></a>        <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Trace of matrix C = '</span>, trace</span>
+<span id="cb8-65"><a href="#cb8-65" tabindex="-1"></a>    <span class="kw">end subroutine</span> display_trace</span>
+<span id="cb8-66"><a href="#cb8-66" tabindex="-1"></a><span class="kw">end module</span> process_marices_mod</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="challenge-2" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="challenge-2" class="callout-inner">
+<h3 class="callout-title">Challenge</h3>
+<div class="callout-content">
+<p>Update John’s code to reduce the responsibilities of any procedures
+to one</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution3" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
+  <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
+</button>
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div class="accordion-body">
+<p>This can be achieved with the changes shown in this <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/fb06543e12e217e6f39ffc9df2f13108f64ca7ac" class="external-link">commit</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="wrap-program-functionality-in-procedures">4. Wrap program functionality in procedures<a class="anchor" aria-label="anchor" href="#wrap-program-functionality-in-procedures"></a>
+</h3>
+<div class="section level4">
+<h4 id="smell">Smell<a class="anchor" aria-label="anchor" href="#smell"></a>
+</h4>
+<ul>
+<li>Logic is repeated outside a procedure.</li>
+<li>Loops appear outside a procedure.</li>
+<li>Lots of inline comments requited to explain what is happening in the
+main program.</li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="benefits-3">Benefits<a class="anchor" aria-label="anchor" href="#benefits-3"></a>
+</h4>
+<ul>
+<li>More of your code can be tested.</li>
+<li>It becomes harder to introduce side effects which may impact other
+aspects of your code.</li>
+</ul>
+<div id="accordionSpoiler8" class="accordion spoiler-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler8" aria-expanded="false" aria-controls="collapseSpoiler8">
+  <h3 class="accordion-header" id="headingSpoiler8">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Before </h3>
+</button>
+<div id="collapseSpoiler8" class="accordion-collapse collapse" aria-labelledby="headingSpoiler8" data-bs-parent="#accordionSpoiler8">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1079,12 +1132,12 @@ what is happening in the main program.</p>
 </div>
 </div>
 </div>
-<div id="accordionSpoiler7" class="accordion spoiler-accordion accordion-flush">
+<div id="accordionSpoiler9" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler7" aria-expanded="false" aria-controls="collapseSpoiler7">
-  <h3 class="accordion-header" id="headingSpoiler7">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> After </h3>
+<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler9" aria-expanded="false" aria-controls="collapseSpoiler9">
+  <h3 class="accordion-header" id="headingSpoiler9">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> After </h3>
 </button>
-<div id="collapseSpoiler7" class="accordion-collapse collapse" aria-labelledby="headingSpoiler7" data-bs-parent="#accordionSpoiler7">
+<div id="collapseSpoiler9" class="accordion-collapse collapse" aria-labelledby="headingSpoiler9" data-bs-parent="#accordionSpoiler9">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1117,401 +1170,6 @@ what is happening in the main program.</p>
 </div>
 </div>
 </div>
-<div id="challenge-2" class="callout challenge">
-<div class="callout-square">
-<i class="callout-icon" data-feather="zap"></i>
-</div>
-<span class="callout-header">Challenge</span>
-<div id="challenge-2" class="callout-inner">
-<h3 class="callout-title">Challenge</h3>
-<div class="callout-content">
-<p>Update John’s code to reduce the responsibilities of any procedures
-to one</p>
-</div>
-</div>
-</div>
-<div id="accordionSolution3" class="accordion challenge-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
-  <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
-</button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
-<div class="accordion-body">
-<p>This can be achieved with the following diff</p>
-<div class="codewrapper sourceCode" id="cb11">
-<h3 class="code-label">DIFF<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode diff" tabindex="0"><code class="sourceCode diff"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="kw">--- a/episodes/7-refactoring-fortran/solution/src/game_of_life.f90</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="dt">+++ b/episodes/7-refactoring-fortran/solution/src/game_of_life.f90</span></span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="dt">@@ -10,24 +10,17 @@ program game_of_life</span></span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a> </span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>     !! Board args</span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>     integer, parameter :: max_generations = 100, max_nrows = 100, max_ncols = 100</span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="st">-    integer :: nrow, ncol</span></span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="st">-    integer :: row, generation_number</span></span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="va">+    integer :: nrow, ncol, generation_number</span></span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>     integer, dimension(:,:), allocatable :: current_board, new_board</span>
-<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="st">-    !! Animation args</span></span>
-<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="st">-    integer, dimension(8) :: date_time_values</span></span>
-<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="st">-    integer :: mod_ms_step, ms_per_step = 250</span></span>
-<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>     logical :: steady_state = .false.</span>
-<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a> </span>
-<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a><span class="va">+    !&gt; Whether to animate the board</span></span>
-<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="va">+    logical, parameter :: animate = .true.</span></span>
-<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a>     !! CLI args</span>
-<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a>     integer                       :: argl</span>
-<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a>     character(len=:), allocatable :: cli_arg_temp_store, input_filename</span>
-<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a> </span>
-<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a><span class="st">-    !! File IO args</span></span>
-<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a><span class="st">-    character(len=80) :: text_to_discard</span></span>
-<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a><span class="st">-    integer :: input_file_io</span></span>
-<span id="cb11-27"><a href="#cb11-27" tabindex="-1"></a><span class="st">-    integer :: iostat</span></span>
-<span id="cb11-28"><a href="#cb11-28" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb11-29"><a href="#cb11-29" tabindex="-1"></a>     ! Get current_board file path from command line</span>
-<span id="cb11-30"><a href="#cb11-30" tabindex="-1"></a>     if (command_argument_count() == 1) then</span>
-<span id="cb11-31"><a href="#cb11-31" tabindex="-1"></a>         call get_command_argument(1, length=argl)</span>
-<span id="cb11-32"><a href="#cb11-32" tabindex="-1"></a><span class="dt">@@ -43,77 +36,116 @@ program game_of_life</span></span>
-<span id="cb11-33"><a href="#cb11-33" tabindex="-1"></a>         stop</span>
-<span id="cb11-34"><a href="#cb11-34" tabindex="-1"></a>     end if</span>
-<span id="cb11-35"><a href="#cb11-35" tabindex="-1"></a> </span>
-<span id="cb11-36"><a href="#cb11-36" tabindex="-1"></a><span class="st">-    ! Open input file</span></span>
-<span id="cb11-37"><a href="#cb11-37" tabindex="-1"></a><span class="st">-    open(unit=input_file_io,   &amp;</span></span>
-<span id="cb11-38"><a href="#cb11-38" tabindex="-1"></a><span class="st">-         file=input_filename, &amp;</span></span>
-<span id="cb11-39"><a href="#cb11-39" tabindex="-1"></a><span class="st">-         status='old',  &amp;</span></span>
-<span id="cb11-40"><a href="#cb11-40" tabindex="-1"></a><span class="st">-         IOSTAT=iostat)</span></span>
-<span id="cb11-41"><a href="#cb11-41" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb11-42"><a href="#cb11-42" tabindex="-1"></a><span class="st">-    if( iostat /= 0) then</span></span>
-<span id="cb11-43"><a href="#cb11-43" tabindex="-1"></a><span class="st">-        write(*,'(a)') ' *** Error when opening '//input_filename</span></span>
-<span id="cb11-44"><a href="#cb11-44" tabindex="-1"></a><span class="st">-        stop 1</span></span>
-<span id="cb11-45"><a href="#cb11-45" tabindex="-1"></a><span class="st">-    end if</span></span>
-<span id="cb11-46"><a href="#cb11-46" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb11-47"><a href="#cb11-47" tabindex="-1"></a><span class="st">-    ! Read in current_board from file</span></span>
-<span id="cb11-48"><a href="#cb11-48" tabindex="-1"></a><span class="st">-    read(input_file_io,'(a)') text_to_discard ! Skip first line</span></span>
-<span id="cb11-49"><a href="#cb11-49" tabindex="-1"></a><span class="st">-    read(input_file_io,*) nrow, ncol</span></span>
-<span id="cb11-50"><a href="#cb11-50" tabindex="-1"></a><span class="va">+    call read_model_from_file()</span></span>
-<span id="cb11-51"><a href="#cb11-51" tabindex="-1"></a> </span>
-<span id="cb11-52"><a href="#cb11-52" tabindex="-1"></a><span class="st">-    ! Verify the number of rows read from the file</span></span>
-<span id="cb11-53"><a href="#cb11-53" tabindex="-1"></a><span class="st">-    if (nrow &lt; 1 .or. nrow &gt; max_nrows) then</span></span>
-<span id="cb11-54"><a href="#cb11-54" tabindex="-1"></a><span class="st">-        write (*,'(a,i6,a,i6)') "nrow must be a positive integer less than ", max_nrows," found ", nrow</span></span>
-<span id="cb11-55"><a href="#cb11-55" tabindex="-1"></a><span class="st">-        stop 1</span></span>
-<span id="cb11-56"><a href="#cb11-56" tabindex="-1"></a><span class="st">-    end if</span></span>
-<span id="cb11-57"><a href="#cb11-57" tabindex="-1"></a><span class="va">+    call find_steady_state()</span></span>
-<span id="cb11-58"><a href="#cb11-58" tabindex="-1"></a> </span>
-<span id="cb11-59"><a href="#cb11-59" tabindex="-1"></a><span class="st">-    ! Verify the number of columns read from the file</span></span>
-<span id="cb11-60"><a href="#cb11-60" tabindex="-1"></a><span class="st">-    if (ncol &lt; 1 .or. ncol &gt; max_ncols) then</span></span>
-<span id="cb11-61"><a href="#cb11-61" tabindex="-1"></a><span class="st">-        write (*,'(a,i6,a,i6)') "ncol must be a positive integer less than ", max_ncols," found ", ncol</span></span>
-<span id="cb11-62"><a href="#cb11-62" tabindex="-1"></a><span class="st">-        stop 1</span></span>
-<span id="cb11-63"><a href="#cb11-63" tabindex="-1"></a><span class="va">+    if (steady_state) then</span></span>
-<span id="cb11-64"><a href="#cb11-64" tabindex="-1"></a><span class="va">+        write(*,'(a,i6,a)') "Reached steady after ", generation_number, " generations"</span></span>
-<span id="cb11-65"><a href="#cb11-65" tabindex="-1"></a><span class="va">+    else</span></span>
-<span id="cb11-66"><a href="#cb11-66" tabindex="-1"></a><span class="va">+        write(*,'(a,i6,a)') "Did NOT Reach steady after ", generation_number, " generations"</span></span>
-<span id="cb11-67"><a href="#cb11-67" tabindex="-1"></a>     end if</span>
-<span id="cb11-68"><a href="#cb11-68" tabindex="-1"></a> </span>
-<span id="cb11-69"><a href="#cb11-69" tabindex="-1"></a><span class="st">-    allocate(current_board(nrow, ncol))</span></span>
-<span id="cb11-70"><a href="#cb11-70" tabindex="-1"></a><span class="st">-    allocate(new_board(nrow, ncol))</span></span>
-<span id="cb11-71"><a href="#cb11-71" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb11-72"><a href="#cb11-72" tabindex="-1"></a><span class="st">-    read(input_file_io,'(a)') text_to_discard ! Skip next line</span></span>
-<span id="cb11-73"><a href="#cb11-73" tabindex="-1"></a><span class="st">-    ! Populate the boards starting state</span></span>
-<span id="cb11-74"><a href="#cb11-74" tabindex="-1"></a><span class="st">-    do row = 1, nrow</span></span>
-<span id="cb11-75"><a href="#cb11-75" tabindex="-1"></a><span class="st">-        read(input_file_io,*) current_board(row, :)</span></span>
-<span id="cb11-76"><a href="#cb11-76" tabindex="-1"></a><span class="st">-    end do</span></span>
-<span id="cb11-77"><a href="#cb11-77" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb11-78"><a href="#cb11-78" tabindex="-1"></a><span class="st">-    close(input_file_io)</span></span>
-<span id="cb11-79"><a href="#cb11-79" tabindex="-1"></a><span class="va">+    deallocate(current_board)</span></span>
-<span id="cb11-80"><a href="#cb11-80" tabindex="-1"></a><span class="va">+    deallocate(new_board)</span></span>
-<span id="cb11-81"><a href="#cb11-81" tabindex="-1"></a> </span>
-<span id="cb11-82"><a href="#cb11-82" tabindex="-1"></a><span class="st">-    new_board = 0</span></span>
-<span id="cb11-83"><a href="#cb11-83" tabindex="-1"></a><span class="st">-    generation_number = 0</span></span>
-<span id="cb11-84"><a href="#cb11-84" tabindex="-1"></a><span class="va">+contains</span></span>
-<span id="cb11-85"><a href="#cb11-85" tabindex="-1"></a> </span>
-<span id="cb11-86"><a href="#cb11-86" tabindex="-1"></a><span class="st">-    ! Clear the terminal screen</span></span>
-<span id="cb11-87"><a href="#cb11-87" tabindex="-1"></a><span class="st">-    call system ("clear")</span></span>
-<span id="cb11-88"><a href="#cb11-88" tabindex="-1"></a><span class="va">+    !&gt; Populate the board from a provided file</span></span>
-<span id="cb11-89"><a href="#cb11-89" tabindex="-1"></a><span class="va">+    subroutine read_model_from_file()</span></span>
-<span id="cb11-90"><a href="#cb11-90" tabindex="-1"></a><span class="va">+        !&gt; A flag to indicate if reading the file was successful</span></span>
-<span id="cb11-91"><a href="#cb11-91" tabindex="-1"></a><span class="va">+        character(len=:), allocatable :: io_error_message</span></span>
-<span id="cb11-92"><a href="#cb11-92" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb11-93"><a href="#cb11-93" tabindex="-1"></a><span class="va">+        ! Board definition args</span></span>
-<span id="cb11-94"><a href="#cb11-94" tabindex="-1"></a><span class="va">+        integer :: row</span></span>
-<span id="cb11-95"><a href="#cb11-95" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb11-96"><a href="#cb11-96" tabindex="-1"></a><span class="va">+        ! File IO args</span></span>
-<span id="cb11-97"><a href="#cb11-97" tabindex="-1"></a><span class="va">+        integer :: input_file_io, iostat</span></span>
-<span id="cb11-98"><a href="#cb11-98" tabindex="-1"></a><span class="va">+        character(len=80) :: text_to_discard</span></span>
-<span id="cb11-99"><a href="#cb11-99" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb11-100"><a href="#cb11-100" tabindex="-1"></a><span class="va">+        input_file_io = 1111</span></span>
-<span id="cb11-101"><a href="#cb11-101" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb11-102"><a href="#cb11-102" tabindex="-1"></a><span class="va">+        ! Open input file</span></span>
-<span id="cb11-103"><a href="#cb11-103" tabindex="-1"></a><span class="va">+        open(unit=input_file_io,   &amp;</span></span>
-<span id="cb11-104"><a href="#cb11-104" tabindex="-1"></a><span class="va">+            file=input_filename, &amp;</span></span>
-<span id="cb11-105"><a href="#cb11-105" tabindex="-1"></a><span class="va">+            status='old',  &amp;</span></span>
-<span id="cb11-106"><a href="#cb11-106" tabindex="-1"></a><span class="va">+            IOSTAT=iostat)</span></span>
-<span id="cb11-107"><a href="#cb11-107" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb11-108"><a href="#cb11-108" tabindex="-1"></a><span class="va">+        if( iostat == 0) then</span></span>
-<span id="cb11-109"><a href="#cb11-109" tabindex="-1"></a><span class="va">+            ! Read in board from file</span></span>
-<span id="cb11-110"><a href="#cb11-110" tabindex="-1"></a><span class="va">+            read(input_file_io,'(a)') text_to_discard ! Skip first line</span></span>
-<span id="cb11-111"><a href="#cb11-111" tabindex="-1"></a><span class="va">+            read(input_file_io,*) nrow, ncol</span></span>
-<span id="cb11-112"><a href="#cb11-112" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb11-113"><a href="#cb11-113" tabindex="-1"></a><span class="va">+            ! Verify the number of rows and columns read from the file</span></span>
-<span id="cb11-114"><a href="#cb11-114" tabindex="-1"></a><span class="va">+            if (nrow &lt; 1 .or. nrow &gt; max_nrows) then</span></span>
-<span id="cb11-115"><a href="#cb11-115" tabindex="-1"></a><span class="va">+                allocate(character(100) :: io_error_message)</span></span>
-<span id="cb11-116"><a href="#cb11-116" tabindex="-1"></a><span class="va">+                write (io_error_message,'(a,i6,a,i6)') "nrow must be a positive integer less than ", max_nrows, " found ", nrow</span></span>
-<span id="cb11-117"><a href="#cb11-117" tabindex="-1"></a><span class="va">+            elseif (ncol &lt; 1 .or. ncol &gt; max_ncols) then</span></span>
-<span id="cb11-118"><a href="#cb11-118" tabindex="-1"></a><span class="va">+                allocate(character(100) :: io_error_message)</span></span>
-<span id="cb11-119"><a href="#cb11-119" tabindex="-1"></a><span class="va">+                write (io_error_message,'(a,i6,a,i6)') "ncol must be a positive integer less than ", max_ncols, " found ", ncol</span></span>
-<span id="cb11-120"><a href="#cb11-120" tabindex="-1"></a><span class="va">+            end if</span></span>
-<span id="cb11-121"><a href="#cb11-121" tabindex="-1"></a><span class="va">+        else</span></span>
-<span id="cb11-122"><a href="#cb11-122" tabindex="-1"></a><span class="va">+            allocate(character(100) :: io_error_message)</span></span>
-<span id="cb11-123"><a href="#cb11-123" tabindex="-1"></a><span class="va">+            write(io_error_message,'(a)') ' *** Error when opening '//input_filename</span></span>
-<span id="cb11-124"><a href="#cb11-124" tabindex="-1"></a><span class="va">+        endif</span></span>
-<span id="cb11-125"><a href="#cb11-125" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb11-126"><a href="#cb11-126" tabindex="-1"></a><span class="va">+        if (.not. allocated(io_error_message)) then</span></span>
-<span id="cb11-127"><a href="#cb11-127" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb11-128"><a href="#cb11-128" tabindex="-1"></a><span class="va">+            allocate(current_board(nrow, ncol))</span></span>
-<span id="cb11-129"><a href="#cb11-129" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb11-130"><a href="#cb11-130" tabindex="-1"></a><span class="va">+            read(input_file_io,'(a)') text_to_discard ! Skip next line</span></span>
-<span id="cb11-131"><a href="#cb11-131" tabindex="-1"></a><span class="va">+            ! Populate the boards starting state</span></span>
-<span id="cb11-132"><a href="#cb11-132" tabindex="-1"></a><span class="va">+            do row = 1, nrow</span></span>
-<span id="cb11-133"><a href="#cb11-133" tabindex="-1"></a><span class="va">+                read(input_file_io,*) current_board(row, :)</span></span>
-<span id="cb11-134"><a href="#cb11-134" tabindex="-1"></a><span class="va">+            end do</span></span>
-<span id="cb11-135"><a href="#cb11-135" tabindex="-1"></a> </span>
-<span id="cb11-136"><a href="#cb11-136" tabindex="-1"></a><span class="st">-    ! Iterate until we reach a steady state</span></span>
-<span id="cb11-137"><a href="#cb11-137" tabindex="-1"></a><span class="st">-    do while(.not. steady_state .and. generation_number &lt; max_generations)</span></span>
-<span id="cb11-138"><a href="#cb11-138" tabindex="-1"></a><span class="st">-        ! Advance the simulation in the steps of the requested number of milliseconds</span></span>
-<span id="cb11-139"><a href="#cb11-139" tabindex="-1"></a><span class="st">-        call date_and_time(VALUES=date_time_values)</span></span>
-<span id="cb11-140"><a href="#cb11-140" tabindex="-1"></a><span class="st">-        mod_ms_step = mod(date_time_values(8), ms_per_step)</span></span>
-<span id="cb11-141"><a href="#cb11-141" tabindex="-1"></a><span class="va">+        end if</span></span>
-<span id="cb11-142"><a href="#cb11-142" tabindex="-1"></a> </span>
-<span id="cb11-143"><a href="#cb11-143" tabindex="-1"></a><span class="st">-        if (mod_ms_step == 0) then</span></span>
-<span id="cb11-144"><a href="#cb11-144" tabindex="-1"></a><span class="st">-            call evolve_board()</span></span>
-<span id="cb11-145"><a href="#cb11-145" tabindex="-1"></a><span class="st">-            call check_for_steady_state()</span></span>
-<span id="cb11-146"><a href="#cb11-146" tabindex="-1"></a><span class="st">-            current_board = new_board</span></span>
-<span id="cb11-147"><a href="#cb11-147" tabindex="-1"></a><span class="st">-            call draw_board()</span></span>
-<span id="cb11-148"><a href="#cb11-148" tabindex="-1"></a><span class="va">+        close(input_file_io)</span></span>
-<span id="cb11-149"><a href="#cb11-149" tabindex="-1"></a> </span>
-<span id="cb11-150"><a href="#cb11-150" tabindex="-1"></a><span class="st">-            generation_number = generation_number + 1</span></span>
-<span id="cb11-151"><a href="#cb11-151" tabindex="-1"></a><span class="va">+        if (allocated(io_error_message)) then</span></span>
-<span id="cb11-152"><a href="#cb11-152" tabindex="-1"></a><span class="va">+            write (*,*) io_error_message</span></span>
-<span id="cb11-153"><a href="#cb11-153" tabindex="-1"></a><span class="va">+            deallocate(io_error_message)</span></span>
-<span id="cb11-154"><a href="#cb11-154" tabindex="-1"></a><span class="va">+            stop</span></span>
-<span id="cb11-155"><a href="#cb11-155" tabindex="-1"></a>         end if</span>
-<span id="cb11-156"><a href="#cb11-156" tabindex="-1"></a><span class="va">+    end subroutine read_model_from_file</span></span>
-<span id="cb11-157"><a href="#cb11-157" tabindex="-1"></a> </span>
-<span id="cb11-158"><a href="#cb11-158" tabindex="-1"></a><span class="st">-    end do</span></span>
-<span id="cb11-159"><a href="#cb11-159" tabindex="-1"></a><span class="va">+    !&gt; Find the steady state of the Game of Life board</span></span>
-<span id="cb11-160"><a href="#cb11-160" tabindex="-1"></a><span class="va">+    subroutine find_steady_state()</span></span>
-<span id="cb11-161"><a href="#cb11-161" tabindex="-1"></a> </span>
-<span id="cb11-162"><a href="#cb11-162" tabindex="-1"></a><span class="st">-    if (steady_state) then</span></span>
-<span id="cb11-163"><a href="#cb11-163" tabindex="-1"></a><span class="st">-        write(*,'(a,i6,a)') "Reached steady after ", generation_number, " generations"</span></span>
-<span id="cb11-164"><a href="#cb11-164" tabindex="-1"></a><span class="st">-    else</span></span>
-<span id="cb11-165"><a href="#cb11-165" tabindex="-1"></a><span class="st">-        write(*,'(a,i6,a)') "Did NOT Reach steady after ", generation_number, " generations"</span></span>
-<span id="cb11-166"><a href="#cb11-166" tabindex="-1"></a><span class="st">-    end if</span></span>
-<span id="cb11-167"><a href="#cb11-167" tabindex="-1"></a><span class="va">+        !! Animation args</span></span>
-<span id="cb11-168"><a href="#cb11-168" tabindex="-1"></a><span class="va">+        integer, dimension(8) :: date_time_values</span></span>
-<span id="cb11-169"><a href="#cb11-169" tabindex="-1"></a><span class="va">+        integer :: mod_ms_step</span></span>
-<span id="cb11-170"><a href="#cb11-170" tabindex="-1"></a><span class="va">+        integer, parameter :: ms_per_step = 250</span></span>
-<span id="cb11-171"><a href="#cb11-171" tabindex="-1"></a> </span>
-<span id="cb11-172"><a href="#cb11-172" tabindex="-1"></a><span class="st">-    deallocate(current_board)</span></span>
-<span id="cb11-173"><a href="#cb11-173" tabindex="-1"></a><span class="st">-    deallocate(new_board)</span></span>
-<span id="cb11-174"><a href="#cb11-174" tabindex="-1"></a><span class="va">+        allocate(new_board(size(current_board,1), size(current_board, 2)))</span></span>
-<span id="cb11-175"><a href="#cb11-175" tabindex="-1"></a><span class="va">+        new_board = 0</span></span>
-<span id="cb11-176"><a href="#cb11-176" tabindex="-1"></a> </span>
-<span id="cb11-177"><a href="#cb11-177" tabindex="-1"></a><span class="st">-contains</span></span>
-<span id="cb11-178"><a href="#cb11-178" tabindex="-1"></a><span class="va">+        ! Clear the terminal screen</span></span>
-<span id="cb11-179"><a href="#cb11-179" tabindex="-1"></a><span class="va">+        if (animate) call system ("clear")</span></span>
-<span id="cb11-180"><a href="#cb11-180" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb11-181"><a href="#cb11-181" tabindex="-1"></a><span class="va">+        ! Iterate until we reach a steady state</span></span>
-<span id="cb11-182"><a href="#cb11-182" tabindex="-1"></a><span class="va">+        steady_state = .false.</span></span>
-<span id="cb11-183"><a href="#cb11-183" tabindex="-1"></a><span class="va">+        generation_number = 0</span></span>
-<span id="cb11-184"><a href="#cb11-184" tabindex="-1"></a><span class="va">+        mod_ms_step = 0</span></span>
-<span id="cb11-185"><a href="#cb11-185" tabindex="-1"></a><span class="va">+        do while(.not. steady_state .and. generation_number &lt; max_generations)</span></span>
-<span id="cb11-186"><a href="#cb11-186" tabindex="-1"></a><span class="va">+            if (animate) then</span></span>
-<span id="cb11-187"><a href="#cb11-187" tabindex="-1"></a><span class="va">+                ! Advance the simulation in the steps of the requested number of milliseconds</span></span>
-<span id="cb11-188"><a href="#cb11-188" tabindex="-1"></a><span class="va">+                call date_and_time(VALUES=date_time_values)</span></span>
-<span id="cb11-189"><a href="#cb11-189" tabindex="-1"></a><span class="va">+                mod_ms_step = mod(date_time_values(8), ms_per_step)</span></span>
-<span id="cb11-190"><a href="#cb11-190" tabindex="-1"></a><span class="va">+            end if</span></span>
-<span id="cb11-191"><a href="#cb11-191" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb11-192"><a href="#cb11-192" tabindex="-1"></a><span class="va">+            if (mod_ms_step == 0) then</span></span>
-<span id="cb11-193"><a href="#cb11-193" tabindex="-1"></a><span class="va">+                call evolve_board()</span></span>
-<span id="cb11-194"><a href="#cb11-194" tabindex="-1"></a><span class="va">+                call check_for_steady_state()</span></span>
-<span id="cb11-195"><a href="#cb11-195" tabindex="-1"></a><span class="va">+                current_board = new_board</span></span>
-<span id="cb11-196"><a href="#cb11-196" tabindex="-1"></a><span class="va">+                if (animate) call draw_board()</span></span>
-<span id="cb11-197"><a href="#cb11-197" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb11-198"><a href="#cb11-198" tabindex="-1"></a><span class="va">+                generation_number = generation_number + 1</span></span>
-<span id="cb11-199"><a href="#cb11-199" tabindex="-1"></a><span class="va">+            end if</span></span>
-<span id="cb11-200"><a href="#cb11-200" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb11-201"><a href="#cb11-201" tabindex="-1"></a><span class="va">+        end do</span></span>
-<span id="cb11-202"><a href="#cb11-202" tabindex="-1"></a><span class="va">+    end subroutine find_steady_state</span></span>
-<span id="cb11-203"><a href="#cb11-203" tabindex="-1"></a> </span>
-<span id="cb11-204"><a href="#cb11-204" tabindex="-1"></a>     !&gt; Evolve the board into the state of the next iteration</span>
-<span id="cb11-205"><a href="#cb11-205" tabindex="-1"></a>     subroutine evolve_board()</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="section level3">
-<h3 id="break-large-procedures-into-smaller-units">4. Break large procedures into smaller units<a class="anchor" aria-label="anchor" href="#break-large-procedures-into-smaller-units"></a>
-</h3>
-<p><strong>Smell</strong>: A function or subroutine no longer fits on a
-page in your editor.</p>
-<p><strong>Smell</strong>: Multiple dummy arguments are updated
-(i.e. multiple <code>intent(out)</code> arguments).</p>
-<p><strong>Smell</strong>: A line of code is deeply indented.</p>
-<p><strong>Smell</strong>: A piece of code interacts with the
-surrounding code through just a few variables.</p>
-<div id="accordionSpoiler8" class="accordion spoiler-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler8" aria-expanded="false" aria-controls="collapseSpoiler8">
-  <h3 class="accordion-header" id="headingSpoiler8">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Before: </h3>
-</button>
-<div id="collapseSpoiler8" class="accordion-collapse collapse" aria-labelledby="headingSpoiler8" data-bs-parent="#accordionSpoiler8">
-<div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb12">
-<h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="kw">module</span> process_marices_mod</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>    <span class="kw">implicit</span> <span class="kw">none</span></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>    <span class="dt">real</span>, <span class="dt">allocatable</span> <span class="dt">::</span> A(:,:), B(:,:), C(:,:)</span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="kw">contains</span></span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>    <span class="kw">subroutine</span> process_matrices(filename)</span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>        <span class="dt">character(len=*)</span>, <span class="dt">intent(in)</span> <span class="dt">::</span> filename</span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>        <span class="dt">integer</span> <span class="dt">::</span> n, iostat, i, j, k</span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>        <span class="dt">integer</span> <span class="dt">::</span> unit</span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>        <span class="dt">real</span> <span class="dt">::</span> trace</span>
-<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a></span>
-<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>        <span class="fu">open(</span>newunit<span class="kw">=</span><span class="fu">unit</span>, <span class="fu">file</span><span class="kw">=</span>filename, <span class="fu">status</span><span class="kw">=</span><span class="st">'old'</span>, <span class="fu">action</span><span class="kw">=</span><span class="st">'read'</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span></span>
-<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>        <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">then</span></span>
-<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a>            <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Error opening file: '</span>, <span class="fu">trim</span>(filename)</span>
-<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>            <span class="kw">stop</span></span>
-<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a>        <span class="kw">end if</span></span>
-<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a></span>
-<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a>        <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> n</span>
-<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a>        <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix size.'</span></span>
-<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a></span>
-<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a>        <span class="kw">allocate</span>(A(n,n), B(n,n))</span>
-<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a></span>
-<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a>        <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Reading matrix A ('</span>, n, <span class="st">'x'</span>, n, <span class="st">')'</span></span>
-<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a>        <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a>            <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> (A(i,j), j<span class="kw">=</span><span class="dv">1</span>,n)</span>
-<span id="cb12-26"><a href="#cb12-26" tabindex="-1"></a>            <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix A.'</span></span>
-<span id="cb12-27"><a href="#cb12-27" tabindex="-1"></a>        <span class="kw">end do</span></span>
-<span id="cb12-28"><a href="#cb12-28" tabindex="-1"></a></span>
-<span id="cb12-29"><a href="#cb12-29" tabindex="-1"></a>        <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Reading matrix B ('</span>, n, <span class="st">'x'</span>, n, <span class="st">')'</span></span>
-<span id="cb12-30"><a href="#cb12-30" tabindex="-1"></a>        <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb12-31"><a href="#cb12-31" tabindex="-1"></a>            <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> (B(i,j), j<span class="kw">=</span><span class="dv">1</span>,n)</span>
-<span id="cb12-32"><a href="#cb12-32" tabindex="-1"></a>            <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix B.'</span></span>
-<span id="cb12-33"><a href="#cb12-33" tabindex="-1"></a>        <span class="kw">end do</span></span>
-<span id="cb12-34"><a href="#cb12-34" tabindex="-1"></a></span>
-<span id="cb12-35"><a href="#cb12-35" tabindex="-1"></a>        <span class="fu">close(unit)</span></span>
-<span id="cb12-36"><a href="#cb12-36" tabindex="-1"></a></span>
-<span id="cb12-37"><a href="#cb12-37" tabindex="-1"></a>        C <span class="kw">=</span> <span class="fl">0.0</span></span>
-<span id="cb12-38"><a href="#cb12-38" tabindex="-1"></a>        <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb12-39"><a href="#cb12-39" tabindex="-1"></a>            <span class="kw">do</span> j <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb12-40"><a href="#cb12-40" tabindex="-1"></a>                <span class="kw">do</span> k <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb12-41"><a href="#cb12-41" tabindex="-1"></a>                    C(i,j) <span class="kw">=</span> C(i,j) <span class="kw">+</span> A(i,k) <span class="kw">*</span> B(k,j)</span>
-<span id="cb12-42"><a href="#cb12-42" tabindex="-1"></a>                <span class="kw">end do</span></span>
-<span id="cb12-43"><a href="#cb12-43" tabindex="-1"></a>            <span class="kw">end do</span></span>
-<span id="cb12-44"><a href="#cb12-44" tabindex="-1"></a>        <span class="kw">end do</span></span>
-<span id="cb12-45"><a href="#cb12-45" tabindex="-1"></a></span>
-<span id="cb12-46"><a href="#cb12-46" tabindex="-1"></a>        n <span class="kw">=</span> <span class="fu">size</span>(C, <span class="dv">1</span>)</span>
-<span id="cb12-47"><a href="#cb12-47" tabindex="-1"></a>        trace <span class="kw">=</span> <span class="fl">0.0</span></span>
-<span id="cb12-48"><a href="#cb12-48" tabindex="-1"></a>        <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb12-49"><a href="#cb12-49" tabindex="-1"></a>            trace <span class="kw">=</span> trace <span class="kw">+</span> C(i,i)</span>
-<span id="cb12-50"><a href="#cb12-50" tabindex="-1"></a>        <span class="kw">end do</span></span>
-<span id="cb12-51"><a href="#cb12-51" tabindex="-1"></a></span>
-<span id="cb12-52"><a href="#cb12-52" tabindex="-1"></a>        <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Trace of matrix C = '</span>, trace</span>
-<span id="cb12-53"><a href="#cb12-53" tabindex="-1"></a>    <span class="kw">end subroutine</span> process_matrices</span>
-<span id="cb12-54"><a href="#cb12-54" tabindex="-1"></a><span class="kw">end module</span> process_marices_mod</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div id="accordionSpoiler9" class="accordion spoiler-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler9" aria-expanded="false" aria-controls="collapseSpoiler9">
-  <h3 class="accordion-header" id="headingSpoiler9">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> After: </h3>
-</button>
-<div id="collapseSpoiler9" class="accordion-collapse collapse" aria-labelledby="headingSpoiler9" data-bs-parent="#accordionSpoiler9">
-<div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb13">
-<h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="kw">module</span> process_marices_mod</span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>    <span class="kw">implicit</span> <span class="kw">none</span></span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>    <span class="dt">real</span>, <span class="dt">allocatable</span> <span class="dt">::</span> A(:,:), B(:,:), C(:,:)</span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="kw">contains</span></span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>    <span class="kw">subroutine</span> read_matrices_from_file(filename)</span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>        <span class="dt">character(len=*)</span>, <span class="dt">intent(in)</span> <span class="dt">::</span> filename</span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>        <span class="dt">integer</span> <span class="dt">::</span> n, iostat, i, j</span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>        <span class="dt">integer</span> <span class="dt">::</span> unit</span>
-<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a></span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>        <span class="fu">open(</span>newunit<span class="kw">=</span><span class="fu">unit</span>, <span class="fu">file</span><span class="kw">=</span>filename, <span class="fu">status</span><span class="kw">=</span><span class="st">'old'</span>, <span class="fu">action</span><span class="kw">=</span><span class="st">'read'</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span></span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>        <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">then</span></span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>            <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Error opening file: '</span>, <span class="fu">trim</span>(filename)</span>
-<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>            <span class="kw">stop</span></span>
-<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a>        <span class="kw">end if</span></span>
-<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a></span>
-<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a>        <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> n</span>
-<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a>        <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix size.'</span></span>
-<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a></span>
-<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a>        <span class="kw">allocate</span>(A(n,n), B(n,n))</span>
-<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a></span>
-<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a>        <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Reading matrix A ('</span>, n, <span class="st">'x'</span>, n, <span class="st">')'</span></span>
-<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a>        <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a>            <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> (A(i,j), j<span class="kw">=</span><span class="dv">1</span>,n)</span>
-<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a>            <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix A.'</span></span>
-<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a>        <span class="kw">end do</span></span>
-<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a></span>
-<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a>        <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Reading matrix B ('</span>, n, <span class="st">'x'</span>, n, <span class="st">')'</span></span>
-<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a>        <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a>            <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> (B(i,j), j<span class="kw">=</span><span class="dv">1</span>,n)</span>
-<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a>            <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix B.'</span></span>
-<span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a>        <span class="kw">end do</span></span>
-<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a></span>
-<span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a>        <span class="fu">close(unit)</span></span>
-<span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a>    <span class="kw">end subroutine</span> read_matrices_from_file</span>
-<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a></span>
-<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a>    <span class="kw">subroutine</span> multiply_matrices()</span>
-<span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a>        <span class="dt">integer</span> <span class="dt">::</span> i, j, k, n</span>
-<span id="cb13-40"><a href="#cb13-40" tabindex="-1"></a>        n <span class="kw">=</span> <span class="fu">size</span>(A, <span class="dv">1</span>)</span>
-<span id="cb13-41"><a href="#cb13-41" tabindex="-1"></a></span>
-<span id="cb13-42"><a href="#cb13-42" tabindex="-1"></a>        <span class="kw">allocate</span>(C(n,n))</span>
-<span id="cb13-43"><a href="#cb13-43" tabindex="-1"></a></span>
-<span id="cb13-44"><a href="#cb13-44" tabindex="-1"></a>        C <span class="kw">=</span> <span class="fl">0.0</span></span>
-<span id="cb13-45"><a href="#cb13-45" tabindex="-1"></a>        <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb13-46"><a href="#cb13-46" tabindex="-1"></a>            <span class="kw">do</span> j <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb13-47"><a href="#cb13-47" tabindex="-1"></a>                <span class="kw">do</span> k <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb13-48"><a href="#cb13-48" tabindex="-1"></a>                    C(i,j) <span class="kw">=</span> C(i,j) <span class="kw">+</span> A(i,k) <span class="kw">*</span> B(k,j)</span>
-<span id="cb13-49"><a href="#cb13-49" tabindex="-1"></a>                <span class="kw">end do</span></span>
-<span id="cb13-50"><a href="#cb13-50" tabindex="-1"></a>            <span class="kw">end do</span></span>
-<span id="cb13-51"><a href="#cb13-51" tabindex="-1"></a>        <span class="kw">end do</span></span>
-<span id="cb13-52"><a href="#cb13-52" tabindex="-1"></a>    <span class="kw">end subroutine</span> multiply_matrices</span>
-<span id="cb13-53"><a href="#cb13-53" tabindex="-1"></a></span>
-<span id="cb13-54"><a href="#cb13-54" tabindex="-1"></a>    <span class="kw">subroutine</span> display_trace()</span>
-<span id="cb13-55"><a href="#cb13-55" tabindex="-1"></a>        <span class="dt">integer</span> <span class="dt">::</span> i, n</span>
-<span id="cb13-56"><a href="#cb13-56" tabindex="-1"></a>        <span class="dt">real</span> <span class="dt">::</span> trace</span>
-<span id="cb13-57"><a href="#cb13-57" tabindex="-1"></a></span>
-<span id="cb13-58"><a href="#cb13-58" tabindex="-1"></a>        n <span class="kw">=</span> <span class="fu">size</span>(C, <span class="dv">1</span>)</span>
-<span id="cb13-59"><a href="#cb13-59" tabindex="-1"></a>        trace <span class="kw">=</span> <span class="fl">0.0</span></span>
-<span id="cb13-60"><a href="#cb13-60" tabindex="-1"></a>        <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb13-61"><a href="#cb13-61" tabindex="-1"></a>            trace <span class="kw">=</span> trace <span class="kw">+</span> C(i,i)</span>
-<span id="cb13-62"><a href="#cb13-62" tabindex="-1"></a>        <span class="kw">end do</span></span>
-<span id="cb13-63"><a href="#cb13-63" tabindex="-1"></a></span>
-<span id="cb13-64"><a href="#cb13-64" tabindex="-1"></a>        <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Trace of matrix C = '</span>, trace</span>
-<span id="cb13-65"><a href="#cb13-65" tabindex="-1"></a>    <span class="kw">end subroutine</span> display_trace</span>
-<span id="cb13-66"><a href="#cb13-66" tabindex="-1"></a><span class="kw">end module</span> process_marices_mod</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
 <div id="challenge-3" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
@@ -1532,104 +1190,7 @@ to one</p>
 </button>
 <div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
-<p>This can be achieved with the following diff</p>
-<div class="codewrapper sourceCode" id="cb14">
-<h3 class="code-label">DIFF<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode diff" tabindex="0"><code class="sourceCode diff"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="kw">--- a/episodes/7-refactoring-fortran/solution/src/game_of_life.f90</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="dt">+++ b/episodes/7-refactoring-fortran/solution/src/game_of_life.f90</span></span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="dt">@@ -94,7 +94,10 @@ program game_of_life</span></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>         mod_ms_step = mod(date_time_values(8), ms_per_step)</span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a> </span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>         if (mod_ms_step == 0) then</span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="st">-            call run_next_iteration()</span></span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="va">+            call evolve_board()</span></span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="va">+            call check_for_steady_state()</span></span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="va">+            current_board = new_board</span></span>
-<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="va">+            call draw_board()</span></span>
-<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a> </span>
-<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>             generation_number = generation_number + 1</span>
-<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a>         end if</span>
-<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="dt">@@ -113,27 +116,9 @@ program game_of_life</span></span>
-<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a> contains</span>
-<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a> </span>
-<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a>     !&gt; Evolve the board into the state of the next iteration</span>
-<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a><span class="st">-    subroutine run_next_iteration()</span></span>
-<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a><span class="va">+    subroutine evolve_board()</span></span>
-<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a>         integer :: row, col, sum</span>
-<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a><span class="st">-        character(nrow) :: output</span></span>
-<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a> </span>
-<span id="cb14-24"><a href="#cb14-24" tabindex="-1"></a><span class="st">-        ! Clear the terminal screen</span></span>
-<span id="cb14-25"><a href="#cb14-25" tabindex="-1"></a><span class="st">-        call system("clear")</span></span>
-<span id="cb14-26"><a href="#cb14-26" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb14-27"><a href="#cb14-27" tabindex="-1"></a><span class="st">-        ! Draw the current board</span></span>
-<span id="cb14-28"><a href="#cb14-28" tabindex="-1"></a><span class="st">-        do row=1, nrow</span></span>
-<span id="cb14-29"><a href="#cb14-29" tabindex="-1"></a><span class="st">-            output = ""</span></span>
-<span id="cb14-30"><a href="#cb14-30" tabindex="-1"></a><span class="st">-            do col=1, ncol</span></span>
-<span id="cb14-31"><a href="#cb14-31" tabindex="-1"></a><span class="st">-                if (current_board(row,col) == 1) then</span></span>
-<span id="cb14-32"><a href="#cb14-32" tabindex="-1"></a><span class="st">-                    output = trim(output)//"#"</span></span>
-<span id="cb14-33"><a href="#cb14-33" tabindex="-1"></a><span class="st">-                else</span></span>
-<span id="cb14-34"><a href="#cb14-34" tabindex="-1"></a><span class="st">-                    output = trim(output)//"."</span></span>
-<span id="cb14-35"><a href="#cb14-35" tabindex="-1"></a><span class="st">-                endif</span></span>
-<span id="cb14-36"><a href="#cb14-36" tabindex="-1"></a><span class="st">-            enddo</span></span>
-<span id="cb14-37"><a href="#cb14-37" tabindex="-1"></a><span class="st">-            print *, output</span></span>
-<span id="cb14-38"><a href="#cb14-38" tabindex="-1"></a><span class="st">-        enddo</span></span>
-<span id="cb14-39"><a href="#cb14-39" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb14-40"><a href="#cb14-40" tabindex="-1"></a><span class="st">-        ! Calculate the new board</span></span>
-<span id="cb14-41"><a href="#cb14-41" tabindex="-1"></a>         do row=2, nrow-1</span>
-<span id="cb14-42"><a href="#cb14-42" tabindex="-1"></a>             do col=2, ncol-1</span>
-<span id="cb14-43"><a href="#cb14-43" tabindex="-1"></a>                 sum = 0</span>
-<span id="cb14-44"><a href="#cb14-44" tabindex="-1"></a><span class="dt">@@ -157,21 +142,43 @@ contains</span></span>
-<span id="cb14-45"><a href="#cb14-45" tabindex="-1"></a>             enddo</span>
-<span id="cb14-46"><a href="#cb14-46" tabindex="-1"></a>         enddo</span>
-<span id="cb14-47"><a href="#cb14-47" tabindex="-1"></a> </span>
-<span id="cb14-48"><a href="#cb14-48" tabindex="-1"></a><span class="st">-        ! Check for steady state</span></span>
-<span id="cb14-49"><a href="#cb14-49" tabindex="-1"></a><span class="st">-        steady_state = .true.</span></span>
-<span id="cb14-50"><a href="#cb14-50" tabindex="-1"></a><span class="va">+        return</span></span>
-<span id="cb14-51"><a href="#cb14-51" tabindex="-1"></a><span class="va">+    end subroutine evolve_board</span></span>
-<span id="cb14-52"><a href="#cb14-52" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb14-53"><a href="#cb14-53" tabindex="-1"></a><span class="va">+    !&gt; Check if we have reached steady state, i.e. current and new board match</span></span>
-<span id="cb14-54"><a href="#cb14-54" tabindex="-1"></a><span class="va">+    subroutine check_for_steady_state()</span></span>
-<span id="cb14-55"><a href="#cb14-55" tabindex="-1"></a><span class="va">+        integer :: row, col</span></span>
-<span id="cb14-56"><a href="#cb14-56" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb14-57"><a href="#cb14-57" tabindex="-1"></a>         do row=1, nrow</span>
-<span id="cb14-58"><a href="#cb14-58" tabindex="-1"></a>             do col=1, ncol</span>
-<span id="cb14-59"><a href="#cb14-59" tabindex="-1"></a>                 if (.not. current_board(row, col) == new_board(row, col)) then</span>
-<span id="cb14-60"><a href="#cb14-60" tabindex="-1"></a>                     steady_state = .false.</span>
-<span id="cb14-61"><a href="#cb14-61" tabindex="-1"></a><span class="st">-                    exit</span></span>
-<span id="cb14-62"><a href="#cb14-62" tabindex="-1"></a><span class="va">+                    return</span></span>
-<span id="cb14-63"><a href="#cb14-63" tabindex="-1"></a>                 end if</span>
-<span id="cb14-64"><a href="#cb14-64" tabindex="-1"></a>             end do</span>
-<span id="cb14-65"><a href="#cb14-65" tabindex="-1"></a><span class="st">-            if (.not. steady_state) exit</span></span>
-<span id="cb14-66"><a href="#cb14-66" tabindex="-1"></a>         end do</span>
-<span id="cb14-67"><a href="#cb14-67" tabindex="-1"></a><span class="va">+        steady_state = .true.</span></span>
-<span id="cb14-68"><a href="#cb14-68" tabindex="-1"></a><span class="va">+    end subroutine check_for_steady_state</span></span>
-<span id="cb14-69"><a href="#cb14-69" tabindex="-1"></a> </span>
-<span id="cb14-70"><a href="#cb14-70" tabindex="-1"></a><span class="st">-        current_board = new_board</span></span>
-<span id="cb14-71"><a href="#cb14-71" tabindex="-1"></a><span class="va">+    !&gt; Output the current board to the terminal</span></span>
-<span id="cb14-72"><a href="#cb14-72" tabindex="-1"></a><span class="va">+    subroutine draw_board()</span></span>
-<span id="cb14-73"><a href="#cb14-73" tabindex="-1"></a><span class="va">+        integer :: row, col</span></span>
-<span id="cb14-74"><a href="#cb14-74" tabindex="-1"></a><span class="va">+        character(nrow) :: output</span></span>
-<span id="cb14-75"><a href="#cb14-75" tabindex="-1"></a> </span>
-<span id="cb14-76"><a href="#cb14-76" tabindex="-1"></a><span class="st">-        return</span></span>
-<span id="cb14-77"><a href="#cb14-77" tabindex="-1"></a><span class="st">-    end subroutine run_next_iteration</span></span>
-<span id="cb14-78"><a href="#cb14-78" tabindex="-1"></a><span class="va">+        ! Clear the terminal screen</span></span>
-<span id="cb14-79"><a href="#cb14-79" tabindex="-1"></a><span class="va">+        call system("clear")</span></span>
-<span id="cb14-80"><a href="#cb14-80" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb14-81"><a href="#cb14-81" tabindex="-1"></a><span class="va">+        do row=1, nrow</span></span>
-<span id="cb14-82"><a href="#cb14-82" tabindex="-1"></a><span class="va">+            output = ""</span></span>
-<span id="cb14-83"><a href="#cb14-83" tabindex="-1"></a><span class="va">+            do col=1, ncol</span></span>
-<span id="cb14-84"><a href="#cb14-84" tabindex="-1"></a><span class="va">+                if (current_board(row,col) == 1) then</span></span>
-<span id="cb14-85"><a href="#cb14-85" tabindex="-1"></a><span class="va">+                    output = trim(output)//"#"</span></span>
-<span id="cb14-86"><a href="#cb14-86" tabindex="-1"></a><span class="va">+                else</span></span>
-<span id="cb14-87"><a href="#cb14-87" tabindex="-1"></a><span class="va">+                    output = trim(output)//"."</span></span>
-<span id="cb14-88"><a href="#cb14-88" tabindex="-1"></a><span class="va">+                endif</span></span>
-<span id="cb14-89"><a href="#cb14-89" tabindex="-1"></a><span class="va">+            enddo</span></span>
-<span id="cb14-90"><a href="#cb14-90" tabindex="-1"></a><span class="va">+            print *, output</span></span>
-<span id="cb14-91"><a href="#cb14-91" tabindex="-1"></a><span class="va">+        enddo</span></span>
-<span id="cb14-92"><a href="#cb14-92" tabindex="-1"></a><span class="va">+    end subroutine draw_board</span></span>
-<span id="cb14-93"><a href="#cb14-93" tabindex="-1"></a> </span>
-<span id="cb14-94"><a href="#cb14-94" tabindex="-1"></a> end program game_of_life</span></code></pre>
+<p>This can be achieved with the changes shown in this <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/ee860cac1cc2b1c2f0f2ed99b2fe26060e576ce4" class="external-link">commit</a></p>
 </div>
 </div>
 </div>
@@ -1639,7 +1200,21 @@ to one</p>
 <div class="section level3">
 <h3 id="replace-repeated-code-with-a-procedure">5. Replace repeated code with a procedure<a class="anchor" aria-label="anchor" href="#replace-repeated-code-with-a-procedure"></a>
 </h3>
-<p><strong>Smell:</strong> Fragments of repeated code appear.</p>
+<div class="section level4">
+<h4 id="smells-3">Smells<a class="anchor" aria-label="anchor" href="#smells-3"></a>
+</h4>
+<ul>
+<li>Fragments of repeated code appear.</li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="benefits-4">Benefits<a class="anchor" aria-label="anchor" href="#benefits-4"></a>
+</h4>
+<ul>
+<li>If logic needs to be updated in the future, there is now just one
+place this needs to be done</li>
+<li>More of your code can be unit tested.</li>
+</ul>
 <div id="accordionSpoiler10" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler10" aria-expanded="false" aria-controls="collapseSpoiler10">
@@ -1647,39 +1222,39 @@ to one</p>
 </button>
 <div id="collapseSpoiler10" class="accordion-collapse collapse" aria-labelledby="headingSpoiler10" data-bs-parent="#accordionSpoiler10">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="kw">subroutine</span> read_matrices_from_file(filename)</span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>    <span class="dt">character(len=*)</span>, <span class="dt">intent(in)</span> <span class="dt">::</span> filename</span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>    <span class="dt">integer</span> <span class="dt">::</span> n, iostat, i, j</span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>    <span class="dt">integer</span> <span class="dt">::</span> unit</span>
-<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>    <span class="fu">open(</span>newunit<span class="kw">=</span><span class="fu">unit</span>, <span class="fu">file</span><span class="kw">=</span>filename, <span class="fu">status</span><span class="kw">=</span><span class="st">'old'</span>, <span class="fu">action</span><span class="kw">=</span><span class="st">'read'</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span></span>
-<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>    <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">then</span></span>
-<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>        <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Error opening file: '</span>, <span class="fu">trim</span>(filename)</span>
-<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>        <span class="kw">stop</span></span>
-<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>    <span class="kw">end if</span></span>
-<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a></span>
-<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>    <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> n</span>
-<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a>    <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix size.'</span></span>
-<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a></span>
-<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a>    <span class="kw">allocate</span>(A(n,n), B(n,n))</span>
-<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a></span>
-<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a>    <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Reading matrix A ('</span>, n, <span class="st">'x'</span>, n, <span class="st">')'</span></span>
-<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a>    <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a>        <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> (A(i,j), j<span class="kw">=</span><span class="dv">1</span>,n)</span>
-<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a>        <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix A.'</span></span>
-<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a>    <span class="kw">end do</span></span>
-<span id="cb15-22"><a href="#cb15-22" tabindex="-1"></a></span>
-<span id="cb15-23"><a href="#cb15-23" tabindex="-1"></a>    <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Reading matrix B ('</span>, n, <span class="st">'x'</span>, n, <span class="st">')'</span></span>
-<span id="cb15-24"><a href="#cb15-24" tabindex="-1"></a>    <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb15-25"><a href="#cb15-25" tabindex="-1"></a>        <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> (B(i,j), j<span class="kw">=</span><span class="dv">1</span>,n)</span>
-<span id="cb15-26"><a href="#cb15-26" tabindex="-1"></a>        <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix B.'</span></span>
-<span id="cb15-27"><a href="#cb15-27" tabindex="-1"></a>    <span class="kw">end do</span></span>
-<span id="cb15-28"><a href="#cb15-28" tabindex="-1"></a></span>
-<span id="cb15-29"><a href="#cb15-29" tabindex="-1"></a>    <span class="fu">close(unit)</span></span>
-<span id="cb15-30"><a href="#cb15-30" tabindex="-1"></a><span class="kw">end subroutine</span> read_matrices_from_file</span></code></pre>
+<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="kw">subroutine</span> read_matrices_from_file(filename)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>    <span class="dt">character(len=*)</span>, <span class="dt">intent(in)</span> <span class="dt">::</span> filename</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>    <span class="dt">integer</span> <span class="dt">::</span> n, iostat, i, j</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>    <span class="dt">integer</span> <span class="dt">::</span> unit</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>    <span class="fu">open(</span>newunit<span class="kw">=</span><span class="fu">unit</span>, <span class="fu">file</span><span class="kw">=</span>filename, <span class="fu">status</span><span class="kw">=</span><span class="st">'old'</span>, <span class="fu">action</span><span class="kw">=</span><span class="st">'read'</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>    <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">then</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>        <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Error opening file: '</span>, <span class="fu">trim</span>(filename)</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>        <span class="kw">stop</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>    <span class="kw">end if</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>    <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> n</span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>    <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix size.'</span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>    <span class="kw">allocate</span>(A(n,n), B(n,n))</span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a>    <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Reading matrix A ('</span>, n, <span class="st">'x'</span>, n, <span class="st">')'</span></span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a>    <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a>        <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> (A(i,j), j<span class="kw">=</span><span class="dv">1</span>,n)</span>
+<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a>        <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix A.'</span></span>
+<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a>    <span class="kw">end do</span></span>
+<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a></span>
+<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a>    <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Reading matrix B ('</span>, n, <span class="st">'x'</span>, n, <span class="st">')'</span></span>
+<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a>    <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a>        <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> (B(i,j), j<span class="kw">=</span><span class="dv">1</span>,n)</span>
+<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a>        <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix B.'</span></span>
+<span id="cb11-27"><a href="#cb11-27" tabindex="-1"></a>    <span class="kw">end do</span></span>
+<span id="cb11-28"><a href="#cb11-28" tabindex="-1"></a></span>
+<span id="cb11-29"><a href="#cb11-29" tabindex="-1"></a>    <span class="fu">close(unit)</span></span>
+<span id="cb11-30"><a href="#cb11-30" tabindex="-1"></a><span class="kw">end subroutine</span> read_matrices_from_file</span></code></pre>
 </div>
 </div>
 </div>
@@ -1692,47 +1267,47 @@ to one</p>
 </button>
 <div id="collapseSpoiler11" class="accordion-collapse collapse" aria-labelledby="headingSpoiler11" data-bs-parent="#accordionSpoiler11">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="kw">subroutine</span> read_matrices_from_file(filename)</span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>    <span class="dt">character(len=*)</span>, <span class="dt">intent(in)</span> <span class="dt">::</span> filename</span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>    <span class="dt">integer</span> <span class="dt">::</span> n, iostat, i, j</span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>    <span class="dt">integer</span> <span class="dt">::</span> unit</span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a></span>
-<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>    <span class="fu">open(</span>newunit<span class="kw">=</span><span class="fu">unit</span>, <span class="fu">file</span><span class="kw">=</span>filename, <span class="fu">status</span><span class="kw">=</span><span class="st">'old'</span>, <span class="fu">action</span><span class="kw">=</span><span class="st">'read'</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span></span>
-<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>    <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">then</span></span>
-<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>        <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Error opening file: '</span>, <span class="fu">trim</span>(filename)</span>
-<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>        <span class="kw">stop</span></span>
-<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>    <span class="kw">end if</span></span>
-<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a></span>
-<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>    <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> n</span>
-<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>    <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix size.'</span></span>
-<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a></span>
-<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>    <span class="kw">allocate</span>(A(n,n), B(n,n))</span>
-<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a></span>
-<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>    <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Reading matrix A ('</span>, n, <span class="st">'x'</span>, n, <span class="st">')'</span></span>
-<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a>    <span class="kw">call</span> read_next_matrix_from_file(A, unit)</span>
-<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a></span>
-<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a>    <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Reading matrix B ('</span>, n, <span class="st">'x'</span>, n, <span class="st">')'</span></span>
-<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a>    <span class="kw">call</span> read_next_matrix_from_file(B, unit)</span>
-<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a></span>
-<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a>    <span class="fu">close(unit)</span></span>
-<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a><span class="kw">end subroutine</span> read_matrices_from_file</span>
-<span id="cb16-25"><a href="#cb16-25" tabindex="-1"></a></span>
-<span id="cb16-26"><a href="#cb16-26" tabindex="-1"></a><span class="kw">subroutine</span> read_next_matrix_from_file(matrix, unit)</span>
-<span id="cb16-27"><a href="#cb16-27" tabindex="-1"></a>    <span class="dt">real</span>, <span class="dt">allocatable</span>, <span class="dt">intent(inout)</span> <span class="dt">::</span> matrix(:,:)</span>
-<span id="cb16-28"><a href="#cb16-28" tabindex="-1"></a>    <span class="dt">integer</span>, <span class="dt">intent(in)</span> <span class="dt">::</span> unit</span>
-<span id="cb16-29"><a href="#cb16-29" tabindex="-1"></a></span>
-<span id="cb16-30"><a href="#cb16-30" tabindex="-1"></a>    <span class="dt">integer</span> <span class="dt">::</span> i, j, iostat, n</span>
-<span id="cb16-31"><a href="#cb16-31" tabindex="-1"></a></span>
-<span id="cb16-32"><a href="#cb16-32" tabindex="-1"></a>    n <span class="kw">=</span> <span class="fu">size</span>(matrix, <span class="dv">1</span>)</span>
-<span id="cb16-33"><a href="#cb16-33" tabindex="-1"></a></span>
-<span id="cb16-34"><a href="#cb16-34" tabindex="-1"></a>    <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb16-35"><a href="#cb16-35" tabindex="-1"></a>        <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> (matrix(i,j), j<span class="kw">=</span><span class="dv">1</span>,n)</span>
-<span id="cb16-36"><a href="#cb16-36" tabindex="-1"></a>        <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix.'</span></span>
-<span id="cb16-37"><a href="#cb16-37" tabindex="-1"></a>    <span class="kw">end do</span></span>
-<span id="cb16-38"><a href="#cb16-38" tabindex="-1"></a><span class="kw">end subroutine</span> read_next_matrix_from_file</span></code></pre>
+<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="kw">subroutine</span> read_matrices_from_file(filename)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>    <span class="dt">character(len=*)</span>, <span class="dt">intent(in)</span> <span class="dt">::</span> filename</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>    <span class="dt">integer</span> <span class="dt">::</span> n, iostat, i, j</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>    <span class="dt">integer</span> <span class="dt">::</span> unit</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>    <span class="fu">open(</span>newunit<span class="kw">=</span><span class="fu">unit</span>, <span class="fu">file</span><span class="kw">=</span>filename, <span class="fu">status</span><span class="kw">=</span><span class="st">'old'</span>, <span class="fu">action</span><span class="kw">=</span><span class="st">'read'</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>    <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">then</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>        <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Error opening file: '</span>, <span class="fu">trim</span>(filename)</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>        <span class="kw">stop</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>    <span class="kw">end if</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>    <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> n</span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>    <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix size.'</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>    <span class="kw">allocate</span>(A(n,n), B(n,n))</span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a>    <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Reading matrix A ('</span>, n, <span class="st">'x'</span>, n, <span class="st">')'</span></span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a>    <span class="kw">call</span> read_next_matrix_from_file(A, unit)</span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a>    <span class="fu">print</span> <span class="kw">*</span>, <span class="st">'Reading matrix B ('</span>, n, <span class="st">'x'</span>, n, <span class="st">')'</span></span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a>    <span class="kw">call</span> read_next_matrix_from_file(B, unit)</span>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a>    <span class="fu">close(unit)</span></span>
+<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a><span class="kw">end subroutine</span> read_matrices_from_file</span>
+<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a></span>
+<span id="cb12-26"><a href="#cb12-26" tabindex="-1"></a><span class="kw">subroutine</span> read_next_matrix_from_file(matrix, unit)</span>
+<span id="cb12-27"><a href="#cb12-27" tabindex="-1"></a>    <span class="dt">real</span>, <span class="dt">allocatable</span>, <span class="dt">intent(inout)</span> <span class="dt">::</span> matrix(:,:)</span>
+<span id="cb12-28"><a href="#cb12-28" tabindex="-1"></a>    <span class="dt">integer</span>, <span class="dt">intent(in)</span> <span class="dt">::</span> unit</span>
+<span id="cb12-29"><a href="#cb12-29" tabindex="-1"></a></span>
+<span id="cb12-30"><a href="#cb12-30" tabindex="-1"></a>    <span class="dt">integer</span> <span class="dt">::</span> i, j, iostat, n</span>
+<span id="cb12-31"><a href="#cb12-31" tabindex="-1"></a></span>
+<span id="cb12-32"><a href="#cb12-32" tabindex="-1"></a>    n <span class="kw">=</span> <span class="fu">size</span>(matrix, <span class="dv">1</span>)</span>
+<span id="cb12-33"><a href="#cb12-33" tabindex="-1"></a></span>
+<span id="cb12-34"><a href="#cb12-34" tabindex="-1"></a>    <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb12-35"><a href="#cb12-35" tabindex="-1"></a>        <span class="fu">read(unit</span>, <span class="fu">*</span>, <span class="fu">iostat</span><span class="kw">=</span><span class="fu">iostat)</span> (matrix(i,j), j<span class="kw">=</span><span class="dv">1</span>,n)</span>
+<span id="cb12-36"><a href="#cb12-36" tabindex="-1"></a>        <span class="kw">if</span> (iostat <span class="op">/=</span> <span class="dv">0</span>) <span class="kw">stop</span> <span class="st">'Error reading matrix.'</span></span>
+<span id="cb12-37"><a href="#cb12-37" tabindex="-1"></a>    <span class="kw">end do</span></span>
+<span id="cb12-38"><a href="#cb12-38" tabindex="-1"></a><span class="kw">end subroutine</span> read_next_matrix_from_file</span></code></pre>
 </div>
 </div>
 </div>
@@ -1745,9 +1320,33 @@ to one</p>
 <span class="callout-header">Callout</span>
 <div class="callout-inner">
 <div class="callout-content">
-<p>John’s code appears to not have any repeated code, so there’s nothing
-to do for this refactoring principle. If you’ve spotted some, well
-Done!</p>
+<p>There’s a delicate balance between reducing code repetition and make
+your code unreadable. Try not to go too far when refactoring!</p>
+</div>
+</div>
+</div>
+<div id="challenge-4" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="challenge-4" class="callout-inner">
+<h3 class="callout-title">Challenge</h3>
+<div class="callout-content">
+<p>Update John’s code to move any repeated code into a procedure.</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution5" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
+  <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
+</button>
+<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div class="accordion-body">
+<p>This can be achieved with the changes shown in this <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/da18b6af1a01c82235975ed1589d0496cf6b23f2" class="external-link">commit</a></p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1755,10 +1354,26 @@ Done!</p>
 <div class="section level3">
 <h3 id="replace-global-variables-with-procedure-arguments">6. Replace global variables with procedure arguments<a class="anchor" aria-label="anchor" href="#replace-global-variables-with-procedure-arguments"></a>
 </h3>
-<p><strong>Smell:</strong> A global variable is assigned and then used
-inside a called function.</p>
-<p><strong>Smell:</strong> A variable is edited within a procedure in
-which it is not declared.</p>
+<div class="section level4">
+<h4 id="smells-4">Smells<a class="anchor" aria-label="anchor" href="#smells-4"></a>
+</h4>
+<ul>
+<li>A global variable is assigned and then used inside a called
+function.</li>
+<li>A variable is edited within a procedure in which it is not
+declared.</li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="benefits-5">Benefits<a class="anchor" aria-label="anchor" href="#benefits-5"></a>
+</h4>
+<ul>
+<li>Testing becomes much easier because your code is more isolated and
+thus less code is required within your tests to setup state.</li>
+<li>You get more help from your compiler and it t is much clearer what
+your code is doing as you can provide more information about dummy
+arguments such as their <code>intent</code>.</li>
+</ul>
 <div id="accordionSpoiler12" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler12" aria-expanded="false" aria-controls="collapseSpoiler12">
@@ -1766,24 +1381,24 @@ which it is not declared.</p>
 </button>
 <div id="collapseSpoiler12" class="accordion-collapse collapse" aria-labelledby="headingSpoiler12" data-bs-parent="#accordionSpoiler12">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="kw">subroutine</span> multiply_matrices()</span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>    <span class="dt">integer</span> <span class="dt">::</span> i, j, k, n</span>
-<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>    n <span class="kw">=</span> <span class="fu">size</span>(A, <span class="dv">1</span>)</span>
-<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>    <span class="kw">allocate</span>(C(n,n))</span>
-<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>    C <span class="kw">=</span> <span class="fl">0.0</span></span>
-<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>    <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>        <span class="kw">do</span> j <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a>            <span class="kw">do</span> k <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a>                C(i,j) <span class="kw">=</span> C(i,j) <span class="kw">+</span> A(i,k) <span class="kw">*</span> B(k,j)</span>
-<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a>            <span class="kw">end do</span></span>
-<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a>        <span class="kw">end do</span></span>
-<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a>    <span class="kw">end do</span></span>
-<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a><span class="kw">end subroutine</span> multiply_matrices</span></code></pre>
+<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="kw">subroutine</span> multiply_matrices()</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>    <span class="dt">integer</span> <span class="dt">::</span> i, j, k, n</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>    n <span class="kw">=</span> <span class="fu">size</span>(A, <span class="dv">1</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>    <span class="kw">allocate</span>(C(n,n))</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>    C <span class="kw">=</span> <span class="fl">0.0</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>    <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>        <span class="kw">do</span> j <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>            <span class="kw">do</span> k <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>                C(i,j) <span class="kw">=</span> C(i,j) <span class="kw">+</span> A(i,k) <span class="kw">*</span> B(k,j)</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>            <span class="kw">end do</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>        <span class="kw">end do</span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>    <span class="kw">end do</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="kw">end subroutine</span> multiply_matrices</span></code></pre>
 </div>
 </div>
 </div>
@@ -1796,38 +1411,38 @@ which it is not declared.</p>
 </button>
 <div id="collapseSpoiler13" class="accordion-collapse collapse" aria-labelledby="headingSpoiler13" data-bs-parent="#accordionSpoiler13">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb18">
+<div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="kw">subroutine</span> multiply_matrices(A, B, C)</span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>    <span class="dt">real</span>, <span class="dt">allocatable</span>, <span class="dt">intent(int)</span> <span class="dt">::</span> A(:,:), B(:,:)</span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>    <span class="dt">real</span>, <span class="dt">allocatable</span>, <span class="dt">intent(out)</span> <span class="dt">::</span> C(:,:)</span>
-<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>    <span class="dt">integer</span> <span class="dt">::</span> i, j, k, n</span>
-<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>    n <span class="kw">=</span> <span class="fu">size</span>(A, <span class="dv">1</span>)</span>
-<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a></span>
-<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a>    <span class="kw">allocate</span>(C(n,n))</span>
-<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a>    </span>
-<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a>    C <span class="kw">=</span> <span class="fl">0.0</span></span>
-<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a>    <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a>        <span class="kw">do</span> j <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a>            <span class="kw">do</span> k <span class="kw">=</span> <span class="dv">1</span>, n</span>
-<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a>                C(i,j) <span class="kw">=</span> C(i,j) <span class="kw">+</span> A(i,k) <span class="kw">*</span> B(k,j)</span>
-<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a>            <span class="kw">end do</span></span>
-<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a>        <span class="kw">end do</span></span>
-<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a>    <span class="kw">end do</span></span>
-<span id="cb18-18"><a href="#cb18-18" tabindex="-1"></a><span class="kw">end subroutine</span> multiply_matrices</span></code></pre>
+<pre class="sourceCode f90" tabindex="0"><code class="sourceCode fortranfree"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="kw">subroutine</span> multiply_matrices(A, B, C)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>    <span class="dt">real</span>, <span class="dt">allocatable</span>, <span class="dt">intent(int)</span> <span class="dt">::</span> A(:,:), B(:,:)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>    <span class="dt">real</span>, <span class="dt">allocatable</span>, <span class="dt">intent(out)</span> <span class="dt">::</span> C(:,:)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>    <span class="dt">integer</span> <span class="dt">::</span> i, j, k, n</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>    n <span class="kw">=</span> <span class="fu">size</span>(A, <span class="dv">1</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>    <span class="kw">allocate</span>(C(n,n))</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>    </span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>    C <span class="kw">=</span> <span class="fl">0.0</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>    <span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>        <span class="kw">do</span> j <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>            <span class="kw">do</span> k <span class="kw">=</span> <span class="dv">1</span>, n</span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a>                C(i,j) <span class="kw">=</span> C(i,j) <span class="kw">+</span> A(i,k) <span class="kw">*</span> B(k,j)</span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>            <span class="kw">end do</span></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a>        <span class="kw">end do</span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a>    <span class="kw">end do</span></span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="kw">end subroutine</span> multiply_matrices</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div id="challenge-4" class="callout challenge">
+<div id="challenge-5" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <span class="callout-header">Challenge</span>
-<div id="challenge-4" class="callout-inner">
+<div id="challenge-5" class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Update John’s code to replace any global variables accessed within
@@ -1835,207 +1450,14 @@ procedures with dummy arguments.</p>
 </div>
 </div>
 </div>
-<div id="accordionSolution5" class="accordion challenge-accordion accordion-flush">
+<div id="accordionSolution6" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
-  <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
+  <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
 <div class="accordion-body">
-<p>This can be achieved with the following diff</p>
-<div class="codewrapper sourceCode" id="cb19">
-<h3 class="code-label">DIFF<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode diff" tabindex="0"><code class="sourceCode diff"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="kw">--- a/episodes/7-refactoring-fortran/solution/src/game_of_life.f90</span></span>
-<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="dt">+++ b/episodes/7-refactoring-fortran/solution/src/game_of_life.f90</span></span>
-<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="dt">@@ -8,11 +8,15 @@ program game_of_life</span></span>
-<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a> </span>
-<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>     implicit none</span>
-<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a> </span>
-<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="st">-    logical, parameter :: animate = .true.</span></span>
-<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="st">-    integer, dimension(:,:), allocatable :: starting_board</span></span>
-<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="st">-    integer :: generation_number</span></span>
-<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a><span class="va">+    !! Board args</span></span>
-<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a><span class="va">+    integer, parameter :: max_generations = 100, max_nrows = 100, max_ncols = 100</span></span>
-<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a><span class="va">+    integer :: nrow, ncol, generation_number</span></span>
-<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="va">+    integer, dimension(:,:), allocatable :: current_board, new_board</span></span>
-<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a>     logical :: steady_state = .false.</span>
-<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a> </span>
-<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="va">+    !&gt; Whether to animate the board</span></span>
-<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a><span class="va">+    logical, parameter :: animate = .true.</span></span>
-<span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a>     !! CLI args</span>
-<span id="cb19-20"><a href="#cb19-20" tabindex="-1"></a>     character(len=:), allocatable :: executable_name, input_filename</span>
-<span id="cb19-21"><a href="#cb19-21" tabindex="-1"></a> </span>
-<span id="cb19-22"><a href="#cb19-22" tabindex="-1"></a><span class="dt">@@ -26,9 +30,9 @@ program game_of_life</span></span>
-<span id="cb19-23"><a href="#cb19-23" tabindex="-1"></a>         stop</span>
-<span id="cb19-24"><a href="#cb19-24" tabindex="-1"></a>     end if</span>
-<span id="cb19-25"><a href="#cb19-25" tabindex="-1"></a> </span>
-<span id="cb19-26"><a href="#cb19-26" tabindex="-1"></a><span class="st">-    call read_model_from_file(input_filename, starting_board)</span></span>
-<span id="cb19-27"><a href="#cb19-27" tabindex="-1"></a><span class="va">+    call read_model_from_file()</span></span>
-<span id="cb19-28"><a href="#cb19-28" tabindex="-1"></a> </span>
-<span id="cb19-29"><a href="#cb19-29" tabindex="-1"></a><span class="st">-    call find_steady_state(steady_state, generation_number, starting_board, animate)</span></span>
-<span id="cb19-30"><a href="#cb19-30" tabindex="-1"></a><span class="va">+    call find_steady_state()</span></span>
-<span id="cb19-31"><a href="#cb19-31" tabindex="-1"></a> </span>
-<span id="cb19-32"><a href="#cb19-32" tabindex="-1"></a>     if (steady_state) then</span>
-<span id="cb19-33"><a href="#cb19-33" tabindex="-1"></a>         write(*,'(a,i6,a)') "Reached steady after ", generation_number, " generations"</span>
-<span id="cb19-34"><a href="#cb19-34" tabindex="-1"></a><span class="dt">@@ -39,7 +43,7 @@ program game_of_life</span></span>
-<span id="cb19-35"><a href="#cb19-35" tabindex="-1"></a> contains</span>
-<span id="cb19-36"><a href="#cb19-36" tabindex="-1"></a> </span>
-<span id="cb19-37"><a href="#cb19-37" tabindex="-1"></a>     !&gt; Read a cli arg at a given index and return it as a string (character array)</span>
-<span id="cb19-38"><a href="#cb19-38" tabindex="-1"></a><span class="st">-    subroutine read_cli_arg(arg_index, arg)</span></span>
-<span id="cb19-39"><a href="#cb19-39" tabindex="-1"></a><span class="va">+    recursive subroutine read_cli_arg(arg_index, arg)</span></span>
-<span id="cb19-40"><a href="#cb19-40" tabindex="-1"></a>         !&gt; The index of the cli arg to try and read</span>
-<span id="cb19-41"><a href="#cb19-41" tabindex="-1"></a>         integer, intent(in) :: arg_index</span>
-<span id="cb19-42"><a href="#cb19-42" tabindex="-1"></a>         !&gt; The string into which to store the cli arg</span>
-<span id="cb19-43"><a href="#cb19-43" tabindex="-1"></a><span class="dt">@@ -55,16 +59,12 @@ contains</span></span>
-<span id="cb19-44"><a href="#cb19-44" tabindex="-1"></a>     end subroutine read_cli_arg</span>
-<span id="cb19-45"><a href="#cb19-45" tabindex="-1"></a> </span>
-<span id="cb19-46"><a href="#cb19-46" tabindex="-1"></a>     !&gt; Populate the board from a provided file</span>
-<span id="cb19-47"><a href="#cb19-47" tabindex="-1"></a><span class="st">-    subroutine read_model_from_file(input_filename, board)</span></span>
-<span id="cb19-48"><a href="#cb19-48" tabindex="-1"></a><span class="st">-        character(len=:), allocatable, intent(in) :: input_filename</span></span>
-<span id="cb19-49"><a href="#cb19-49" tabindex="-1"></a><span class="st">-        integer, dimension(:,:), allocatable, intent(out) :: board</span></span>
-<span id="cb19-50"><a href="#cb19-50" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb19-51"><a href="#cb19-51" tabindex="-1"></a><span class="va">+    subroutine read_model_from_file()</span></span>
-<span id="cb19-52"><a href="#cb19-52" tabindex="-1"></a>         !&gt; A flag to indicate if reading the file was successful</span>
-<span id="cb19-53"><a href="#cb19-53" tabindex="-1"></a>         character(len=:), allocatable :: io_error_message</span>
-<span id="cb19-54"><a href="#cb19-54" tabindex="-1"></a> </span>
-<span id="cb19-55"><a href="#cb19-55" tabindex="-1"></a>         ! Board definition args</span>
-<span id="cb19-56"><a href="#cb19-56" tabindex="-1"></a><span class="st">-        integer :: row, nrow, ncol</span></span>
-<span id="cb19-57"><a href="#cb19-57" tabindex="-1"></a><span class="st">-        integer, parameter :: max_nrows = 100, max_ncols = 100</span></span>
-<span id="cb19-58"><a href="#cb19-58" tabindex="-1"></a><span class="va">+        integer :: row</span></span>
-<span id="cb19-59"><a href="#cb19-59" tabindex="-1"></a> </span>
-<span id="cb19-60"><a href="#cb19-60" tabindex="-1"></a>         ! File IO args</span>
-<span id="cb19-61"><a href="#cb19-61" tabindex="-1"></a>         integer :: input_file_io, iostat</span>
-<span id="cb19-62"><a href="#cb19-62" tabindex="-1"></a><span class="dt">@@ -98,12 +98,12 @@ contains</span></span>
-<span id="cb19-63"><a href="#cb19-63" tabindex="-1"></a> </span>
-<span id="cb19-64"><a href="#cb19-64" tabindex="-1"></a>         if (.not. allocated(io_error_message)) then</span>
-<span id="cb19-65"><a href="#cb19-65" tabindex="-1"></a> </span>
-<span id="cb19-66"><a href="#cb19-66" tabindex="-1"></a><span class="st">-            allocate(board(nrow, ncol))</span></span>
-<span id="cb19-67"><a href="#cb19-67" tabindex="-1"></a><span class="va">+            allocate(current_board(nrow, ncol))</span></span>
-<span id="cb19-68"><a href="#cb19-68" tabindex="-1"></a> </span>
-<span id="cb19-69"><a href="#cb19-69" tabindex="-1"></a>             read(input_file_io,'(a)') text_to_discard ! Skip next line</span>
-<span id="cb19-70"><a href="#cb19-70" tabindex="-1"></a>             ! Populate the boards starting state</span>
-<span id="cb19-71"><a href="#cb19-71" tabindex="-1"></a>             do row = 1, nrow</span>
-<span id="cb19-72"><a href="#cb19-72" tabindex="-1"></a><span class="st">-                read(input_file_io,*) board(row, :)</span></span>
-<span id="cb19-73"><a href="#cb19-73" tabindex="-1"></a><span class="va">+                read(input_file_io,*) current_board(row, :)</span></span>
-<span id="cb19-74"><a href="#cb19-74" tabindex="-1"></a>             end do</span>
-<span id="cb19-75"><a href="#cb19-75" tabindex="-1"></a> </span>
-<span id="cb19-76"><a href="#cb19-76" tabindex="-1"></a>         end if</span>
-<span id="cb19-77"><a href="#cb19-77" tabindex="-1"></a><span class="dt">@@ -118,27 +118,14 @@ contains</span></span>
-<span id="cb19-78"><a href="#cb19-78" tabindex="-1"></a>     end subroutine read_model_from_file</span>
-<span id="cb19-79"><a href="#cb19-79" tabindex="-1"></a> </span>
-<span id="cb19-80"><a href="#cb19-80" tabindex="-1"></a>     !&gt; Find the steady state of the Game of Life board</span>
-<span id="cb19-81"><a href="#cb19-81" tabindex="-1"></a><span class="st">-    subroutine find_steady_state(steady_state, generation_number, input_board, animate)</span></span>
-<span id="cb19-82"><a href="#cb19-82" tabindex="-1"></a><span class="st">-        !&gt; Whether the board has reached a steady state</span></span>
-<span id="cb19-83"><a href="#cb19-83" tabindex="-1"></a><span class="st">-        logical, intent(out) :: steady_state</span></span>
-<span id="cb19-84"><a href="#cb19-84" tabindex="-1"></a><span class="st">-        !&gt; The number of generations that have been processed</span></span>
-<span id="cb19-85"><a href="#cb19-85" tabindex="-1"></a><span class="st">-        integer, intent(out) :: generation_number</span></span>
-<span id="cb19-86"><a href="#cb19-86" tabindex="-1"></a><span class="st">-        !&gt; The starting state of the board</span></span>
-<span id="cb19-87"><a href="#cb19-87" tabindex="-1"></a><span class="st">-        integer, dimension(:,:), allocatable, intent(in) :: input_board</span></span>
-<span id="cb19-88"><a href="#cb19-88" tabindex="-1"></a><span class="st">-        !&gt; Whether to animate the board</span></span>
-<span id="cb19-89"><a href="#cb19-89" tabindex="-1"></a><span class="st">-        logical, intent(in) :: animate</span></span>
-<span id="cb19-90"><a href="#cb19-90" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb19-91"><a href="#cb19-91" tabindex="-1"></a><span class="st">-        integer, dimension(:,:), allocatable :: current_board, new_board</span></span>
-<span id="cb19-92"><a href="#cb19-92" tabindex="-1"></a><span class="st">-        integer, parameter :: max_generations = 100</span></span>
-<span id="cb19-93"><a href="#cb19-93" tabindex="-1"></a><span class="va">+    subroutine find_steady_state()</span></span>
-<span id="cb19-94"><a href="#cb19-94" tabindex="-1"></a> </span>
-<span id="cb19-95"><a href="#cb19-95" tabindex="-1"></a>         !! Animation args</span>
-<span id="cb19-96"><a href="#cb19-96" tabindex="-1"></a>         integer, dimension(8) :: date_time_values</span>
-<span id="cb19-97"><a href="#cb19-97" tabindex="-1"></a>         integer :: mod_ms_step</span>
-<span id="cb19-98"><a href="#cb19-98" tabindex="-1"></a>         integer, parameter :: ms_per_step = 250</span>
-<span id="cb19-99"><a href="#cb19-99" tabindex="-1"></a> </span>
-<span id="cb19-100"><a href="#cb19-100" tabindex="-1"></a><span class="st">-        allocate(current_board(size(input_board,1), size(input_board, 2)))</span></span>
-<span id="cb19-101"><a href="#cb19-101" tabindex="-1"></a><span class="st">-        allocate(new_board(size(input_board,1), size(input_board, 2)))</span></span>
-<span id="cb19-102"><a href="#cb19-102" tabindex="-1"></a><span class="st">-        current_board = input_board</span></span>
-<span id="cb19-103"><a href="#cb19-103" tabindex="-1"></a><span class="va">+        allocate(new_board(size(current_board,1), size(current_board, 2)))</span></span>
-<span id="cb19-104"><a href="#cb19-104" tabindex="-1"></a>         new_board = 0</span>
-<span id="cb19-105"><a href="#cb19-105" tabindex="-1"></a> </span>
-<span id="cb19-106"><a href="#cb19-106" tabindex="-1"></a>         ! Clear the terminal screen</span>
-<span id="cb19-107"><a href="#cb19-107" tabindex="-1"></a><span class="dt">@@ -156,10 +143,10 @@ contains</span></span>
-<span id="cb19-108"><a href="#cb19-108" tabindex="-1"></a>             end if</span>
-<span id="cb19-109"><a href="#cb19-109" tabindex="-1"></a> </span>
-<span id="cb19-110"><a href="#cb19-110" tabindex="-1"></a>             if (mod_ms_step == 0) then</span>
-<span id="cb19-111"><a href="#cb19-111" tabindex="-1"></a><span class="st">-                call evolve_board(current_board, new_board)</span></span>
-<span id="cb19-112"><a href="#cb19-112" tabindex="-1"></a><span class="st">-                call check_for_steady_state(steady_state, current_board, new_board)</span></span>
-<span id="cb19-113"><a href="#cb19-113" tabindex="-1"></a><span class="va">+                call evolve_board()</span></span>
-<span id="cb19-114"><a href="#cb19-114" tabindex="-1"></a><span class="va">+                call check_for_steady_state()</span></span>
-<span id="cb19-115"><a href="#cb19-115" tabindex="-1"></a>                 current_board = new_board</span>
-<span id="cb19-116"><a href="#cb19-116" tabindex="-1"></a><span class="st">-                if (animate) call draw_board(current_board)</span></span>
-<span id="cb19-117"><a href="#cb19-117" tabindex="-1"></a><span class="va">+                if (animate) call draw_board()</span></span>
-<span id="cb19-118"><a href="#cb19-118" tabindex="-1"></a> </span>
-<span id="cb19-119"><a href="#cb19-119" tabindex="-1"></a>                 generation_number = generation_number + 1</span>
-<span id="cb19-120"><a href="#cb19-120" tabindex="-1"></a>             end if</span>
-<span id="cb19-121"><a href="#cb19-121" tabindex="-1"></a><span class="dt">@@ -168,16 +155,8 @@ contains</span></span>
-<span id="cb19-122"><a href="#cb19-122" tabindex="-1"></a>     end subroutine find_steady_state</span>
-<span id="cb19-123"><a href="#cb19-123" tabindex="-1"></a> </span>
-<span id="cb19-124"><a href="#cb19-124" tabindex="-1"></a>     !&gt; Evolve the board into the state of the next iteration</span>
-<span id="cb19-125"><a href="#cb19-125" tabindex="-1"></a><span class="st">-    subroutine evolve_board(current_board, new_board)</span></span>
-<span id="cb19-126"><a href="#cb19-126" tabindex="-1"></a><span class="st">-        !&gt; The current state of the board</span></span>
-<span id="cb19-127"><a href="#cb19-127" tabindex="-1"></a><span class="st">-        integer, dimension(:,:), allocatable, intent(in) :: current_board</span></span>
-<span id="cb19-128"><a href="#cb19-128" tabindex="-1"></a><span class="st">-        !&gt; The new state of the board</span></span>
-<span id="cb19-129"><a href="#cb19-129" tabindex="-1"></a><span class="st">-        integer, dimension(:,:), allocatable, intent(inout) :: new_board</span></span>
-<span id="cb19-130"><a href="#cb19-130" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb19-131"><a href="#cb19-131" tabindex="-1"></a><span class="st">-        integer :: row, col, sum, nrow, ncol</span></span>
-<span id="cb19-132"><a href="#cb19-132" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb19-133"><a href="#cb19-133" tabindex="-1"></a><span class="st">-        nrow = size(current_board, 1)</span></span>
-<span id="cb19-134"><a href="#cb19-134" tabindex="-1"></a><span class="st">-        ncol = size(current_board, 2)</span></span>
-<span id="cb19-135"><a href="#cb19-135" tabindex="-1"></a><span class="va">+    subroutine evolve_board()</span></span>
-<span id="cb19-136"><a href="#cb19-136" tabindex="-1"></a><span class="va">+        integer :: row, col, sum</span></span>
-<span id="cb19-137"><a href="#cb19-137" tabindex="-1"></a> </span>
-<span id="cb19-138"><a href="#cb19-138" tabindex="-1"></a>         do row=2, nrow-1</span>
-<span id="cb19-139"><a href="#cb19-139" tabindex="-1"></a>             do col=2, ncol-1</span>
-<span id="cb19-140"><a href="#cb19-140" tabindex="-1"></a><span class="dt">@@ -206,18 +185,8 @@ contains</span></span>
-<span id="cb19-141"><a href="#cb19-141" tabindex="-1"></a>     end subroutine evolve_board</span>
-<span id="cb19-142"><a href="#cb19-142" tabindex="-1"></a> </span>
-<span id="cb19-143"><a href="#cb19-143" tabindex="-1"></a>     !&gt; Check if we have reached steady state, i.e. current and new board match</span>
-<span id="cb19-144"><a href="#cb19-144" tabindex="-1"></a><span class="st">-    subroutine check_for_steady_state(steady_state, current_board, new_board)</span></span>
-<span id="cb19-145"><a href="#cb19-145" tabindex="-1"></a><span class="st">-        !&gt; Whether the board has reached a steady state</span></span>
-<span id="cb19-146"><a href="#cb19-146" tabindex="-1"></a><span class="st">-        logical, intent(out) :: steady_state</span></span>
-<span id="cb19-147"><a href="#cb19-147" tabindex="-1"></a><span class="st">-        !&gt; The current state of the board</span></span>
-<span id="cb19-148"><a href="#cb19-148" tabindex="-1"></a><span class="st">-        integer, dimension(:,:), allocatable, intent(in) :: current_board</span></span>
-<span id="cb19-149"><a href="#cb19-149" tabindex="-1"></a><span class="st">-        !&gt; The new state of the board</span></span>
-<span id="cb19-150"><a href="#cb19-150" tabindex="-1"></a><span class="st">-        integer, dimension(:,:), allocatable, intent(inout) :: new_board</span></span>
-<span id="cb19-151"><a href="#cb19-151" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb19-152"><a href="#cb19-152" tabindex="-1"></a><span class="st">-        integer :: row, col, nrow, ncol</span></span>
-<span id="cb19-153"><a href="#cb19-153" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb19-154"><a href="#cb19-154" tabindex="-1"></a><span class="st">-        nrow = size(current_board, 1)</span></span>
-<span id="cb19-155"><a href="#cb19-155" tabindex="-1"></a><span class="st">-        ncol = size(current_board, 2)</span></span>
-<span id="cb19-156"><a href="#cb19-156" tabindex="-1"></a><span class="va">+    subroutine check_for_steady_state()</span></span>
-<span id="cb19-157"><a href="#cb19-157" tabindex="-1"></a><span class="va">+        integer :: row, col</span></span>
-<span id="cb19-158"><a href="#cb19-158" tabindex="-1"></a> </span>
-<span id="cb19-159"><a href="#cb19-159" tabindex="-1"></a>         do row=1, nrow</span>
-<span id="cb19-160"><a href="#cb19-160" tabindex="-1"></a>             do col=1, ncol</span>
-<span id="cb19-161"><a href="#cb19-161" tabindex="-1"></a><span class="dt">@@ -231,17 +200,9 @@ contains</span></span>
-<span id="cb19-162"><a href="#cb19-162" tabindex="-1"></a>     end subroutine check_for_steady_state</span>
-<span id="cb19-163"><a href="#cb19-163" tabindex="-1"></a> </span>
-<span id="cb19-164"><a href="#cb19-164" tabindex="-1"></a>     !&gt; Output the current board to the terminal</span>
-<span id="cb19-165"><a href="#cb19-165" tabindex="-1"></a><span class="st">-    subroutine draw_board(board)</span></span>
-<span id="cb19-166"><a href="#cb19-166" tabindex="-1"></a><span class="st">-        !&gt; The current state of the board</span></span>
-<span id="cb19-167"><a href="#cb19-167" tabindex="-1"></a><span class="st">-        integer, dimension(:,:), allocatable, intent(in) :: board</span></span>
-<span id="cb19-168"><a href="#cb19-168" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb19-169"><a href="#cb19-169" tabindex="-1"></a><span class="st">-        integer :: row, col, nrow, ncol</span></span>
-<span id="cb19-170"><a href="#cb19-170" tabindex="-1"></a><span class="st">-        character(:), allocatable :: output</span></span>
-<span id="cb19-171"><a href="#cb19-171" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb19-172"><a href="#cb19-172" tabindex="-1"></a><span class="st">-        nrow = size(board, 1)</span></span>
-<span id="cb19-173"><a href="#cb19-173" tabindex="-1"></a><span class="st">-        ncol = size(board, 2)</span></span>
-<span id="cb19-174"><a href="#cb19-174" tabindex="-1"></a><span class="st">-</span></span>
-<span id="cb19-175"><a href="#cb19-175" tabindex="-1"></a><span class="st">-        allocate(character(nrow) :: output)</span></span>
-<span id="cb19-176"><a href="#cb19-176" tabindex="-1"></a><span class="va">+    subroutine draw_board()</span></span>
-<span id="cb19-177"><a href="#cb19-177" tabindex="-1"></a><span class="va">+        integer :: row, col</span></span>
-<span id="cb19-178"><a href="#cb19-178" tabindex="-1"></a><span class="va">+        character(nrow) :: output</span></span>
-<span id="cb19-179"><a href="#cb19-179" tabindex="-1"></a> </span>
-<span id="cb19-180"><a href="#cb19-180" tabindex="-1"></a>         ! Clear the terminal screen</span>
-<span id="cb19-181"><a href="#cb19-181" tabindex="-1"></a>         call system("clear")</span>
-<span id="cb19-182"><a href="#cb19-182" tabindex="-1"></a><span class="dt">@@ -249,7 +210,7 @@ contains</span></span>
-<span id="cb19-183"><a href="#cb19-183" tabindex="-1"></a>         do row=1, nrow</span>
-<span id="cb19-184"><a href="#cb19-184" tabindex="-1"></a>             output = ""</span>
-<span id="cb19-185"><a href="#cb19-185" tabindex="-1"></a>             do col=1, ncol</span>
-<span id="cb19-186"><a href="#cb19-186" tabindex="-1"></a><span class="st">-                if (board(row,col) == 1) then</span></span>
-<span id="cb19-187"><a href="#cb19-187" tabindex="-1"></a><span class="va">+                if (current_board(row,col) == 1) then</span></span>
-<span id="cb19-188"><a href="#cb19-188" tabindex="-1"></a>                     output = trim(output)//"#"</span>
-<span id="cb19-189"><a href="#cb19-189" tabindex="-1"></a>                 else</span>
-<span id="cb19-190"><a href="#cb19-190" tabindex="-1"></a>                     output = trim(output)//"."</span></code></pre>
+<p>This can be achieved with the changes shown in this <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/02da8d0b614d7d7412a066fbdd3c249eb308f5a9" class="external-link">commit</a></p>
 </div>
 </div>
 </div>
@@ -2045,10 +1467,23 @@ procedures with dummy arguments.</p>
 <div class="section level3">
 <h3 id="separate-code-concepts-into-files-or-modules">7. Separate code concepts into files or modules<a class="anchor" aria-label="anchor" href="#separate-code-concepts-into-files-or-modules"></a>
 </h3>
-<p><strong>Smell:</strong> You find it hard to locate a piece of
-code.</p>
-<p><strong>Smell:</strong> You get a lot of version control
-conflicts.</p>
+<div class="section level4">
+<h4 id="smells-5">Smells<a class="anchor" aria-label="anchor" href="#smells-5"></a>
+</h4>
+<ul>
+<li>You find it hard to locate a piece of code.</li>
+<li>You get a lot of version control conflicts.</li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="benefits-6">Benefits<a class="anchor" aria-label="anchor" href="#benefits-6"></a>
+</h4>
+<ul>
+<li>This adds further clarity about what each unit of code is
+responsible for.</li>
+<li>Allows further isolation of code as you can scope some procedures or
+variables to be private.</li>
+</ul>
 <div id="accordionSpoiler14" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler14" aria-expanded="false" aria-controls="collapseSpoiler14">
@@ -2099,24 +1534,24 @@ example, we could place <code>display_trace</code> in
 </div>
 </div>
 </div>
-<div id="challenge-5" class="callout challenge">
+<div id="challenge-6" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <span class="callout-header">Challenge</span>
-<div id="challenge-5" class="callout-inner">
+<div id="challenge-6" class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Update John’s code to separate code concepts into modules.</p>
 </div>
 </div>
 </div>
-<div id="accordionSolution6" class="accordion challenge-accordion accordion-flush">
+<div id="accordionSolution7" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
-  <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution7" aria-expanded="false" aria-controls="collapseSolution7">
+  <h4 class="accordion-header" id="headingSolution7"> Show me the solution </h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
+<div id="collapseSolution7" class="accordion-collapse collapse" aria-labelledby="headingSolution7" data-bs-parent="#accordionSolution7">
 <div class="accordion-body">
 <p>You should end up with a module structure. For example, like
 this…</p>
@@ -2132,6 +1567,7 @@ this…</p>
     |   |-- subroutine check_for_steady_state
     |-- io.f90
         |-- subroutine read_model_from_file</code></pre>
+<p>This can be achieved with the changes shown in this <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/b4c6afcdb2e3a37c602051966e55ad764cdb6203" class="external-link">commit</a></p>
 </div>
 </div>
 </div>
@@ -2151,6 +1587,7 @@ with Legacy Code</a></em> (Feathers, 2004)</p>
 <p>If you don’t have time to read the entire book, there is a good
 summary of the key point in this blog post <a href="https://understandlegacycode.com/blog/key-points-of-working-effectively-with-legacy-code/" class="external-link">The
 key points of Working Effectively with Legacy Code</a></p>
+</div>
 </div>
 </div>
 </div>
@@ -2236,7 +1673,7 @@ that it can convert from Fahrenheit to Kelvin.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Your test could look something like this…</p>
 <pre><code>Set some input value of Fahrenheit, for example 32.0
@@ -2286,7 +1723,7 @@ one of the exercise <a href="https://github.com/UCL-ARC/fortran-unit-testing-exe
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>A solution is provided in <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution" class="external-link">3-writing-your-first-unit-test/solution</a>.</p>
 </div>
@@ -2875,7 +2312,7 @@ what exactly is being tested.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Veggies </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p>The name and description of a Veggies test are defined within the
 testsuite function.</p>
@@ -2928,7 +2365,7 @@ This results in the output.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> test-drive </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <p>With test-drive, we can name both a testsuite and an individual test
 within a testsuite. The testuite name is applied within the program. In
@@ -2983,7 +2420,7 @@ two tests <code>"a special test case"</code> and
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
   <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> pFUnit </h3>
 </button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
+<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
 <div class="accordion-body">
 <p>With pFUnit, we name a test within the CMakeLists.txt. In the example
 below we define a test with the name
@@ -3131,7 +2568,7 @@ failing and you wish to tackle them one at a time.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler4" aria-expanded="false" aria-controls="collapseSpoiler4">
   <h3 class="accordion-header" id="headingSpoiler4">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Veggies </h3>
 </button>
-<div id="collapseSpoiler4" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler4" aria-labelledby="headingSpoiler4">
+<div id="collapseSpoiler4" class="accordion-collapse collapse" aria-labelledby="headingSpoiler4" data-bs-parent="#accordionSpoiler4">
 <div class="accordion-body">
 <p>Veggies comes with a built-in mechanism for filtering tests via the
 CLI flag <code>-f</code>.</p>
@@ -3156,7 +2593,7 @@ the following command</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler5" aria-expanded="false" aria-controls="collapseSpoiler5">
   <h3 class="accordion-header" id="headingSpoiler5">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> test-drive </h3>
 </button>
-<div id="collapseSpoiler5" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler5" aria-labelledby="headingSpoiler5">
+<div id="collapseSpoiler5" class="accordion-collapse collapse" aria-labelledby="headingSpoiler5" data-bs-parent="#accordionSpoiler5">
 <div class="accordion-body">
 <p>test-drive does not come with mechanism for filtering individual
 tests out-of-the-box. However, we are able to add this functionality
@@ -3251,7 +2688,7 @@ mechanism.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler6" aria-expanded="false" aria-controls="collapseSpoiler6">
   <h3 class="accordion-header" id="headingSpoiler6">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> pFUnit </h3>
 </button>
-<div id="collapseSpoiler6" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler6" aria-labelledby="headingSpoiler6">
+<div id="collapseSpoiler6" class="accordion-collapse collapse" aria-labelledby="headingSpoiler6" data-bs-parent="#accordionSpoiler6">
 <div class="accordion-body">
 <p>pFUnit leverages CTest’s mechanism to filter tests.</p>
 </div>
@@ -3263,7 +2700,7 @@ mechanism.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler7" aria-expanded="false" aria-controls="collapseSpoiler7">
   <h3 class="accordion-header" id="headingSpoiler7">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> CTest </h3>
 </button>
-<div id="collapseSpoiler7" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler7" aria-labelledby="headingSpoiler7">
+<div id="collapseSpoiler7" class="accordion-collapse collapse" aria-labelledby="headingSpoiler7" data-bs-parent="#accordionSpoiler7">
 <div class="accordion-body">
 <p>When building test-drive and veggies with CMake, to maintian the
 ability to run our tests individually, we can add named tests to ctest.
@@ -3343,7 +2780,7 @@ in the exercises repository.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>A solution is provided in <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/5-debugging-a-broken-test/solution" class="external-link">README-solution.md</a>.</p>
 </div>
@@ -3560,7 +2997,7 @@ in the exercises repository.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>A solution is provided in <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/6-testing-parallel-code/solution" class="external-link">6-testing-parallel-code/solution</a>.</p>
 </div>
