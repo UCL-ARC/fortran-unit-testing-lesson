@@ -154,84 +154,7 @@ This can be achieved with the changes shown in this [commit](https://github.com/
 :::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::
 
-### 3. Wrap program functionality in procedures
-
-**Smell**: Logic is repeated outside a procedure.
-
-**Smell**: Loops appear outside a procedure.
-
-**Smell**: Lots of inline comments requited to explain what is happening in the main program.
-
-
-:::::::::::::::::::::::::::::::::::::::::::: spoiler
-#### Before 
-
-```f90
-program my_matrix_prog
-    use process_marices_mod, only : process_matrices
-    implicit none
-
-    character(len=200) :: temp_string
-    character(:), allocatable :: filename
-
-
-    print *, 'Enter input filename:'
-    read (*,*) temp_string
-    filename = trim(temp_string)
-
-    call process_matrices(filename)
-
-end program my_matrix_prog
-```
-
-::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-:::::::::::::::::::::::::::::::::::::::::::: spoiler
-
-#### After
-
-```f90
-program my_matrix_prog
-    use process_marices_mod, only : process_matrices
-    implicit none
-
-    character(:), allocatable :: filename
-
-    call read_filename(filename)
-    call process_matrices(filename)
-
-contains
-
-    subroutine read_filename(filename)
-        character(:), allocatable, intent(out) :: filename
-
-        character(len=200) :: temp_string
-
-        print *, 'Enter input filename:'
-        read (*,*) temp_string
-
-        filename = trim(temp_string)
-    end subroutine read_filename
-
-end program my_matrix_prog
-```
-
-::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::::::::::: challenge
-
-#### Challenge
-
-Update John's code to reduce the responsibilities of any procedures to one
-
-:::::::::::::::::::::::: solution 
-
-This can be achieved with the changes shown in this [commit](https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/ee860cac1cc2b1c2f0f2ed99b2fe26060e576ce4)
-
-:::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::
-
-### 4. Break large procedures into smaller units
+### 3. Break large procedures into smaller units
 
 **Smell**: A function or subroutine no longer fits on a page in your editor.
 
@@ -387,6 +310,84 @@ This can be achieved with the changes shown in this [commit](https://github.com/
 
 :::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::
+
+### 4. Wrap program functionality in procedures
+
+**Smell**: Logic is repeated outside a procedure.
+
+**Smell**: Loops appear outside a procedure.
+
+**Smell**: Lots of inline comments requited to explain what is happening in the main program.
+
+
+:::::::::::::::::::::::::::::::::::::::::::: spoiler
+#### Before 
+
+```f90
+program my_matrix_prog
+    use process_marices_mod, only : process_matrices
+    implicit none
+
+    character(len=200) :: temp_string
+    character(:), allocatable :: filename
+
+
+    print *, 'Enter input filename:'
+    read (*,*) temp_string
+    filename = trim(temp_string)
+
+    call process_matrices(filename)
+
+end program my_matrix_prog
+```
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::: spoiler
+
+#### After
+
+```f90
+program my_matrix_prog
+    use process_marices_mod, only : process_matrices
+    implicit none
+
+    character(:), allocatable :: filename
+
+    call read_filename(filename)
+    call process_matrices(filename)
+
+contains
+
+    subroutine read_filename(filename)
+        character(:), allocatable, intent(out) :: filename
+
+        character(len=200) :: temp_string
+
+        print *, 'Enter input filename:'
+        read (*,*) temp_string
+
+        filename = trim(temp_string)
+    end subroutine read_filename
+
+end program my_matrix_prog
+```
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+#### Challenge
+
+Update John's code to reduce the responsibilities of any procedures to one
+
+:::::::::::::::::::::::: solution 
+
+This can be achieved with the changes shown in this [commit](https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/ee860cac1cc2b1c2f0f2ed99b2fe26060e576ce4)
+
+:::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::
+
 
 ### 5. Replace repeated code with a procedure
 
