@@ -1,5 +1,5 @@
 ---
-title: "Fortran Unit Test Syntax"
+title: "Syntax of other unit test frameworks"
 teaching:
 exercises:
 ---
@@ -27,14 +27,10 @@ exercises:
     - This is the least featured of the frameworks.
     - Requires more boilerplate than the other frameworks.
     - Integrated with FPM and CMake.
-- [pFUnit](https://github.com/Goddard-Fortran-Ecosystem/pFUnit)
-    - Most feature rich framework.
-    - Requires writing tests in a non-standard file format which is then converted to F90 before compilation.
-    - Integrated with CMake.
 
 ## The shared structure of a test module
 
-All three frameworks share a basic structure for their test modules.
+All three frameworks share the basic structure for their test modules.
 
 ```f90 
 module test_something
@@ -42,26 +38,23 @@ module test_something
     ! use the src to be tested
     implicit none
 
-    ! Define types to act as test parameters (and test case for pfunit)
+    ! Derived types: Define types to act as test parameters and test cases.
 contains
 
-    ! Define a test suite (collection of tests) to be returned from a procedure
+    ! Test Suite: Define a test suite (collection of tests) to be returned from a procedure.
 
-    ! Define the actual test execution code which will call the src and execute assertions
+    ! Test Logic: Define the actual test execution code which will call the src and execute assertions.
 
-    ! Define constructors for your derived types (test parameters/cases)
+    ! Type Constructors: Define constructors for your derived types (test parameters/cases).
 end module test_something
 ```
 
 ## Let's dive into the syntax
 
-We will use the game of life example from challenge 1 of the last episode to highlight the difference in
-syntax between the three frameworks.
 
+### Derived types:
 
-### Define types to act as test parameters (and test case for pfunit)
-
-This step is similar for all three frameworks and uses standard Fortran syntax to define a [derived type](https://fortran-lang.org/learn/quickstart/derived_types). The key differences are:
+The key differences are:
 
 - Whether the derived type extends another type or not.
 - The required [type-bound procedures](https://fortran-lang.org/learn/quickstart/derived_types/#type-bound-procedures).
@@ -89,39 +82,17 @@ end my_test_params
 ```
 
 :::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::: spoiler
 
-#### pFUnit
 
-```F90
-@testParameter
-type, extends(AbstractTestParameter) :: my_test_params
-    integer :: input, expected_output
-contains
-        procedure :: toString => my_test_params_toString
-end type my_test_params
-
-@TestCase(testParameters={my_test_suite()}, constructor=my_test_params_to_my_test_case)
-type, extends(ParameterizedTestCase) :: my_test_case
-    type(my_test_params) :: params
-end type my_test_case
-```
-
-:::::::::::::::::::::::::::::::::::::
-
-### Define a test suite (collection of tests) to be returned from a procedure
-
-In this section we define our suite of tests to test the unit in question. This can return a single test but
-it's likely that there are multiple scenarios and edge cases we would like to test. Therefore, we return an
-array of tests rather than a single test.
+### Test Suite:
 
 ::::::::::::::::::::::::::::: spoiler
 
 #### Veggies
 
 For Veggies, we define a function which returns a Veggies derived-type that takes an array of test parameters
-representing different test scenarios and a generic test function, in this case `check_my_src_procedure`. This
-test function is where we actually call our src procedure and carry out assertions (see [the next section](#define-the-actual-test-execution-code-which-will-call-the-src-and-execute-assertions)). 
+representing different test scenarios and a generic test function, in this case **check_my_src_procedure**. This
+test function is where we actually call our src procedure and carry out assertions (see the next section). 
 
 ```F90
 function my_test_suite() result(tests)
@@ -175,33 +146,14 @@ end subroutine test_my_procedure_with_input_1
 ```
 
 :::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::: spoiler
 
-#### pFUnit
-
-For pFUnit, we define a function which returns an array of our test parameter derived-type.
-
-```F90
-function my_test_suite() result(params)
-    type(my_test_params), allocatable :: params(:)
-
-    params = [ &
-        my_test_params(1, 2) & ! Given input is 1, output is 2
-    ]
-end function my_test_suite
-```
-
-:::::::::::::::::::::::::::::::::::::
-
-### Define the actual test execution code which will call the src and execute assertions
-
-This is where we actually call our src procedure and carry out assertions.
+### Test Logic:
 
 ::::::::::::::::::::::::::::: spoiler
 
 #### Veggies
 
-For Veggies, we define a function which takes a veggies `input_t` type and returns a veggies `result_t`
+For Veggies, we define a function which takes a veggies **input_t** type and returns a veggies **result_t**
 type. As this input_t type is generic compared to out parameter type, we do some additional verification
 to ensure we are passing the expected test parameter type.
 
@@ -248,7 +200,7 @@ end subroutine check_my_src_procedure
 
 ::::::::::::::::::::::::::::::::::::: callout
 
-We must check if error has been allocated after every `check`. i.e.
+We must check if error has been allocated after every **check**. i.e.
 
 ```F90
 call check(...)
@@ -261,29 +213,8 @@ if (allocated(error)) return
 :::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::: spoiler
 
-#### pFUnit
-
-For pFUnit, we define a subroutine which takes an instance of our test case derived-type and is annotated
-with the pFUnit annotation `@Test`.
-
-```F90
-@Test
-subroutine TestMySrcProcedure(this)
-    class (my_test_case), intent(inout) :: this
-
-    integer :: actual_output
-
-    call my_src_procedure(this%params%input, actual_output)
-
-    @assertEqual(this%params%input, actual_output, "Unexpected output from my_src_procedure")
-end subroutine TestMySrcProcedure
-```
-
-:::::::::::::::::::::::::::::::::::::
-
-### Define constructors for your derived types (test parameters/cases)
+### Type Constructors:
 
 For **Veggies** and **test-drive**, this step is not always required but can be useful to simplify
 populating multiple different test cases. For example, if we wished to test a subroutine which
@@ -323,45 +254,3 @@ contains
 ```
 
 :::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::: spoiler
-
-#### pFUnit
-
-For pFUnit, we are required to define two functions
-
-- A conversion from test parameters to a test case
-- A conversion from test parameters to a string
-
-```F90
-function my_test_params_to_my_test_case(testParameter) result(tst)
-    type (my_test_case) :: tst
-    type (my_test_params), intent(in) :: testParameter
-
-    tst%params%input = testParameter%input
-    tst%params%expected_output = testParameter%expected_output
-end function my_test_params_to_my_test_case
-
-function my_test_params_toString(testParameter) result(string)
-    class (my_test_params), intent(in) :: this
-    character(:), allocatable :: string
-
-    character(len=80) :: buffer
-
-    write(buffer,'("Given ",i4," we expect to get ",i4)') this%input, this%expected_output
-    string = trim(buffer)
-end function my_test_params_toString
-```
-:::::::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::::::::::: challenge
-
-## Challenge: Write Fortran unit tests in multiple frameworks.
-
-Take a look at [4-fortran-unit-test-syntax/challenge](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/4-fortran-unit-test-syntax/challenge).
-
-:::::::::::::::::::::::::::::::: solution
-
-A solution is provided in [4-fortran-unit-test-syntax/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/4-fortran-unit-test-syntax/solution).
-
-:::::::::::::::::::::::::::::::::::::::::
-:::::::::::::::::::::::::::::::::::::::::::::
