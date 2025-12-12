@@ -194,6 +194,22 @@ end subroutine TestMySrcProcedure
     - As is done here, it is recommended to provide a helpful message in case of an assertion
       failing to help diagnose the issue.
 
+::::::::::::::::::::::::::::::::::: callout
+
+#### Parametrize on a test by test basis 
+
+It is also possible to parametrize a test at this point, instead of when defining the derived-types.
+This can be useful if you wish to reuse a test parameter type for multiple test cases...
+
+```f90
+@Test(testParameters={my_test_suite()})
+subroutine TestMySrcProcedure(this)
+    class (my_test_case), intent(inout) :: this
+    ...
+```
+
+:::::::::::::::::::::::::::::::::::::::::::
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::: spoiler
@@ -202,7 +218,7 @@ end subroutine TestMySrcProcedure
 
 We are required to define two functions.
 
-#### A conversion from test parameters to a test case
+**A conversion from test parameters to a test case:**
 
 ```F90
 function my_test_params_to_my_test_case(testParameter) result(tst)
@@ -213,17 +229,13 @@ function my_test_params_to_my_test_case(testParameter) result(tst)
 end function my_test_params_to_my_test_case
 ```
 
-:::::::::::::::::::::::::::::: callout
-
 It may be necessary to individually map each type-bound value within the
 **testParameter** to that in the **tst**, depending on their complexity.
 
-::::::::::::::::::::::::::::::::::::::
 
+**A conversion from test parameters to a string:**
 
-#### A conversion from test parameters to a string
-
-This function helps to provide a clearer description of each test case as the result
+This function helps to provide a clearer description of each test case. The result
 of this function will be displayed alongside the name of the test for each parameter
 set.
 
