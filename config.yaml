@@ -69,7 +69,7 @@ episodes:
 - 1-what-is-a-unit-tests.md
 - 2-refactor-fortran.md
 - 3-writing-your-first-unit-test.md
-- 4-fortran-unit-test-syntax.md
+- 4-pfunit-syntax.md
 - 5-debugging-a-broken-test.md
 - 6-testing-parallel-code.md
 
