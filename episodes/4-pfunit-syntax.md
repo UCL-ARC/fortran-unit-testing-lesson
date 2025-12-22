@@ -136,6 +136,46 @@ end type my_test_case
 - We then define a single type-bound value which is of the test parameter type we have just
   defined.
 
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+#### Challenge: Add derived types to pFUnit tests of temperature conversions
+
+Continuing with part two of [3-writing-your-first-unit-test/challenge][exercises-challenge] from the
+exercises repo. Begin re-writing your standard Fortran test using pFUnit. First, add some derived
+types to the provided template file,
+[test_temp_conversions.pf](https://github.com/UCL-ARC/fortran-unit-testing-exercises/blob/main/episodes/3-writing-your-first-unit-test/challenge/test/pfunit/test_temp_conversions.pf#L9-L19).
+
+:::::::::::::::::::::::::::::::: solution
+
+These types could look something like this...
+
+```f90
+!> Test parameter type to package the test parameters
+@TestParameter
+type, extends(AbstractTestParameter) :: temp_conversions_test_params_t
+    !> The temperature to input into the function being tested
+    real :: input
+    !> Theb temperature expected to be returned from the function being tested
+    real :: expected_output
+    !> A description of the test to be outputted for logging
+    character(len=100) :: description
+contains
+    procedure :: toString => temp_conversions_test_params_t_toString
+end type temp_conversions_test_params_t
+
+!> Test case type to specify the style of test (paramaterized)
+@TestCase(constructor=new_test_case)
+type, extends(ParameterizedTestCase) :: temp_conversions_test_case_t
+    type(temp_conversions_test_params_t) :: params
+end type temp_conversions_test_case_t
+```
+
+A full solution is provided in [3-writing-your-first-unit-test/solution](exercises-solution).
+
+:::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::: spoiler
@@ -161,6 +201,38 @@ end function my_test_suite
 - The function returns an array of **my_test_params**.
 - We are using a constructor function to define each parameter set which we do not need to
   define ourselves.
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+#### Challenge: Add a test suite to pFUnit tests of temperature conversions
+
+Continuing with your pFUnit test of `temp_conversions`, add a test suite for tests of the
+function `fahrenheit_to_celsius` in the indicated section of the template file, 
+[test_temp_conversions.pf](https://github.com/UCL-ARC/fortran-unit-testing-exercises/blob/main/episodes/3-writing-your-first-unit-test/challenge/test/pfunit/test_temp_conversions.pf#L27-L28)
+
+:::::::::::::::::::::::::::::::: solution
+
+This test suites could look something like this...
+
+```f90
+!> Test Suite for tests of fahrenheit_to_celsius
+function fahrenheit_to_celsius_testsuite() result(params)
+    !> An array of test parameters, each specifying an individual test
+    class(temp_conversions_test_params_t), allocatable :: params(:)
+
+    params = [ &
+        temp_conversions_test_params_t(0.0, -17.777779, "0.0 °F"), &
+        temp_conversions_test_params_t(32.0, 0.0, "0.0 °C"), &
+        temp_conversions_test_params_t(-100.0, -73.333336, "100 °F"), &
+        temp_conversions_test_params_t(1.23,-17.094444, "Decimal °F") &
+    ]
+end function fahrenheit_to_celsius_testsuite
+```
+
+A full solution is provided in [3-writing-your-first-unit-test/solution](exercises-solution).
+
+:::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -210,6 +282,44 @@ subroutine TestMySrcProcedure(this)
 
 :::::::::::::::::::::::::::::::::::::::::::
 
+::::::::::::::::::::::::::::::::::::: challenge
+
+#### Challenge: Add a test function to pFUnit tests of temperature conversions
+
+Continuing with your pFUnit test of `temp_conversions`, add some test logic for tests of
+the function `fahrenheit_to_celsius` in the indicated section of the template file, 
+[test_temp_conversions.pf](https://github.com/UCL-ARC/fortran-unit-testing-exercises/blob/main/episodes/3-writing-your-first-unit-test/challenge/test/pfunit/test_temp_conversions.pf#L30-L31)
+
+:::::::::::::::::::::::::::::::: solution
+
+This test logic could look something like this...
+
+```f90
+!> Test Logic, unit test subroutine for fahrenheit_to_celsius
+@Test(testParameters={fahrenheit_to_celsius_testsuite()})
+subroutine test_fahrenheit_to_celsius(this)
+    !> The test case which indicates the type of test we are running
+    class(temp_conversions_test_case_t), intent(inout) :: this
+
+    character(len=200) :: failure_message
+    real :: actual_output
+
+    ! Get the actual celsius value returned from fahrenheit_to_celsius
+    actual_output = fahrenheit_to_celsius(this%params%input)
+
+    ! Populate the failure message
+    write(failure_message, '(A,F7.2,A,F7.2,A,F7.2,A)') "Failed With ", this%params%input, " °F: Expected ", &
+            this%params%expected_output, "°C but got ", actual_output, "°C"
+    @assertEqual(this%params%expected_output, actual_output, tolerance=1e-6, message=trim(failure_message))
+
+end subroutine test_fahrenheit_to_celsius
+```
+
+A full solution is provided in [3-writing-your-first-unit-test/solution](exercises-solution).
+
+:::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::: spoiler
@@ -251,18 +361,55 @@ function my_test_params_toString(testParameter) result(string)
 end function my_test_params_toString
 ```
 
+::::::::::::::::::::::::::::::::::::: challenge
+
+#### Challenge: Add type constructors to pFUnit tests of temperature conversions
+
+Continuing with your pFUnit test of `temp_conversions`, add some type constructors for
+tests of the `temp_conversions` in the indicated section of the template file, 
+[test_temp_conversions.pf](https://github.com/UCL-ARC/fortran-unit-testing-exercises/blob/main/episodes/3-writing-your-first-unit-test/challenge/test/pfunit/test_temp_conversions.pf#L49-L59)
+
+:::::::::::::::::::::::::::::::: solution
+
+These type constructors could look something like this...
+
+```f90
+!> Constructor for converting test parameters into a test case
+function new_test_case(testParameter) result(tst)
+    !> The parameters to be converted to a test case
+    type(temp_conversions_test_params_t), intent(in) :: testParameter
+    !> The test case to return after conversion from parameters
+    type(temp_conversions_test_case_t) :: tst
+
+    tst%params = testParameter
+end function new_test_case
+
+!> Constructor for converting test parameters into a string
+function temp_conversions_test_params_t_toString(this) result(string)
+    !> The parameters to be converted to a string
+    class(temp_conversions_test_params_t), intent(in) :: this
+    character(:), allocatable :: string
+
+    string = trim(this%description)
+end function temp_conversions_test_params_t_toString
+```
+
+A full solution is provided in [3-writing-your-first-unit-test/solution](exercises-solution).
+
+:::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
 ## Challenge: Test temperature conversions using pFUnit
 
-Continuing with part two of [3-writing-your-first-unit-test/challenge][exercises-challenge] from the
-exercises repo. Re-write your standard Fortran test using pFUnit.
+Finalising your pFUnit test of `temp_conversions` add an additional test of the function `celsius_to_kelvin`.
 
 :::::::::::::::::::::::::::::::: solution
 
-A solution is provided in [3-writing-your-first-unit-test/solution](exercises-solution).
+The full solution is provided in [3-writing-your-first-unit-test/solution](exercises-solution).
 
 :::::::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::
