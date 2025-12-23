@@ -251,7 +251,7 @@ subroutine TestMySrcProcedure(this)
 
     call my_src_procedure(this%params%input, actual_output)
 
-    @assertEqual(this%params%input, actual_output, "Unexpected output from my_src_procedure")
+    @assertEqual(this%params%expected_output, actual_output, "Unexpected output from my_src_procedure")
 end subroutine TestMySrcProcedure
 ```
 
