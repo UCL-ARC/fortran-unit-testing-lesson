@@ -52,8 +52,8 @@ should do very little regarding building the tests. However, it should...
 - Define targets which pass through to targets in the **tests/Makefile**.
   ```
   tests: $(SRC_OBJS)
-	@echo "Building pFUnit test suite..."
-	@$(MAKE) -C $(ROOT_DIR)/tests tests
+  	@echo "Building pFUnit test suite..."
+  	@$(MAKE) -C $(ROOT_DIR)/tests tests
   ```
 
 ::::::::::::::::::::: spoiler
@@ -155,9 +155,26 @@ clean:
   - This will create a target of the provided name (in this case **tests**)
   - We define the variables pFUnit requires to build the **tests** target as variables prefixed with **tests_**.
     - **tests_TESTS** - A list of the **.pf** test files to be pre-processed before compilation.
-    - **tests_OTHER_SOURCES** - A list of src object files required for the tests defined within **tests** (excluding the src main/program file)
+    - **tests_OTHER_SOURCES** - A list of src object files required for the tests (excluding the src main/program file)
     - **tests_OTHER_LIBRARIES** - A list of library flags to pass to the compiler when compiling the test code
 - We must create a target for compiling object files which uses the same flags as **tests_OTHER_LIBRARIES**
+
+### Building with Make 
+
+We can then build and run our tests with the following commands
+
+```sh
+make tests
+./build/tests
+```
+
+:::::::::::::::::::::::::::::::::::: challenge
+
+### Practice integrating with Make
+
+:::::::::::::::::::::::::::::::: solution
+:::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Integrating pFUnit with CMake
 
@@ -193,7 +210,7 @@ However, it should...
   ```cmake
   enable_testing()
   ```
-- Add the tests dir as a subdirectory.
+- Add the **tests/** dir as a subdirectory.
   ```cmake
   add_subdirectory("tests")
   ```
@@ -252,6 +269,7 @@ set(test_srcs
   "${PROJECT_SOURCE_DIR}/tests/test_something_else.pf"
 )
 
+# Add the test target
 add_pfunit_ctest (test_something_interesting
   TEST_SOURCES ${test_srcs}
   LINK_LIBRARIES SUT # your application library
@@ -265,16 +283,26 @@ add_pfunit_ctest (test_something_interesting
 - We then filter the **main.f90** program file from the list of src files.
 - We store the src files in a library (**SUT**, stands for system under test)
   to be referenced later.
-- We list the test **.pf** files we wish to include into **test_srcs**.
+- We list the test **.pf** files we wish to include within **test_srcs**.
 - We then create a test with pFUnit and CTest using the function provided by
-  pFUnit **add_pfunit_ctest**. Here we are...
+  pFUnit, **add_pfunit_ctest**. Here we are...
     - naming the test **test_something_interesting**.
     - informing pFUnit of the relevant src files via **TEST_SOURCES**.
     - linking to the src library via **LINK_LIBRARIES**.
 
+### Building with CMake
+
+We can then build our tests with the following commands
+
+```sh
+cmake -B build -DCMAKE_PREFIX_PATH=/path/to/pfunit/build/installed
+cmake --build build
+ctest --test-dir build # or ./build/tests/test_something_interesting
+```
+
 :::::::::::::::::::: callout
 
-#### Mixing CTest and pFUnit
+### Mixing CTest and pFUnit
 
 In this case we have called **add_pfunit_ctest** once with all of our **.pf**
 test files. This results in there being one CTest test (i.e. one executable
@@ -286,7 +314,7 @@ Note that the tests can still be filtered by calling the executable itself and
 using pFUnit's inbuilt filtering option, like so.
 
 ```sh
-$ ./build/tests/test_something -f test_something_else -v
+$ ./build/tests/test_something_interesting -f test_something_else -v
  
 
  Start: <test_something_else_suite.TestMySrcProcedure>
@@ -299,3 +327,11 @@ Time:         0.001 seconds
 ```
 
 ::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::: challenge
+
+### Practice integrating with CMake
+
+:::::::::::::::::::::::::::::::: solution
+:::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::
