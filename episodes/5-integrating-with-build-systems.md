@@ -13,9 +13,8 @@ exercises:
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Be able to add a new test to our existing Make and CMake build system.
-- Understand where we name our tests within the build system.
-- Diagnose a failing test and find the cause.
+- Be able to add a new test to an existing Make and CMake build system.
+- Understand where we name tests within the build system.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
