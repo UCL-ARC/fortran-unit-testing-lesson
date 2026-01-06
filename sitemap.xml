@@ -37,6 +37,9 @@
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/5-debugging-a-broken-test.html</loc>
   </url>
   <url>
+    <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/5-integrating-with-build-systems.html</loc>
+  </url>
+  <url>
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/5-testing-parallel-code.html</loc>
   </url>
   <url>
@@ -95,6 +98,9 @@
   </url>
   <url>
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/5-debugging-a-broken-test.html</loc>
+  </url>
+  <url>
+    <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/5-integrating-with-build-systems.html</loc>
   </url>
   <url>
     <loc>https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/5-testing-parallel-code.html</loc>
