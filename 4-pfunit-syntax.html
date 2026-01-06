@@ -329,7 +329,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Fortran Unit Test Syntax</h1>
-        <p>Last updated on 2025-12-22 |
+        <p>Last updated on 2026-01-06 |
 
         <a href="https://github.com/UCL-ARC/fortran-unit-testing-lesson/edit/main/episodes/4-pfunit-syntax.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -505,7 +505,8 @@ parameter type we have just defined.</li>
 <h3 class="callout-title">Challenge: Add derived types to pFUnit tests
 of temperature conversions</h3>
 <div class="callout-content">
-<p>Continuing with part two of <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/challenge" class="external-link">3-writing-your-first-unit-test/challenge</a>
+<p>Continuing with part two of
+[3-writing-your-first-unit-test/challenge][<a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/challenge" class="external-link uri">https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/challenge</a>]
 from the exercises repo. Begin re-writing your standard Fortran test
 using pFUnit. First, add some derived types to the provided template
 file, <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/blob/main/episodes/3-writing-your-first-unit-test/challenge/test/pfunit/test_temp_conversions.pf#L9-L19" class="external-link">test_temp_conversions.pf</a>.</p>
@@ -542,7 +543,7 @@ file, <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/blob/ma
 <span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>    <span class="dt">type(temp_conversions_test_params_t)</span> <span class="dt">::</span> params</span>
 <span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="dt">end type</span> temp_conversions_test_case_t</span></code></pre>
 </div>
-<p>A full solution is provided in <a href="exercises-solution">3-writing-your-first-unit-test/solution</a>.</p>
+<p>A full solution is provided in <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution" class="external-link">3-writing-your-first-unit-test/solution</a>.</p>
 </div>
 </div>
 </div>
@@ -618,7 +619,7 @@ template file, <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercise
 <span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>    <span class="kw">]</span></span>
 <span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="kw">end function</span> fahrenheit_to_celsius_testsuite</span></code></pre>
 </div>
-<p>A full solution is provided in <a href="exercises-solution">3-writing-your-first-unit-test/solution</a>.</p>
+<p>A full solution is provided in <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution" class="external-link">3-writing-your-first-unit-test/solution</a>.</p>
 </div>
 </div>
 </div>
@@ -647,7 +648,7 @@ assertions…</p>
 <span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a></span>
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>    <span class="kw">call</span> my_src_<span class="dt">procedure</span>(this<span class="op">%</span>params<span class="op">%</span>input, actual_output)</span>
 <span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>    @assertEqual(this<span class="op">%</span>params<span class="op">%</span>input, actual_output, <span class="st">"Unexpected output from my_src_procedure"</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>    @assertEqual(this<span class="op">%</span>params<span class="op">%</span>expected_output, actual_output, <span class="st">"Unexpected output from my_src_procedure"</span>)</span>
 <span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="kw">end subroutine</span> TestMySrcProcedure</span></code></pre>
 </div>
 <p><strong>Key points:</strong></p>
@@ -730,7 +731,7 @@ template file, <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercise
 <span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a></span>
 <span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="kw">end subroutine</span> test_fahrenheit_to_celsius</span></code></pre>
 </div>
-<p>A full solution is provided in <a href="exercises-solution">3-writing-your-first-unit-test/solution</a>.</p>
+<p>A full solution is provided in <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution" class="external-link">3-writing-your-first-unit-test/solution</a>.</p>
 </div>
 </div>
 </div>
@@ -825,7 +826,7 @@ file, <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/blob/ma
 <span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a>    string <span class="kw">=</span> <span class="fu">trim</span>(this<span class="op">%</span>description)</span>
 <span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a><span class="kw">end function</span> temp_conversions_test_params_t_toString</span></code></pre>
 </div>
-<p>A full solution is provided in <a href="exercises-solution">3-writing-your-first-unit-test/solution</a>.</p>
+<p>A full solution is provided in <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution" class="external-link">3-writing-your-first-unit-test/solution</a>.</p>
 </div>
 </div>
 </div>
@@ -843,8 +844,9 @@ file, <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/blob/ma
 <h3 class="callout-title">Challenge: Test temperature conversions using
 pFUnit</h3>
 <div class="callout-content">
-<p>Finalising your pFUnit test of <code>temp_conversions</code> add an
-additional test of the function <code>celsius_to_kelvin</code>.</p>
+<p>Finalising your pFUnit test of <strong>temp_conversions</strong>, add
+an additional test of the function
+<strong>celsius_to_kelvin</strong>.</p>
 </div>
 </div>
 </div>
@@ -855,7 +857,7 @@ additional test of the function <code>celsius_to_kelvin</code>.</p>
 </button>
 <div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
 <div class="accordion-body">
-<p>The full solution is provided in <a href="exercises-solution">3-writing-your-first-unit-test/solution</a>.</p>
+<p>The full solution is provided in <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution" class="external-link">3-writing-your-first-unit-test/solution</a>.</p>
 </div>
 </div>
 </div>
@@ -924,7 +926,7 @@ any links that you are not going to use.
   "url": "https://UCL-ARC.github.io/fortran-unit-testing-lesson/4-pfunit-syntax.html",
   "identifier": "https://UCL-ARC.github.io/fortran-unit-testing-lesson/4-pfunit-syntax.html",
   "dateCreated": "2025-05-09",
-  "dateModified": "2025-12-22",
+  "dateModified": "2026-01-06",
   "datePublished": "2026-01-06"
 }
 
