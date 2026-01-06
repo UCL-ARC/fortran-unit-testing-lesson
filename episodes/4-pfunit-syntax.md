@@ -141,7 +141,7 @@ end type my_test_case
 
 #### Challenge: Add derived types to pFUnit tests of temperature conversions
 
-Continuing with part two of [3-writing-your-first-unit-test/challenge][https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/challenge] from the
+Continuing with part two of [3-writing-your-first-unit-test/challenge](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/challenge) from the
 exercises repo. Begin re-writing your standard Fortran test using pFUnit. First, add some derived
 types to the provided template file,
 [test_temp_conversions.pf](https://github.com/UCL-ARC/fortran-unit-testing-exercises/blob/main/episodes/3-writing-your-first-unit-test/challenge/test/pfunit/test_temp_conversions.pf#L9-L19).
