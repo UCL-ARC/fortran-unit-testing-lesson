@@ -169,7 +169,7 @@ clean:
 **Key points:**
 
 - We must include the pre-installed pFUnit dependencies and Makefile options via the **PFUNIT.mk** file.
-  - The version of pFUnit that has been built will affect the path to this file (i.e. **.../installed/PFUNIT-4.15/include/...**)
+  - The version of pFUnit that has been built will affect the path to this file (i.e. **.../installed/PFUNIT-4.12/include/...**)
 - We are utilising the function provided by pFUnit **make_pfunit_test**
   - This will create a target of the provided name (in this case **tests**)
   - We define the variables pFUnit requires to build the **tests** target as variables prefixed with **tests_**.
@@ -240,13 +240,13 @@ end module test_something
 
 To verify your newly implemented tests of **temp_conversions** from
 the previous episode, complete **part i** of the
-[building-the-test](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/add-integrate-with-make/episodes/3-writing-your-first-unit-test/challenge#building-the-test)
+[building-the-test](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/challenge#building-the-test)
 section of **3-writing-your-first-unit-test/challenge** and integrate your test(s) with the **Make** build system provided in the exercise.
 
 :::::::::::::::::::::::::::::::: solution
 
 A solution is provided in
-[3-writing-your-first-unit-test/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution).
+[3-writing-your-first-unit-test/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution#building-the-test).
 
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::
@@ -425,13 +425,13 @@ add_pfunit_ctest (test_something_interesting
 
 To verify your newly implemented tests of **temp_conversions** from
 the previous episode, complete **part ii** of the
-[building-the-test](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/add-integrate-with-make/episodes/3-writing-your-first-unit-test/challenge#building-the-test)
+[building-the-test](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/challenge#building-the-test)
 section of **3-writing-your-first-unit-test/challenge** and integrate your test(s) with the **CMake** build system provided in the exercise.
 
 :::::::::::::::::::::::::::::::: solution
 
 A solution is provided in
-[3-writing-your-first-unit-test/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution).
+[3-writing-your-first-unit-test/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution#building-the-test).
 
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::
