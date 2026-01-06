@@ -70,7 +70,7 @@ episodes:
 - 2-refactor-fortran.md
 - 3-writing-your-first-unit-test.md
 - 4-pfunit-syntax.md
-- 5-debugging-a-broken-test.md
+- 5-integrating-with-build-systems.md
 - 6-testing-parallel-code.md
 
 # Information for Learners
