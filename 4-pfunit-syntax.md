@@ -141,7 +141,7 @@ end type my_test_case
 
 #### Challenge: Add derived types to pFUnit tests of temperature conversions
 
-Continuing with part two of [3-writing-your-first-unit-test/challenge][exercises-challenge] from the
+Continuing with part two of [3-writing-your-first-unit-test/challenge][https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/challenge] from the
 exercises repo. Begin re-writing your standard Fortran test using pFUnit. First, add some derived
 types to the provided template file,
 [test_temp_conversions.pf](https://github.com/UCL-ARC/fortran-unit-testing-exercises/blob/main/episodes/3-writing-your-first-unit-test/challenge/test/pfunit/test_temp_conversions.pf#L9-L19).
@@ -171,7 +171,7 @@ type, extends(ParameterizedTestCase) :: temp_conversions_test_case_t
 end type temp_conversions_test_case_t
 ```
 
-A full solution is provided in [3-writing-your-first-unit-test/solution](exercises-solution).
+A full solution is provided in [3-writing-your-first-unit-test/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution).
 
 :::::::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::
@@ -229,7 +229,7 @@ function fahrenheit_to_celsius_testsuite() result(params)
 end function fahrenheit_to_celsius_testsuite
 ```
 
-A full solution is provided in [3-writing-your-first-unit-test/solution](exercises-solution).
+A full solution is provided in [3-writing-your-first-unit-test/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution).
 
 :::::::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::
@@ -251,7 +251,7 @@ subroutine TestMySrcProcedure(this)
 
     call my_src_procedure(this%params%input, actual_output)
 
-    @assertEqual(this%params%input, actual_output, "Unexpected output from my_src_procedure")
+    @assertEqual(this%params%expected_output, actual_output, "Unexpected output from my_src_procedure")
 end subroutine TestMySrcProcedure
 ```
 
@@ -315,7 +315,7 @@ subroutine test_fahrenheit_to_celsius(this)
 end subroutine test_fahrenheit_to_celsius
 ```
 
-A full solution is provided in [3-writing-your-first-unit-test/solution](exercises-solution).
+A full solution is provided in [3-writing-your-first-unit-test/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution).
 
 :::::::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::
@@ -394,7 +394,7 @@ function temp_conversions_test_params_t_toString(this) result(string)
 end function temp_conversions_test_params_t_toString
 ```
 
-A full solution is provided in [3-writing-your-first-unit-test/solution](exercises-solution).
+A full solution is provided in [3-writing-your-first-unit-test/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution).
 
 :::::::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::
@@ -405,15 +405,11 @@ A full solution is provided in [3-writing-your-first-unit-test/solution](exercis
 
 ## Challenge: Test temperature conversions using pFUnit
 
-Finalising your pFUnit test of `temp_conversions` add an additional test of the function `celsius_to_kelvin`.
+Finalising your pFUnit test of **temp_conversions**, add an additional test of the function **celsius_to_kelvin**.
 
 :::::::::::::::::::::::::::::::: solution
 
-The full solution is provided in [3-writing-your-first-unit-test/solution](exercises-solution).
+The full solution is provided in [3-writing-your-first-unit-test/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution).
 
 :::::::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::
-
-[pfunit-directives]: https://pfunit.sourceforge.net/page_Assert.html3-writing-your-first-unit-test/challenge/src/temp_conversions.f90
-[exercises-challenge]: https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/challenge
-[exercises-solution]: https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution
