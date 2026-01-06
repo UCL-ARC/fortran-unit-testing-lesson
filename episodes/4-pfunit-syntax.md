@@ -405,7 +405,7 @@ A full solution is provided in [3-writing-your-first-unit-test/solution](exercis
 
 ## Challenge: Test temperature conversions using pFUnit
 
-Finalising your pFUnit test of `temp_conversions` add an additional test of the function `celsius_to_kelvin`.
+Finalising your pFUnit test of **temp_conversions**, add an additional test of the function **celsius_to_kelvin**.
 
 :::::::::::::::::::::::::::::::: solution
 

@@ -29,7 +29,7 @@ Firstly, assume we have the following file structure.
     | Makefile
     |-- src/
     |   |-- main.f90
-    |   |__ ... Some module files containing src code
+    |   |-- something.f90
     |      
     |-- tests/
         |-- Makefile
@@ -53,7 +53,11 @@ should do very little regarding building the tests. However, it should...
   ```
   tests: $(SRC_OBJS)
   	@echo "Building pFUnit test suite..."
-  	@$(MAKE) -C $(ROOT_DIR)/tests tests
+  	@$(MAKE) -C $(TEST_DIR) tests
+
+  clean:
+  	rm -rf $(BUILD_DIR)
+  	$(MAKE) -C $(TEST_DIR) clean
   ```
 
 ::::::::::::::::::::: spoiler
@@ -63,59 +67,73 @@ should do very little regarding building the tests. However, it should...
 The full top level **Makefile** may look something like this...
 
 ```
-# Define relevant paths
+# Top level variables
 ROOT_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-SRC_DIR = $(ROOT_DIR)/src
-BUILD_DIR = $(ROOT_DIR)/build
-SRC_BUILD_DIR = $(BUILD_DIR)/src
-
-# Define compiler flags
-FC = gfortran
+FC ?= gfortran
 FC_FLAGS = #... Some flags required for compilation
 LIBS = #... Some libs to link to
 
+#------------------------------------#
+#      Targets for compiling src     #
+#------------------------------------#
+SRC_DIR = $(ROOT_DIR)/src
+BUILD_DIR = $(ROOT_DIR)/build
+
 # List src files
 SRC_FILES = \
-    src/something.f90 \
-    src/main.f90
+    something.f90 \
+    main.f90
 
 # Map src files to .o files
 SRC_OBJS = $(patsubst %.f90, $(BUILD_DIR)/%.o, $(SRC_FILES))
 
+# Build src .o files
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90 | $(BUILD_DIR)
+	@echo "Building $@"
+	$(FC) -c -J $(BUILD_DIR) -o $@ $<
+
 # Build src executable
-$(SRC_BUILD_DIR)/a.exe: $(SRC_OBJS)
+$(BUILD_DIR)/a.exe: $(SRC_OBJS)
 	$(FC) -o $@ $(FC_FLAGS) $^ $(LIBS) 
 
 # Map exe target to building executable
-exe: $(SRC_BUILD_DIR)/a.exe
+exe: $(BUILD_DIR)/a.exe
 
-# Build src .o files
-$(SRC_BUILD_DIR)/%.o: $(SRC_DIR)/%.f90 | $(SRC_BUILD_DIR)
-	$(FC) -c $(FC_FLAGS) -J $(SRC_BUILD_DIR) -o $@ $<
+# Ensure the build dirs exists
+$(BUILD_DIR):
+	mkdir -p $@
 
+#------------------------------------#
+#         Targets for testing        #
+#------------------------------------#
+TEST_DIR = $(ROOT_DIR)/tests
+
+# Include make command from tests Makefile
+tests: $(SRC_OBJS)
+	@echo "Building pFUnit test suite..."
+	@$(MAKE) -C $(TEST_DIR) tests
+
+
+#------------------------------------#
+#        Targets for cleaning        #
+#------------------------------------#
 # Define target for cleaning the build dir
 clean:
 	rm -rf $(BUILD_DIR)
-	$(MAKE) -C $(ROOT_DIR)/tests clean
+	$(MAKE) -C $(TEST_DIR) clean
 
 .PHONY: clean
 
-# Ensure the build dirs exists
-$(SRC_BUILD_DIR):
-	mkdir -p $@
-
-# Export relevant variables for the tests/Makefile to pick up.
-export SRC_BUILD_DIR
+#--------------------------------------#
+# Export variables for child Makefiles #
+#--------------------------------------#
+# Export variables for the other Makefiles to use
+export BUILD_DIR
 export ROOT_DIR
 export SRC_OBJS
 export FC
 export FC_FLAGS
 export LIBS
-
-# Define targets which pass through to targets in the tests/Makefile.
-tests: $(SRC_OBJS)
-	@echo "Building pFUnit test suite..."
-	@$(MAKE) -C $(ROOT_DIR)/tests tests
 ```
 
 :::::::::::::::::::::::::::::
@@ -123,17 +141,19 @@ tests: $(SRC_OBJS)
 The **tests/Makefile** would then look like this...
 
 ```
-PFUNIT_SOURCE_DIR = $(ROOT_DIR)/../pfunit
-PFUNIT_INCLUDE_DIR = $(PFUNIT_SOURCE_DIR)/build/installed/PFUNIT-4.12/include
-include $(PFUNIT_INCLUDE_DIR)/PFUNIT.mk
+PFUNIT_INCLUDE_DIR ?= $(ROOT_DIR)/../pfunit/build/installed/PFUNIT-4.12/include
 
-TEST_FLAGS = -I$(SRC_BUILD_DIR) $(FC_FLAGS) $(LIBS) $(PFUNIT_EXTRA_FFLAGS)
+# Don't try to include if we're cleaning as this doesn't depend on pFUnit
+ifneq ($(MAKECMDGOALS),clean)
+include $(PFUNIT_INCLUDE_DIR)/PFUNIT.mk
+TEST_FLAGS = -I$(BUILD_DIR) $(FC_FLAGS) $(LIBS) $(PFUNIT_EXTRA_FFLAGS)
+endif
 
 # Define variables to be picked up by make_pfunit_test
 tests_TESTS = \
   test_something.pf \
   test_something_else.pf
-tests_OTHER_SOURCES = $(filter-out $(SRC_BUILD_DIR)/main.o, $(SRC_OBJS))
+tests_OTHER_SOURCES = $(filter-out $(BUILD_DIR)/main.o, $(SRC_OBJS))
 tests_OTHER_LIBRARIES = $(TEST_FLAGS)
 
 # Triggers pre-processing and defines rule for building test executable
@@ -159,8 +179,6 @@ clean:
     - **tests_OTHER_LIBRARIES** - A list of library flags to pass to the compiler when compiling the test code
 - We must create a target for compiling object files which uses the same flags as **tests_OTHER_LIBRARIES**
 
-### Building with Make 
-
 We can then build and run our tests with the following commands
 
 ```sh
@@ -170,9 +188,18 @@ make tests
 
 :::::::::::::::::::::::::::::::::::: challenge
 
-### Practice integrating with Make
+### Challenge: Practice integrating with Make
+
+To verify your newly implemented tests of **temp_conversions** from
+the previous episode, complete **part i** of the
+[building-the-test](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/add-integrate-with-make/episodes/3-writing-your-first-unit-test/challenge#building-the-test)
+section of **3-writing-your-first-unit-test/challenge** and integrate your test(s) with the **Make** build system provided in the exercise.
 
 :::::::::::::::::::::::::::::::: solution
+
+A solution is provided in
+[3-writing-your-first-unit-test/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution).
+
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -330,8 +357,17 @@ Time:         0.001 seconds
 
 :::::::::::::::::::::::::::::::::::: challenge
 
-### Practice integrating with CMake
+### Challenge: Practice integrating with CMake
+
+To verify your newly implemented tests of **temp_conversions** from
+the previous episode, complete **part ii** of the
+[building-the-test](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/add-integrate-with-make/episodes/3-writing-your-first-unit-test/challenge#building-the-test)
+section of **3-writing-your-first-unit-test/challenge** and integrate your test(s) with the **CMake** build system provided in the exercise.
 
 :::::::::::::::::::::::::::::::: solution
+
+A solution is provided in
+[3-writing-your-first-unit-test/solution](https://github.com/UCL-ARC/fortran-unit-testing-exercises/tree/main/episodes/3-writing-your-first-unit-test/solution).
+
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::
