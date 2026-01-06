@@ -182,8 +182,57 @@ clean:
 We can then build and run our tests with the following commands
 
 ```sh
-make tests
-./build/tests
+$ make tests
+...
+$ ./tests/tests --verbose
+ 
+
+ Start: <test_something_suite.test_do_something_1>
+.   end: <test_something_suite.test_do_something_1>
+ 
+
+ Start: <test_something_else_suite.test_do_something_2>
+.   end: <test_something_else_suite.test_do_something_2>
+
+Time:         0.001 seconds
+  
+ OK
+ (2 tests)
+```
+
+### Naming our tests with Make
+
+In the output shown above we have ran using the **--verbose** flag. This flag
+includes the name of our test suites and test subroutines in the output. For
+example, we have **2 tests** which here indicates two test functions in total,
+**test_do_something_1** and **test_do_something_2**. However, we can see that
+these two test functions are each stored within their own test suite
+**test_something_suite** and **test_something_else_suite** respectively.
+
+Here, we are defining a test suite as a single test module file (**.pf** file).
+Therefore, we can see that the name of the test suite comes from the name of
+the module. The name of the test is then taken from the name of the test subroutine.
+For example, **test_something.pf** would look like this.
+
+```f90
+module test_something
+    use something, only : do_something
+    use funit
+    implicit none
+
+contains
+
+    @Test
+    subroutine test_do_something_1()
+        integer :: input, actual_output
+
+        input = 1
+
+        call do_something(input, actual_output)
+
+        @assertEqual(2, actual_output, "Unexpected output from do_something")
+    end subroutine test_do_something_1
+end module test_something
 ```
 
 :::::::::::::::::::::::::::::::::::: challenge
@@ -344,8 +393,8 @@ using pFUnit's inbuilt filtering option, like so.
 $ ./build/tests/test_something_interesting -f test_something_else -v
  
 
- Start: <test_something_else_suite.TestMySrcProcedure>
-.   end: <test_something_else_suite.TestMySrcProcedure>
+ Start: <test_something_else_suite.test_do_something_2>
+.   end: <test_something_else_suite.test_do_something_2>
 
 Time:         0.001 seconds
   
@@ -354,6 +403,22 @@ Time:         0.001 seconds
 ```
 
 ::::::::::::::::::::::::::::
+
+### Naming our tests with CMake
+
+When we run our tests by directly calling the executable as shown above, we can see
+that the test suite names and test subroutine names are identical to when 
+[built using make](#naming-our-tests-with-make). However, when using CMake we have
+control of one other name. The name of the CTest test. This name is set when we
+call **add_pfunit_ctest**. For example the below will create a test named
+**test_something_interesting**.
+
+```cmake
+add_pfunit_ctest (test_something_interesting
+  TEST_SOURCES ${test_srcs}
+  LINK_LIBRARIES sut # your application library
+  )
+```
 
 :::::::::::::::::::::::::::::::::::: challenge
 
