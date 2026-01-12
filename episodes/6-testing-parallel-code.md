@@ -272,7 +272,42 @@ Just like serial tests, MPI tests can be integrated into projects which utilise 
 
 ### Integrating with Make
 
-To build MPI enables pFUnit tests via Make, one must use the 
+To build MPI enabled pFUnit tests via Make, one must use an mpi enabled compiler such as **mpif90** and
+include the pFUnit library in the compiler arguments **-lpfunit**. Therefore, the **tests/Makefile**
+from [5-integrating-with-build-systems#integrating-pfunit-with-make](https://github-pages.arc.ucl.ac.uk/fortran-unit-testing-lesson/5-integrating-with-build-systems.html#integrating-pfunit-with-make) becomes,
+
+```makefile
+PFUNIT_INCLUDE_DIR ?= /path/to/pfunit/include
+
+# Don't try to include if we're cleaning as this doesn't depend on pFUnit
+ifneq ($(MAKECMDGOALS),clean)
+include $(PFUNIT_INCLUDE_DIR)/PFUNIT.mk
+TEST_FLAGS = -I$(BUILD_DIR) $(FC_FLAGS) $(LIBS) $(PFUNIT_EXTRA_FFLAGS) -lpfunit # <-- Lib added here
+endif
+
+# Define variables to be picked up by make_pfunit_test
+tests_TESTS = \
+  test_something.pf \
+  test_something_else.pf
+tests_OTHER_SOURCES = $(filter-out $(BUILD_DIR)/main.o, $(SRC_OBJS))
+tests_OTHER_LIBRARIES = $(TEST_FLAGS)
+
+# Triggers pre-processing and defines rule for building test executable
+$(eval $(call make_pfunit_test,tests))
+
+# Converts pre-processed test files into objects ready for building of the executable
+%.o: %.F90
+	$(FC) -c $(TEST_FLAGS) $<
+
+clean:
+	\rm -f *.o *.mod *.F90 *.inc tests
+```
+
+With this, we can compile for MPI using the following command.
+
+```sh
+PFUNIT_INCLUDE_DIR=/path/to/pfunit/include FC=mpif90 make tests
+```
 
 ### Integrating with CMake
 

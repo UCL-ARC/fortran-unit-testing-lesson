@@ -140,7 +140,7 @@ export LIBS
 The **tests/Makefile** would then look like this...
 
 ```
-PFUNIT_INCLUDE_DIR ?= $(ROOT_DIR)/../pfunit/build/installed/PFUNIT-4.12/include
+PFUNIT_INCLUDE_DIR ?= /path/to/pfunit/include
 
 # Don't try to include if we're cleaning as this doesn't depend on pFUnit
 ifneq ($(MAKECMDGOALS),clean)
