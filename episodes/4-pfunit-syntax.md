@@ -351,7 +351,7 @@ set.
 
 ```F90
 function my_test_params_toString(testParameter) result(string)
-    class (my_test_params), intent(in) :: this
+    class (my_test_params), intent(in) :: testParameter
     character(:), allocatable :: string
 
     character(len=80) :: buffer
