@@ -31,11 +31,11 @@ to implement ourselves. Thankfully, pFUnit can handle this for us.
 
 ## Tips for writing testable MPI code
 
-### Where possible, separate calls to the MPI library into units (subroutines or functions).
+### Where possible, separate calls to the MPI library into procedures.
 
 If a procedure does not contain any calls to the MPI library, then it can be tested with a serial unit test. Therefore,
 separating MPI calls into their own units makes for a simpler test suite for most of your logic. Only, procedures with
-MPI library calls will require the more complex parallel pFUnit tests.
+MPI library calls will require MPI enabled pFUnit tests.
 
 ### Pass the MPI communicator information into each mpi procedure to be tested.
 
@@ -218,6 +218,14 @@ subroutine TestMySrcProcedure(this)
     @assertEqual(this%params%expected_output, actual_output, "Unexpected output from my_src_procedure")
 end subroutine TestMySrcProcedure
 ```
+
+::::::::::::::::::::::::: callout
+
+In the example above, the MPI communicator is passed into the src procedure. Using the function provided by pFUnit
+**this%getMpiCommunicator()** allows pFUnit to manage the number of ranks used within each test.
+
+:::::::::::::::::::::::::::::::::
+
 
 ::::::::::::::::::::::::::::::::::::: challenge 
 
