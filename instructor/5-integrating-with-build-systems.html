@@ -328,7 +328,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Integrating with build systems</h1>
-        <p>Last updated on 2026-01-06 |
+        <p>Last updated on 2026-01-13 |
 
         <a href="https://github.com/UCL-ARC/fortran-unit-testing-lesson/edit/main/episodes/5-integrating-with-build-systems.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -486,7 +486,7 @@ export LIBS</code></pre>
 </div>
 </div>
 <p>The <strong>tests/Makefile</strong> would then look like this…</p>
-<pre><code>PFUNIT_INCLUDE_DIR ?= $(ROOT_DIR)/../pfunit/build/installed/PFUNIT-4.12/include
+<pre><code>PFUNIT_INCLUDE_DIR ?= /path/to/pfunit/include
 
 # Don't try to include if we're cleaning as this doesn't depend on pFUnit
 ifneq ($(MAKECMDGOALS),clean)
@@ -912,8 +912,8 @@ any links that you are not going to use.
   "url": "https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/5-integrating-with-build-systems.html",
   "identifier": "https://UCL-ARC.github.io/fortran-unit-testing-lesson/instructor/5-integrating-with-build-systems.html",
   "dateCreated": "2025-05-09",
-  "dateModified": "2026-01-06",
-  "datePublished": "2026-01-06"
+  "dateModified": "2026-01-13",
+  "datePublished": "2026-01-13"
 }
 
   </script><script>
