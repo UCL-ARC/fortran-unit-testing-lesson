@@ -57,7 +57,7 @@ All unit tests tend to follow the same pattern of Given-When-Then.
 
 ::::::::::::::::::::::::::::::::::::: challenge 
 
-### Challenge 1: Write a unit test in sudo code.
+### Challenge 1: Write a unit test in pseudo code.
 
 Assuming you have a function `reverse_array` which reverses the order of an allocated array. Write a unit test in pseudo code for `reverse_array` using the pattern above.
 
