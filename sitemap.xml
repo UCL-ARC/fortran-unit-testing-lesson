@@ -28,6 +28,9 @@
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/4-fortran-unit-test-syntax.html</loc>
   </url>
   <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/4-pfunit-basics.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/4-pfunit-syntax.html</loc>
   </url>
   <url>
@@ -43,7 +46,13 @@
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/5-testing-parallel-code.html</loc>
   </url>
   <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/6-parameterising-pfunit-tests.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/6-testing-parallel-code.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/7-testing-parallel-code.html</loc>
   </url>
   <url>
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/CODE_OF_CONDUCT.html</loc>
@@ -91,6 +100,9 @@
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/4-fortran-unit-test-syntax.html</loc>
   </url>
   <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/4-pfunit-basics.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/4-pfunit-syntax.html</loc>
   </url>
   <url>
@@ -106,7 +118,13 @@
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/5-testing-parallel-code.html</loc>
   </url>
   <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/6-parameterising-pfunit-tests.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/6-testing-parallel-code.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/7-testing-parallel-code.html</loc>
   </url>
   <url>
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/CODE_OF_CONDUCT.html</loc>
