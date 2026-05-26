@@ -69,9 +69,10 @@ episodes:
 - 1-what-is-a-unit-tests.md
 - 2-refactor-fortran.md
 - 3-writing-your-first-unit-test.md
-- 4-pfunit-syntax.md
+- 4-pfunit-basics.md
 - 5-integrating-with-build-systems.md
-- 6-testing-parallel-code.md
+- 6-parameterising-pfunit-tests.md
+- 7-testing-parallel-code.md
 
 # Information for Learners
 learners:
