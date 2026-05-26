@@ -37,11 +37,15 @@ the use of [pFUnit](https://github.com/Goddard-Fortran-Ecosystem/pFUnit) as it i
   provided by pFUnit into **.f90** before compilation. This removes the need to write a lot of
   boilerplate code.
 
-## The most basics pFUnit test
+## The most basic pFUnit test
 
-As we've seen in the [previous episode](../3-writing-your-first-unit-test.html), if we were to write our own unit tests using a custom testing setup we would need to define a test runner that could track success and failure states for each test and report the reason for each failure back to us. 
+As we've seen in the [previous episode](../3-writing-your-first-unit-test.html), if we were to write our own unit tests using a
+custom testing setup we would need to define a test runner that could track success and failure states for each test and report
+the reason for each failure back to us.
 
-Alternatively, if we were to use pFUnit, there is no longer a need to define this test runner because pFUnit handles that for us. Therefore, the most basic test we can define using pFunit becomes simple. For example, if we wanted to test the Fortran intrinsic function **dot_product**, we could write the following test.
+Alternatively, if we were to use pFUnit, there is no longer a need to define this test runner because pFUnit handles that for us.
+Therefore, the most basic test we can define using pFunit becomes simple. For example, if we wanted to test the Fortran intrinsic
+function **dot_product**, we could write the following test.
 
 ```fortran
 module test_dot_product_intrinsic
@@ -64,14 +68,23 @@ contains
 end module test_dot_product_intrinsic
 ```
 
-Here we have introduced some new syntax in the form of **@Test** and **@AssertEqual**. These are pFUnit pre-processor directives which simplify how we write tests:
+Here we have introduced some new syntax in the form of **@Test** and **@AssertEqual**. These are pFUnit pre-processor directives
+which simplify how we write tests:
 
 - **@Test** designates the subroutine **test_dot_product** as a test that should be ran on execution of your pFUnit test suite.
 - **@AssertEqual** is one of many assert directives provided by pFUnit. More specifically, **@AssertEqual** allows the
-  exact comparison of two values (also works for comparing arrays). For a full list of the available assertion directives see
+  exact comparison of values (also works for comparing arrays). For a full list of the available assertion directives see
   [pFUnit documentation page for their preprocessor directives](https://pfunit.sourceforge.net/page_Assert.html)
-    - As is done here, it is recommended to provide a helpful message, in case of an assertion
+  - As is done here, it is recommended to provide a helpful message, in case of an assertion
       failing, to help diagnose the issue.
+
+::: callout
+
+### @AssertEqual for floating point values
+
+For floating point values, @AssertEqual no longer carries out an exact comparison but become a comparison up to a tolerance.
+
+:::
 
 If we then wish to add a new test case we can add another subroutine, again decorated with **@Test**:
 
@@ -112,7 +125,8 @@ end module test_dot_product_intrinsic
 
 ## Handling state within tests
 
-If multiple tests rely of the existence of some state such as the allocation of an array. We could repeat this step within each test, like so:
+If multiple tests rely of the existence of some state such as the allocation of an array. We could repeat this step within each
+test, like so:
 
 ```fortran
 module test_dot_product_intrinsic
@@ -126,7 +140,7 @@ contains
 
         ! allocate a and b
         allocate(a(10), b(10))
-        
+
         ! Define inputs and expected outputs for the scenario we want to test
         a = [1,2,3,4,5,6,7,8,9,10]
         b = [11,12,13,14,15,16,17,18,19,20]
@@ -209,7 +223,7 @@ contains
         !> The instance of our test case type for this test
         class(dot_product_test_case), intent(inout) :: this
         integer :: c
-        
+
         ! Define inputs and expected outputs for the scenario we want to test
         this%a = [1,2,3,4,5,6,7,8,9,10]
         this%b = [11,12,13,14,15,16,17,18,19,20]
@@ -236,11 +250,24 @@ contains
 end module test_dot_product_intrinsic
 ```
 
-In the above code we have defined our own custom derived type **dot_product_test_case** which contains the two arrays **a** and **b** as type-bound prameters. **dot_product_test_case** also contains a type-bound procedures **tearDown** which deallocates **a** and **b**. To first allocate **a** and **b** we have defined a constructor **dot_product_test_case_constructor**. These two procedures allow us to move this previously repeated logic to one location. Finally, to ensure our new custom type is understood and used correctly by pFUnit, we must do two things. Ensure this type extends one provided by the pFUnit library - **TestCase**. Decorate this new type with the pre-processor directive **@TestCase**, ensuring that we pass **dot_product_test_case_constructor** as the constructor.
+There are a few key things we have done in the above code:
+
+- Defined our own custom derived type **dot_product_test_case** which contains the two arrays **a** and **b** as type-bound
+  parameters.
+- **dot_product_test_case** also contains a type-bound procedures **tearDown** which deallocates **a** and **b**.
+- To first allocate **a** and **b** we have defined a constructor **dot_product_test_case_constructor**.
+- These two procedures, **tearDown** and **dot_product_test_case_constructor**, allow us to move the previously repeated logic to
+  one location.
+- Finally, to ensure our new custom type is understood and used correctly by pFUnit, we must include two things in it's definition:
+    1. Ensure this type extends one provided by the pFUnit library - **TestCase**.
+    2. Decorate this new type with the pre-processor directive **@TestCase**, ensuring that we pass
+    **dot_product_test_case_constructor** as the constructor.
 
 ## Parameterising tests
 
-By defining a custom test case type, we have begun to reduce repetition within our test. However, there is further repitition to be removed. For example, in both **@Test**'s we are calling **dot_product** and running the same assertion. To remove this, we can paramaterise our test. This is done by defining a new custom type **dot_product_test_parameters**:
+By defining a custom test case type, we have begun to reduce repetition within our test. However, there is further repetition to
+be removed. For example, in both **@Test**'s we are calling **dot_product** and running the same assertion. To remove this, we can
+paramaterise our test. This is done by defining a new custom type **dot_product_test_parameters**:
 
 ```fortran
 module test_dot_product_intrinsic
@@ -265,7 +292,7 @@ module test_dot_product_intrinsic
         procedure :: toString
     end type dot_product_test_parameters
 
-    !> Custom test case type allowing a single definition of tearDown logic. 
+    !> Custom test case type allowing a single definition of tearDown logic.
     !! If teardown is not required, This could also be thought of as boilerplate
     !! required to make the parameters available within our @Test.
     @TestCase(constructor=dot_product_test_case_constructor)
@@ -324,7 +351,7 @@ contains
         c = 935
         ! Here `dot_product_test_parameters` is a default constructor generated by our
         ! type definition
-        parameter_sets(1) = dot_product_test_parameters(a, b, c, "10x10 incrementing values") 
+        parameter_sets(1) = dot_product_test_parameters(a, b, c, "10x10 incrementing values")
 
         ! Parameter set 2
         a = 0
@@ -354,7 +381,7 @@ There is a lot of new aspects being introduced in the above test so let's break 
 
 ### 1. Test parameters type
 
-First of all we have defined a new custom type **dot_product_test_parameters**
+First of all, we have defined a new custom type **dot_product_test_parameters**
 
 ```fortran
 !> Custom test parameters type containing all of the inputs and expected
@@ -378,10 +405,13 @@ end type dot_product_test_parameters
 
 The key features of this the type **dot_product_test_parameters** are
 
-- It is decorated with the directive **@TestParameter**.
-- It extends the type **AbstractTestParameter** provided by the pFUnit library.
-- All inputs (**a** and **b**) and expected outputs (**expected_dot_product**) of **dot_product** are define as type-bound variables.
-- The type-bound variable **description** and procedure **toString** allow conversion of a single test parameter instance to a character array for logging (see below). 
+- It is decorated with the directive **@TestParameter** to inform the pre-processor that this is a test parameter type.
+- It extends the type **AbstractTestParameter** provided by the pFUnit library to allow the pfunit test runner to utlisise this
+  custom type.
+- All inputs (**a** and **b**) and expected outputs (**expected_dot_product**) of **dot_product** are define as type-bound
+  variables.
+- The type-bound variable **description** and procedure **toString** allow conversion of a single test parameter instance to a
+  character array for logging (see below).
 
 #### toString
 
@@ -398,7 +428,7 @@ function toString(this) result(string)
 end function toString
 ```
 
-For simplicity, we utilise the variable **description** to define this string in its entirity.
+For simplicity, we utilise the variable **description** to define this string in its entirety.
 
 :::::::::: callout
 
@@ -425,7 +455,7 @@ testParameters = dot_product_test_parameters(a, b, expected_dot_product, "10x10 
 Now that we have a new test parameter type, we must update our test case type to make use of it:
 
 ```fortran
-!> Custom test case type allowing a single definition of tearDown logic. 
+!> Custom test case type allowing a single definition of tearDown logic.
 !! If teardown is not required, This could also be thought of as boilerplate
 !! required to make the parameters available within our @Test.
 @TestCase(constructor=dot_product_test_case_constructor)
@@ -439,7 +469,7 @@ end type dot_product_test_case
 
 The key points to highlight are:
 
-- We are now extending the base type **ParameterizedTestCase**.
+- We are now extending the base type **ParameterizedTestCase** to inform the pre-processor that this is a test case that should be parameterised.
 - To prevent duplication we simply define an instance of our test parameter type as a type-bound variable.
 - The type-bound procedure **teardown** remains the same.
 
@@ -465,18 +495,19 @@ end function dot_product_test_case_constructor
 #### Setting up state
 
 Now that we are not using the test case constructor for setting up state we need a new place for this to be done.
-Thankfully, pFUnit allows us to do this in similar way to **teardown** by adding a new type-bound procedure within
-our test case type called **setUp**. 
+pFUnit allows us to do this in similar way to **teardown** by adding a new type-bound procedure within
+our test case type called **setUp**.
 
 ::::::::::::::::::::
 
-:::::::::::: spoiler
-
 ::::::::::::
+
+:::::::::::: spoiler
 
 ### 3. Defining a suite of tests / parameter sets
 
 **TODO:**
+
 - Returns a list of parameter sets where each set represents a single test
 - If inputs need to be allocated, this is where we do it.
 
