@@ -1,4 +1,4 @@
-FROM ghcr.io/carpentries-incubator/fortran-unit-testing:main
+FROM ghcr.io/carpentries-incubator/intro-to-modern-fortran:main
 
 COPY --chown=vscode exercises/3-writing-your-first-unit-test /home/vscode/3-writing-your-first-unit-test
 
@@ -9,7 +9,7 @@ WORKDIR /home/vscode/3-writing-your-first-unit-test/challenge
 # Build with CMake
 RUN cmake -B build-std && \
     cmake --build build-std
-    
+
 # Test with CMake
 RUN ctest --test-dir build-std --output-on-failure
 
