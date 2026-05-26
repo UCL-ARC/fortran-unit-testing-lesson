@@ -123,6 +123,22 @@ contains
 end module test_dot_product_intrinsic
 ```
 
+::: challenge
+
+### Challenge: Test temperature conversions using pFUnit
+
+Continuing with part two of
+[3-writing-your-first-unit-test/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/challenge)
+from the exercises. Write a single test for the temperature conversion using pFUnit.
+
+::: solution
+
+A solution is provided in [3-writing-your-first-unit-test/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/solution).
+
+:::
+
+:::
+
 ## Handling state within tests
 
 If multiple tests rely of the existence of some state such as the allocation of an array. We could repeat this step within each
@@ -446,6 +462,22 @@ testParameters = dot_product_test_parameters(a, b, expected_dot_product, "10x10 
 
 ::::::::::::::::::
 
+::: challenge
+
+### Challenge: Parameterising temperature conversion tests with pFUnit, part 1
+
+Begin parameterising your pFUnit tests of temperature conversions by creating a custom derived type for your test parameters.
+
+See part 2 of [3-writing-your-first-unit-test/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/challenge).
+
+::: solution
+
+A solution is provided in [3-writing-your-first-unit-test/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/solution).
+
+:::
+
+:::
+
 ::::::::::::
 
 :::::::::::: spoiler
@@ -500,6 +532,23 @@ our test case type called **setUp**.
 
 ::::::::::::::::::::
 
+::: challenge
+
+### Challenge: Parameterising temperature conversion tests with pFUnit, part 2
+
+Continue parameterising your pFUnit tests of temperature conversions by Updating your custom test case type to utilise your new
+parameter type.
+
+See part 2 of [3-writing-your-first-unit-test/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/challenge).
+
+::: solution
+
+A solution is provided in [3-writing-your-first-unit-test/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/solution).
+
+:::
+
+:::
+
 ::::::::::::
 
 :::::::::::: spoiler
@@ -546,6 +595,23 @@ Let's look at the key aspects of this function:
 - We return an array of **dot_product_test_parameters** where each element is a single test case.
 - This is now where we allocate **a** and **b**.
 
+::: challenge
+
+### Challenge: Parameterising temperature conversion tests with pFUnit, part 3
+
+Continue parameterising your pFUnit tests of temperature conversions by defining your parameters sets and returning them from your
+test suite function.
+
+See part 2 of [3-writing-your-first-unit-test/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/challenge).
+
+::: solution
+
+A solution is provided in [3-writing-your-first-unit-test/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/solution).
+
+:::
+
+:::
+
 ::::::::::::
 
 :::::::::::: spoiler
@@ -569,6 +635,23 @@ end subroutine test_dot_product
 The key aspects are:
 
 - The **@Test** directive now takes a **testParameters** value which we return from our test suite **dot_product_test_suite**.
-- We no longer set any inputs or expected outputs within this test subrotuine but simply just call **dot_product** and **@AssertEqual**.
+- We no longer set any inputs or expected outputs within this test subroutine but simply just call **dot_product** and **@AssertEqual**.
+
+::: challenge
+
+### Challenge: Parameterising temperature conversion tests with pFUnit, part 4
+
+Finish parameterising your pFUnit tests of temperature conversions by Updating your test subroutine to make use of your new custom
+parameter type and test suite.
+
+See part 2 of [3-writing-your-first-unit-test/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/challenge).
+
+::: solution
+
+A solution is provided in [3-writing-your-first-unit-test/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/solution).
+
+:::
+
+:::
 
 ::::::::::::
