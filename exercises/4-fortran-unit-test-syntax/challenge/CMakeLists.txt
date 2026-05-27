@@ -8,6 +8,8 @@ project(
   DESCRIPTION "Conway's game of life"
 )
 
+set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-none")
+
 # Define src files
 set(SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 set(PROJ_SRC_FILES
