@@ -75,11 +75,6 @@ A file [test_temp_conversions.pf](./test/pfunit/test_temp_conversions.pf) contai
 for your pFUnit test(s) has been provided. Comments within this file indicate the aspects of
 the pFUnit test you must write.
 
-> Note: This template has been written to facilitate conversion of
-> [test_temp_conversions.f90](./test/standard_fortran/test_temp_conversions.f90) as provided with this repo
-> to pFUnit. If your version of test_temp_conversions.f90, produced in Part 1, is significantly
-> different, You may prefer to use a different structure to the one provided in the template.
-
 #### Building the test
 
 - **i. Build your new test(s) with Make** - A top level [Makefile](./Makefile) has already been provided to build the
