@@ -51,7 +51,7 @@ jobs:
       - name: Test episode 2
         run: podman build . -f docker-tests/Dockerfile.02
 
-      - name: Test episode 2
+      - name: Test episode 3
         run: podman build . -f docker-tests/Dockerfile.03
 
       - name: Test episode 4
