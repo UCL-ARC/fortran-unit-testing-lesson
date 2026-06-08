@@ -47,6 +47,169 @@ convenient approach.
 
 ## Syntax of writing MPI enabled pFUnit tests
 
+When we move from testing a serial code to an MPI enabled code, there are several changes we need to make to our pFUnit tests.
+For example, let's look at how our test of **dot_product** changes for following the MPI enabled version:
+
+```f90
+module mpi_implementations
+    use mpi
+    implicit none
+
+contains
+
+    !> Calculates the dot produce of two arrays `a` and `b`, splitting the calculation across mpi processors
+    function mpi_dot_product(a, b, rank, num_ranks, communicator) result(final_result)
+        !> The input array `a` to be passed to dot_product
+        integer, allocatable :: a(:)
+        !> The input array `b` to be passed to dot_product
+        integer, allocatable :: b(:)
+        !> The rank of the current mpi process
+        integer, intent(in) :: rank
+        !> The number of mpi processors in the communicator
+        integer, intent(in) :: num_ranks
+        !> The mpi communicator to be used
+        integer, intent(in) :: communicator
+
+        integer :: final_result
+
+        integer :: indices_per_rank, proc_start, proc_end, ierr, proc_result
+
+        indices_per_rank = size(a) / num_ranks
+        proc_start = (rank * size(a)) / num_ranks + 1
+        proc_end   = ((rank + 1) * size(a)) / num_ranks
+
+        proc_result = dot_product(a(proc_start:proc_end), b(proc_start:proc_end))
+
+        CALL MPI_ALLREDUCE(proc_result, final_result, 1, MPI_INTEGER, MPI_SUM, communicator, ierr)
+    end function mpi_dot_product
+end module
+```
+
+::: spoiler
+
+### Full pFUnit test of mpi_dot_product
+
+```f90
+module test_with_mpi
+    use pfunit
+    use mpi_implementations, only : mpi_dot_product
+
+    implicit none
+
+    !> Custom test parameters type containing all of the inputs and expected
+    !! outputs of the intrinsic dot_product
+    @TestParameter
+    type, extends(MPITestParameter) :: mpi_dot_product_test_parameters
+        !> The input array `a` to be passed to dot_product
+        integer, allocatable :: a(:)
+        !> The input array `b` to be passed to dot_product
+        integer, allocatable :: b(:)
+        !> The expected value to be returned from dot_product
+        integer :: expected_dot_product
+        !> A description of the test to be outputted for logging
+        character(len=100) :: description
+    contains
+        !> The required type-bound procedure for converting an instance
+        !> of this type to a string for logging
+        procedure :: toString
+    end type mpi_dot_product_test_parameters
+
+    !> Custom test case type allowing a single definition of tearDown logic.
+    !! If teardown is not required, This could also be thought of as boilerplate
+    !! required to make the parameters available within our @Test.
+    @TestCase(constructor=mpi_dot_product_test_case_constructor)
+    type, extends(MPITestCase) :: mpi_dot_product_test_case
+        !> The instance of our test parameters type to be used within the test logic
+        type(mpi_dot_product_test_parameters) :: params
+    contains
+        procedure :: tearDown
+    end type mpi_dot_product_test_case
+
+contains
+
+    !> Trims and returns the description of the parameter set. The string returned
+    !! by this function will be included by pFUnit in the name of this test
+    function toString(this) result(string)
+        class (mpi_dot_product_test_parameters), intent(in) :: this
+        character(:), allocatable :: string
+
+        string = trim(this%description)
+    end function toString
+
+    !> Boilerplate constructor required to convert our custom parameters type to
+    !! the test case type.
+    function mpi_dot_product_test_case_constructor(testParameters) result(newTestCase)
+        type(mpi_dot_product_test_parameters), intent(in) :: testParameters
+        type(mpi_dot_product_test_case) :: newTestCase
+
+        newTestCase%params = testParameters
+    end function mpi_dot_product_test_case_constructor
+
+    !> Essentially a destructor for our custom test case type which deallocates
+    !! arrays `a` and `b`
+    subroutine tearDown(this)
+        !> The instance of our custom test case type which we want to teardown
+        class(mpi_dot_product_test_case), intent(inout) :: this
+
+        deallocate(this%params%a)
+        deallocate(this%params%b)
+    end subroutine tearDown
+
+    !> The test suite in which parameter sets (inputs and expected outputs) for each
+    !! test are defined.
+    function mpi_dot_product_test_suite() result(parameter_sets)
+        !> The array of parameter sets to be returned
+        type(mpi_dot_product_test_parameters) :: parameter_sets(10)
+
+        integer, allocatable :: a(:), b(:)
+        integer :: c, i
+
+        allocate(a(100))
+        allocate(b(100))
+
+        ! Parameter set 1
+        a = [(i,i=1,100)]
+        b = [(i,i=101,200)]
+        c = 843350
+        parameter_sets(1) = mpi_dot_product_test_parameters(1, a, b, c, "10x10 incrementing values")
+        parameter_sets(2) = mpi_dot_product_test_parameters(2, a, b, c, "10x10 incrementing values")
+        parameter_sets(3) = mpi_dot_product_test_parameters(4, a, b, c, "10x10 incrementing values")
+        parameter_sets(4) = mpi_dot_product_test_parameters(6, a, b, c, "10x10 incrementing values")
+        parameter_sets(5) = mpi_dot_product_test_parameters(8, a, b, c, "10x10 incrementing values")
+
+        ! Parameter set 2
+        a = 0
+        b = 0
+        c = 0
+        parameter_sets(6) = mpi_dot_product_test_parameters(1, a, b, c, "10x10 all zeros")
+        parameter_sets(7) = mpi_dot_product_test_parameters(2, a, b, c, "10x10 all zeros")
+        parameter_sets(8) = mpi_dot_product_test_parameters(4, a, b, c, "10x10 all zeros")
+        parameter_sets(9) = mpi_dot_product_test_parameters(6, a, b, c, "10x10 all zeros")
+        parameter_sets(10) = mpi_dot_product_test_parameters(8, a, b, c, "10x10 all zeros")
+
+        ! Deallocate the temporary stores of a and b for completeness
+        deallocate(a, b)
+    end function mpi_dot_product_test_suite
+
+    @Test(testParameters={mpi_dot_product_test_suite()})
+    subroutine test_mpi_dot_product(this)
+        !> The instance of our test case type for this test
+        class(mpi_dot_product_test_case), intent(inout) :: this
+
+        integer :: result
+
+        result = mpi_dot_product(this%params%a, this%params%b, this%getProcessRank(), this%getNumProcesses(), this%getMpiCommunicator())
+
+        ! Check that the call to dot_product returned what we expect
+        @AssertEqual(this%params%expected_dot_product, result, message="Unexpected value returned for the dot_product")
+    end subroutine test_mpi_dot_product
+end module test_with_mpi
+```
+
+:::
+
+Let's break down each section of this test and how it differs from the serial version we saw in the previous episode.
+
 :::::::::::::::::::::::::::::::::::::::::::::::::::: spoiler
 
 ### Derived types
@@ -60,13 +223,23 @@ MPI ranks, we can do the following:
     corresponds to the number of processors for which a particular test should be ran.
 
 ```F90
-@testParameter
-type, extends(MPITestParameter) :: my_test_params
-    integer :: input
-    integer :: expected_output
+!> Custom test parameters type containing all of the inputs and expected
+!! outputs of the intrinsic dot_product
+@TestParameter
+type, extends(MPITestParameter) :: mpi_dot_product_test_parameters
+    !> The input array `a` to be passed to dot_product
+    integer, allocatable :: a(:)
+    !> The input array `b` to be passed to dot_product
+    integer, allocatable :: b(:)
+    !> The expected value to be returned from dot_product
+    integer :: expected_dot_product
+    !> A description of the test to be outputted for logging
+    character(len=100) :: description
 contains
-    procedure :: toString => my_test_params_toString
-end type my_test_params
+    !> The required type-bound procedure for converting an instance
+    !> of this type to a string for logging
+    procedure :: toString
+end type mpi_dot_product_test_parameters
 ```
 
 We also need to change how we define our test case:
@@ -78,11 +251,23 @@ We also need to change how we define our test case:
     - **getNumProcesses()** returns the number of MPI ranks for the current test.
 
 ```F90
-@TestCase(constructor=my_test_params_to_my_test_case, testParameters={my_test_suite()})
-type, extends(MPITestCase) :: my_test_case
-    type(my_test_params) :: params
-end type my_test_case
+!> Custom test case type allowing a single definition of tearDown logic.
+!! If teardown is not required, This could also be thought of as boilerplate
+!! required to make the parameters available within our @Test.
+@TestCase(constructor=mpi_dot_product_test_case_constructor)
+type, extends(MPITestCase) :: mpi_dot_product_test_case
+    !> The instance of our test parameters type to be used within the test logic
+    type(mpi_dot_product_test_parameters) :: params
+contains
+    procedure :: tearDown
+end type mpi_dot_product_test_case
 ```
+
+::: callout
+
+Note that the constructors (i.e. `toString`, `mpi_dot_product_test_case_constructor` and `teardown`) remain essentially unchanged.
+
+:::
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
@@ -139,19 +324,41 @@ the test suite. There is actually little that needs to change, all we must do is
 ranks we want each parameter set to be run with. For example,
 
 ```f90
-function my_test_suite() result(params)
-    type(my_test_params), allocatable :: params(:)
+!> The test suite in which parameter sets (inputs and expected outputs) for each
+!! test are defined.
+function mpi_dot_product_test_suite() result(parameter_sets)
+    !> The array of parameter sets to be returned
+    type(mpi_dot_product_test_parameters) :: parameter_sets(10)
 
-    integer :: i, max_num_ranks
+    integer, allocatable :: a(:), b(:)
+    integer :: c, i
 
-    # Run two tests for each number of MPI ranks
-    max_num_ranks = 8
-    allocate(params(max_num_ranks * 2))
-    do i = 1, max_num_ranks
-        params(i)     = my_test_params(i, 1, 2)  ! Given input is 1, output is 2
-        params(i + 1) = my_test_params(i, 3, 4)  ! Given input is 3, output is 4
-    end do
-end function my_test_suite
+    allocate(a(100))
+    allocate(b(100))
+
+    ! Parameter set 1
+    a = [(i,i=1,100)]
+    b = [(i,i=101,200)]
+    c = 843350
+    parameter_sets(1) = mpi_dot_product_test_parameters(1, a, b, c, "10x10 incrementing values")
+    parameter_sets(2) = mpi_dot_product_test_parameters(2, a, b, c, "10x10 incrementing values")
+    parameter_sets(3) = mpi_dot_product_test_parameters(4, a, b, c, "10x10 incrementing values")
+    parameter_sets(4) = mpi_dot_product_test_parameters(6, a, b, c, "10x10 incrementing values")
+    parameter_sets(5) = mpi_dot_product_test_parameters(8, a, b, c, "10x10 incrementing values")
+
+    ! Parameter set 2
+    a = 0
+    b = 0
+    c = 0
+    parameter_sets(6) = mpi_dot_product_test_parameters(1, a, b, c, "10x10 all zeros")
+    parameter_sets(7) = mpi_dot_product_test_parameters(2, a, b, c, "10x10 all zeros")
+    parameter_sets(8) = mpi_dot_product_test_parameters(4, a, b, c, "10x10 all zeros")
+    parameter_sets(9) = mpi_dot_product_test_parameters(6, a, b, c, "10x10 all zeros")
+    parameter_sets(10) = mpi_dot_product_test_parameters(8, a, b, c, "10x10 all zeros")
+
+    ! Deallocate the temporary stores of a and b for completeness
+    deallocate(a, b)
+end function mpi_dot_product_test_suite
 ```
 
 ::::::::::::::::::::::::::::::::::::: challenge
@@ -217,16 +424,18 @@ MPI communicator into each procedure which utilises MPI. For example, the test l
 something like this.
 
 ```F90
-@Test
-subroutine TestMySrcProcedure(this)
-    class (my_test_case), intent(inout) :: this
+@Test(testParameters={mpi_dot_product_test_suite()})
+subroutine test_mpi_dot_product(this)
+    !> The instance of our test case type for this test
+    class(mpi_dot_product_test_case), intent(inout) :: this
 
-    integer :: actual_output
+    integer :: result
 
-    call my_src_procedure(this%params%input, actual_output, this%getMpiCommunicator(), this%getNumProcessesRequested())
+    result = mpi_dot_product(this%params%a, this%params%b, this%getProcessRank(), this%getNumProcesses(), this%getMpiCommunicator())
 
-    @assertEqual(this%params%expected_output, actual_output, "Unexpected output from my_src_procedure")
-end subroutine TestMySrcProcedure
+    ! Check that the call to dot_product returned what we expect
+    @AssertEqual(this%params%expected_dot_product, result, message="Unexpected value returned for the dot_product")
+end subroutine test_mpi_dot_product
 ```
 
 ::::::::::::::::::::::::: callout
@@ -249,7 +458,7 @@ to work with the new src procedure signature.
 
 :::::::::::::::::::::::::::::::: solution
 
-Your derived types should now look something like this,
+Your test logic should now look something like this,
 
 ```f90
 @Test
@@ -273,15 +482,6 @@ end subroutine TestFindSteadyState
 
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-:::::::::::::::::::::::::::::::::::::::::::::::::::: spoiler
-
-### Type Constructors
-
-Converting to supporting MPI has not altered the relationship between the test parameters and the test case.
-Therefore, the constructors will remain unchanged.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
