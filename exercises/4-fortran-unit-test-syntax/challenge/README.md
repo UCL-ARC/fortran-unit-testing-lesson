@@ -21,7 +21,7 @@ cmake --build build
 
 1. Update the [test/CMakeLists.txt](./test/CMakeLists.txt) to build the fully implemented test, **test_evolve_board.pf**.
 2. Finish the partially implemented tests in [test](./test/) and ensure they are built via CMake.
-    - [test_check_for_steady_state.pf](./test/test_check_for_steady_state.pf)
-    - [test_read_model_from_file.pf](./test/test_read_model_from_file.pf)
+    1. [test_check_for_steady_state.pf](./test/test_check_for_steady_state.pf)
+    2. [test_read_model_from_file.pf](./test/test_read_model_from_file.pf)
 3. Write a completely new pFUnit test for the subroutine `find_steady_state` in [game_of_life_mod.f90](./src/game_of_life_mod.f90)
    and ensure it is built via CMake.

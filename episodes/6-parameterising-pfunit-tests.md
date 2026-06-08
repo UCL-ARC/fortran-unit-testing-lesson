@@ -345,15 +345,16 @@ testParameters = dot_product_test_parameters(a, b, expected_dot_product, "10x10 
 
 ::: challenge
 
-### Challenge: Parameterising temperature conversion tests with pFUnit, part 1
+### Challenge: Parameterising tests with pFUnit, part 1
 
-Begin parameterising your pFUnit tests of temperature conversions by creating a custom derived type for your test parameters.
-
-See part 2 of [3-writing-your-first-unit-test/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/challenge).
+Take a look at
+[4-fortran-unit-test-syntax/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/4-fortran-unit-test-syntax/challenge).
+Complete tasks 1 and 2.1.
 
 ::: solution
 
-A solution is provided in [3-writing-your-first-unit-test/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/solution).
+A solution is provided in
+[4-fortran-unit-test-syntax/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/4-fortran-unit-test-syntax/solution).
 
 :::
 
@@ -413,23 +414,6 @@ our test case type called **setUp**.
 
 ::::::::::::::::::::
 
-::: challenge
-
-### Challenge: Parameterising temperature conversion tests with pFUnit, part 2
-
-Continue parameterising your pFUnit tests of temperature conversions by Updating your custom test case type to utilise your new
-parameter type.
-
-See part 2 of [3-writing-your-first-unit-test/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/challenge).
-
-::: solution
-
-A solution is provided in [3-writing-your-first-unit-test/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/solution).
-
-:::
-
-:::
-
 ::::::::::::
 
 :::::::::::: spoiler
@@ -478,16 +462,16 @@ Let's look at the key aspects of this function:
 
 ::: challenge
 
-### Challenge: Parameterising temperature conversion tests with pFUnit, part 3
+### Challenge: Parameterising tests with pFUnit, part 2
 
-Continue parameterising your pFUnit tests of temperature conversions by defining your parameters sets and returning them from your
-test suite function.
-
-See part 2 of [3-writing-your-first-unit-test/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/challenge).
+Continuing with
+[4-fortran-unit-test-syntax/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/4-fortran-unit-test-syntax/challenge),
+complete task 2.2.
 
 ::: solution
 
-A solution is provided in [3-writing-your-first-unit-test/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/solution).
+A solution is provided in
+[4-fortran-unit-test-syntax/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/4-fortran-unit-test-syntax/solution).
 
 :::
 
@@ -520,16 +504,16 @@ The key aspects are:
 
 ::: challenge
 
-### Challenge: Parameterising temperature conversion tests with pFUnit, part 4
+### Challenge: Parameterising tests with pFUnit, part 3
 
-Finish parameterising your pFUnit tests of temperature conversions by Updating your test subroutine to make use of your new custom
-parameter type and test suite.
-
-See part 2 of [3-writing-your-first-unit-test/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/challenge).
+Continuing with
+[4-fortran-unit-test-syntax/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/4-fortran-unit-test-syntax/challenge),
+complete task 3.
 
 ::: solution
 
-A solution is provided in [3-writing-your-first-unit-test/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/solution).
+A solution is provided in
+[4-fortran-unit-test-syntax/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/4-fortran-unit-test-syntax/solution).
 
 :::
 
