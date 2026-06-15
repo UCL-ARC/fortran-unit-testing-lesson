@@ -57,7 +57,7 @@ module mpi_implementations
 
 contains
 
-    !> Calculates the dot produce of two arrays `a` and `b`, splitting the calculation across mpi processors
+    !> Calculates the dot product of two arrays `a` and `b`, splitting the calculation across mpi processors
     function mpi_dot_product(a, b, rank, num_ranks, communicator) result(final_result)
         !> The input array `a` to be passed to dot_product
         integer, allocatable :: a(:)
@@ -554,70 +554,134 @@ constructor).
 
 Thus far we have been assuming our src procedure returns the same value to all ranks for any number of MPI
 ranks. We must do things slightly differently if we expect different values to be returned for different
-ranks. To handle this scenario we can make use of the functions provided by pFUnit, **getNumProcesses()** and
+ranks. For example, imagine we now wish to test **partial_mpi_dot_product** from the following module:
+
+```f90
+module mpi_implementations
+    use mpi
+    implicit none
+
+contains
+
+    !> Calculates the partial dot product of two arrays `a` and `b`, splitting the calculation across mpi processors
+    function partial_mpi_dot_product(a, b, rank, num_ranks, communicator) result(final_result)
+        !> The input array `a` to be passed to dot_product
+        integer, allocatable :: a(:)
+        !> The input array `b` to be passed to dot_product
+        integer, allocatable :: b(:)
+        !> The rank of the current mpi process
+        integer, intent(in) :: rank
+        !> The number of mpi processors in the communicator
+        integer, intent(in) :: num_ranks
+        !> The mpi communicator to be used
+        integer, intent(in) :: communicator
+
+        integer :: final_result
+
+        integer :: indices_per_rank, proc_start, proc_end, ierr
+
+        indices_per_rank = size(a) / num_ranks
+        proc_start = (rank * size(a)) / num_ranks + 1
+        proc_end   = ((rank + 1) * size(a)) / num_ranks
+
+        final_result = dot_product(a(proc_start:proc_end), b(proc_start:proc_end))
+    end function partial_mpi_dot_product
+end module
+```
+
+In this new function, the value for each processor will be different since we don't call **mpi_allreduce**.
+To handle this scenario we can make use of the functions provided by pFUnit, **getNumProcesses()** and
 **getProcessRank()**. However, these values are not set until the test case runs (i.e. until we are within
 the subroutine decorated with **@Test**). Therefore, we must be a little clever about how we populate our
 test parameters.
 
-We can build arrays of input parameters with the rank of a process matching the index of the parameter array.
-For example, rank 0 would access index 1 of the input array during testing, rank 1 would access index 2 and so
-on. For example, if we define our test parameter type to use arrays, like so,
+We can build arrays of input/output parameters with the rank of a process matching the index of the parameter
+array. For example, rank 0 would access index 1, rank 1 would access index 2 and so on. Therefore, we must now
+update our test parameter type to use an integer array for **expected_dot_product**, like so:
 
 ```F90
-@testParameter
-type, extends(MPITestParameter) :: my_test_params
-    integer, allocatable :: input(:)
-    integer, allocatable :: expected_output(:)
+!> Custom test parameters type containing all of the inputs and expected
+!! outputs of the intrinsic dot_product
+@TestParameter
+type, extends(MPITestParameter) :: mpi_dot_product_test_parameters
+    !> The input array `a` to be passed to dot_product
+    integer, allocatable :: a(:)
+    !> The input array `b` to be passed to dot_product
+    integer, allocatable :: b(:)
+    !> The expected values to be returned from dot_product
+    integer, allocatable :: expected_dot_product(:)
+    !> A description of the test to be outputted for logging
+    character(len=100) :: description
 contains
-    procedure :: toString => my_test_params_toString
-end type my_test_params
+    !> The required type-bound procedure for converting an instance
+    !> of this type to a string for logging
+    procedure :: toString
+end type mpi_dot_product_test_parameters
 ```
 
 We can then update how we populate our test parameters to take into account the rank indexing:
 
 ```F90
-function my_test_suite() result(params)
-    type(my_test_params), allocatable :: params(:)
-    integer, allocatable :: input(:)
-    integer, allocatable :: expected_output(:)
-    integer, max_number_of_ranks
+!> The test suite in which parameter sets (inputs and expected outputs) for each
+!! test are defined.
+function mpi_dot_product_test_suite() result(parameter_sets)
+    !> The array of parameter sets to be returned
+    type(mpi_dot_product_test_parameters) :: parameter_sets(10)
 
-    max_number_of_ranks = 2
-    allocate(params(max_number_of_ranks))
-    allocate(input(max_number_of_ranks))
-    allocate(expected_output(max_number_of_ranks))
+    integer, allocatable :: a(:), b(:), c(:)
+    integer :: i, c_sum
 
-    ! Tests with one rank
-    input(1) = 1
-    expected_output(1) = 2
-    params(1) = my_test_params(1, input, expected_output)
+    allocate(a(100))
+    allocate(b(100))
+    allocate(c(8)) ! Allocate up to maximum number of ranks to be tested
 
-    ! Tests with two ranks
-    !     rank 0
-    input(1) = 1
-    expected_output(1) = 1
-    !     rank 1
-    input(2) = 1
-    expected_output(2) = 1
-    params(2) = my_test_params(2, input, expected_output)
-end function my_test_suite
+    ! Parameter set 1
+    a = [(i,i=1,100)]
+    b = [(i,i=101,200)]
+    c = 0
+    c(1) = 843350
+    parameter_sets(1) = mpi_dot_product_test_parameters(1, a, b, c, "10x10 incrementing values")
+    c(1:2) = [170425,672925]
+    parameter_sets(2) = mpi_dot_product_test_parameters(2, a, b, c, "10x10 incrementing values")
+    c(1:4) = [38025,132400,258025,414900]
+    parameter_sets(3) = mpi_dot_product_test_parameters(4, a, b, c, "10x10 incrementing values")
+    c(1:6) = [15096,53533,101796,148696,223533,300696]
+    parameter_sets(4) = mpi_dot_product_test_parameters(6, a, b, c, "10x10 incrementing values")
+    c(1:8) = [8450,29575,49850,82550,106250,151775,177650,237250]
+    parameter_sets(5) = mpi_dot_product_test_parameters(8, a, b, c, "10x10 incrementing values")
+
+    ! Parameter set 2
+    a = 0
+    b = 0
+    c = 0
+    parameter_sets(6) = mpi_dot_product_test_parameters(1, a, b, c, "10x10 all zeros")
+    parameter_sets(7) = mpi_dot_product_test_parameters(2, a, b, c, "10x10 all zeros")
+    parameter_sets(8) = mpi_dot_product_test_parameters(4, a, b, c, "10x10 all zeros")
+    parameter_sets(9) = mpi_dot_product_test_parameters(6, a, b, c, "10x10 all zeros")
+    parameter_sets(10) = mpi_dot_product_test_parameters(8, a, b, c, "10x10 all zeros")
+
+    ! Deallocate the temporary stores of a, b and c for completeness
+    deallocate(a, b, c)
+end function mpi_dot_product_test_suite
 ```
 
 Finally, we need to ensure each process accesses the correct rank indexed parameters during the test
 
 ```F90
-@Test
-subroutine TestMySrcProcedure(this)
-    class (my_test_case), intent(inout) :: this
+@Test(testParameters={mpi_dot_product_test_suite()})
+subroutine test_partial_mpi_dot_product(this)
+    !> The instance of our test case type for this test
+    class(mpi_dot_product_test_case), intent(inout) :: this
 
-    integer :: actual_output, rank_index
+    integer :: result, rank
 
-    rank_index = this%getProcessRank() + 1
+    rank = this%getProcessRank()
 
-    call my_src_procedure(this%params%input(rank_index), actual_output)
+    result = partial_mpi_dot_product(this%params%a, this%params%b, rank, this%getNumProcesses(), this%getMpiCommunicator())
 
-    @assertEqual(this%params%expected_output(rank_index), actual_output, "Unexpected output from my_src_procedure")
-end subroutine TestMySrcProcedure
+    ! Check that the call to dot_product returned what we expect
+    @AssertEqual(this%params%expected_dot_product(rank + 1), result, message="Unexpected value returned for the dot_product")
+end subroutine test_partial_mpi_dot_product
 ```
 
 ::::::::::::::::::::::::::::::::::::: challenge
