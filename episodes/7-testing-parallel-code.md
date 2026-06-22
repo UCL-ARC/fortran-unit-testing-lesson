@@ -549,7 +549,7 @@ The difference between a serial test and an MPI test built using CMake is minima
 add_pfunit_ctest (test_something_interesting
   TEST_SOURCES ${test_srcs}
   LINK_LIBRARIES SUT # your application library
-  MAX_PES 4
+  MAX_PES 4          # <-- max number of MPI ranks required for the test
   )
 ```
 
