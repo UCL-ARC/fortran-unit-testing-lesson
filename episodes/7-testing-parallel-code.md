@@ -48,7 +48,7 @@ convenient approach.
 ## Syntax of writing MPI enabled pFUnit tests
 
 When we move from testing a serial code to an MPI enabled code, there are several changes we need to make to our pFUnit tests.
-For example, let's look at how our test of **dot_product** changes for following the MPI enabled version:
+For example, let's look at how our test of **dot_product** changes for the following MPI enabled version:
 
 ```f90
 module mpi_implementations
@@ -210,6 +210,13 @@ end module test_with_mpi
 
 Let's break down each section of this test and how it differs from the serial version we saw in the previous episode.
 
+::: instructor
+
+When writing out the new MPI versions of the **dot_product** test, it is best to start from the serial
+version to emphasize the similarities between the two.
+
+:::
+
 :::::::::::::::::::::::::::::::::::::::::::::::::::: spoiler
 
 ### Derived types
@@ -276,7 +283,7 @@ Note that the constructors (i.e. `toString`, `mpi_dot_product_test_case_construc
 Take a look at the exercise
 [6-testing-parallel-code](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/6-testing-parallel-code/challenge).
 This exercise contains an MPI parallelised version of the game of life from episode
-[2. Refactoring Fortran](https://github-pages.arc.ucl.ac.uk/fortran-unit-testing-lesson/2-refactor-fortran.html)
+[2. Refactoring Fortran](https://carpentries-incubator.github.io/fortran-unit-testing/2-refactor-fortran.html)
 and the exercise
 [4-fortran-unit-test-syntax](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/4-fortran-unit-test-syntax/challenge).
 
@@ -321,7 +328,9 @@ end type find_steady_state_test_case
 
 Now that we have updated our derived types, we must update how we populate our test parameter sets within
 the test suite. There is actually little that needs to change, all we must do is set how many MPI
-ranks we want each parameter set to be run with. For example,
+ranks we want each parameter set to be run with. To do this we will use the default constructor generated
+for our custom type **mpi_dot_product_test_parameters**. Since we have extended **MPITestParameter**, we can
+pass the desired number of MPI ranks as the first argument, as shown below.
 
 ```f90
 !> The test suite in which parameter sets (inputs and expected outputs) for each
@@ -337,9 +346,9 @@ function mpi_dot_product_test_suite() result(parameter_sets)
     allocate(b(100))
 
     ! Parameter set 1
-    a = [(i,i=1,100)]
-    b = [(i,i=101,200)]
-    c = 843350
+    a = [(i,i=1,100)]   !                              Here
+    b = [(i,i=101,200)] !                               |
+    c = 843350          !                               V
     parameter_sets(1) = mpi_dot_product_test_parameters(1, a, b, c, "10x10 incrementing values")
     parameter_sets(2) = mpi_dot_product_test_parameters(2, a, b, c, "10x10 incrementing values")
     parameter_sets(3) = mpi_dot_product_test_parameters(4, a, b, c, "10x10 incrementing values")
@@ -347,9 +356,9 @@ function mpi_dot_product_test_suite() result(parameter_sets)
     parameter_sets(5) = mpi_dot_product_test_parameters(8, a, b, c, "10x10 incrementing values")
 
     ! Parameter set 2
-    a = 0
-    b = 0
-    c = 0
+    a = 0               !                            and here
+    b = 0               !                               |
+    c = 0               !                               V
     parameter_sets(6) = mpi_dot_product_test_parameters(1, a, b, c, "10x10 all zeros")
     parameter_sets(7) = mpi_dot_product_test_parameters(2, a, b, c, "10x10 all zeros")
     parameter_sets(8) = mpi_dot_product_test_parameters(4, a, b, c, "10x10 all zeros")
@@ -417,11 +426,10 @@ end function getTestSuite
 
 ### Test Logic
 
-As we are assuming our src procedure returns the same value to all ranks for any number of MPI ranks
-there is not much that needs to change within our test logic subroutine. The one thing that is likely
-to change in this case is the call to the src procedure being tested as it is recommended to pass the
-MPI communicator into each procedure which utilises MPI. For example, the test logic might look
-something like this.
+Since we are assuming our src procedure returns the same value to all ranks, for any number of MPI ranks,
+nothing much that needs to change within our test logic subroutine. The one thing that is likely to change
+is the call to the src procedure being tested as it is recommended to pass the MPI communicator into each
+procedure which utilises MPI. For example, the test logic might look something like this.
 
 ```F90
 @Test(testParameters={mpi_dot_product_test_suite()})
@@ -440,8 +448,8 @@ end subroutine test_mpi_dot_product
 
 ::::::::::::::::::::::::: callout
 
-In the example above, the MPI communicator is passed into the src procedure. Using the function provided by pFUnit
-**this%getMpiCommunicator()** allows pFUnit to manage the number of ranks used within each test.
+In the example above, the MPI communicator is passed into the src procedure. By using the function provided by pFUnit
+(**this%getMpiCommunicator()**) we allow pFUnit to manage the number of ranks used within each test.
 
 :::::::::::::::::::::::::::::::::
 
@@ -450,7 +458,7 @@ In the example above, the MPI communicator is passed into the src procedure. Usi
 #### Challenge: Update test logic to work with MPI
 
 Continuing with the exercise
-[6-testing-parallel-code](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/6-testing-parallel-code/challenge).
+[exercises/6-testing-parallel-code/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/6-testing-parallel-code/challenge).
 
 Converting the test logic within
 [test_find_steady_state.pf](https://github.com/carpentries-incubator/fortran-unit-testing/blob/main/exercises/6-testing-parallel-code/challenge/test/test_find_steady_state.pf#L69-L84)
@@ -494,7 +502,7 @@ Just like serial tests, MPI tests can be integrated into projects which utilise 
 To build MPI enabled pFUnit tests via Make, one must use an mpi enabled compiler such as **mpif90** and
 include the pFUnit library in the compiler arguments **-lpfunit**. Therefore, the **tests/Makefile**
 from
-[5-integrating-with-build-systems#integrating-pfunit-with-make](https://github-pages.arc.ucl.ac.uk/fortran-unit-testing-lesson/5-integrating-with-build-systems.html#integrating-pfunit-with-make)
+[5. Integrating with build systems#Integrating pFUnit with Make](https://carpentries-incubator.github.io/fortran-unit-testing/5-integrating-with-build-systems.html#integrating-pfunit-with-make)
 becomes,
 
 ```makefile
@@ -589,7 +597,7 @@ contains
 end module
 ```
 
-In this new function, the value for each processor will be different since we don't call **mpi_allreduce**.
+In this new function, the value for each processor will be different since we don't call **MPI_ALLREDUCE**.
 To handle this scenario we can make use of the functions provided by pFUnit, **getNumProcesses()** and
 **getProcessRank()**. However, these values are not set until the test case runs (i.e. until we are within
 the subroutine decorated with **@Test**). Therefore, we must be a little clever about how we populate our
@@ -689,13 +697,13 @@ end subroutine test_partial_mpi_dot_product
 ### Challenge: A more complex MPI test
 
 Take a look at part 3 of
-[6-testing-parallel-code/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/6-testing-parallel-code/challenge)
+[exercises/6-testing-parallel-code/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/6-testing-parallel-code/challenge)
 in the exercises repository.
 
 :::::::::::::::::::::::::::::::: solution
 
 A solution is provided in
-[6-testing-parallel-code/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/6-testing-parallel-code/solution).
+[exercises/6-testing-parallel-code/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/6-testing-parallel-code/solution).
 
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
