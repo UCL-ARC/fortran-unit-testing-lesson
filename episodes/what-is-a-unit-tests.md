@@ -64,8 +64,28 @@ All unit tests tend to follow the same pattern of Given-When-Then.
 
 ### Challenge 1: Write a unit test in pseudo code
 
-Assuming you have a function `reverse_array` which reverses the order of an allocated array. Write a unit test in pseudo code for
-`reverse_array` using the pattern above.
+::: instructor
+
+Challenge 1 should be lead by the instructor and done as a class activity.
+
+:::
+
+Assuming you have a function `reverse_array` which reverses the order of an
+allocated array. Finishingwriting the pseudo code unit test below for
+`reverse_array` using the pattern above. A template has been provided for you:
+
+```txt
+! Given - what are the inputs and expected outputs?
+Allocate the input array `input_array`
+!...
+
+! When - What functionality are we testing?
+!...
+
+! Then - how to do you check the result?
+for each element in `input_array`:
+  !...
+```
 
 :::::::::::::::::::::::: solution
 
