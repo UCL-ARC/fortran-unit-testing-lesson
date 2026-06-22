@@ -346,9 +346,9 @@ function mpi_dot_product_test_suite() result(parameter_sets)
     allocate(b(100))
 
     ! Parameter set 1
-    a = [(i,i=1,100)]   !                              Here
-    b = [(i,i=101,200)] !                               |
-    c = 843350          !                               V
+    a = [(i,i=1,100)]    !                             Here
+    b = [(i,i=101,200)]  !                              |
+    c = 843350           !                              V
     parameter_sets(1) = mpi_dot_product_test_parameters(1, a, b, c, "10x10 incrementing values")
     parameter_sets(2) = mpi_dot_product_test_parameters(2, a, b, c, "10x10 incrementing values")
     parameter_sets(3) = mpi_dot_product_test_parameters(4, a, b, c, "10x10 incrementing values")
@@ -356,13 +356,13 @@ function mpi_dot_product_test_suite() result(parameter_sets)
     parameter_sets(5) = mpi_dot_product_test_parameters(8, a, b, c, "10x10 incrementing values")
 
     ! Parameter set 2
-    a = 0               !                            and here
-    b = 0               !                               |
-    c = 0               !                               V
-    parameter_sets(6) = mpi_dot_product_test_parameters(1, a, b, c, "10x10 all zeros")
-    parameter_sets(7) = mpi_dot_product_test_parameters(2, a, b, c, "10x10 all zeros")
-    parameter_sets(8) = mpi_dot_product_test_parameters(4, a, b, c, "10x10 all zeros")
-    parameter_sets(9) = mpi_dot_product_test_parameters(6, a, b, c, "10x10 all zeros")
+    a = 0                !                            and here
+    b = 0                !                               |
+    c = 0                !                               V
+    parameter_sets(6)  = mpi_dot_product_test_parameters(1, a, b, c, "10x10 all zeros")
+    parameter_sets(7)  = mpi_dot_product_test_parameters(2, a, b, c, "10x10 all zeros")
+    parameter_sets(8)  = mpi_dot_product_test_parameters(4, a, b, c, "10x10 all zeros")
+    parameter_sets(9)  = mpi_dot_product_test_parameters(6, a, b, c, "10x10 all zeros")
     parameter_sets(10) = mpi_dot_product_test_parameters(8, a, b, c, "10x10 all zeros")
 
     ! Deallocate the temporary stores of a and b for completeness
