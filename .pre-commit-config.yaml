@@ -1,4 +1,11 @@
 ---
+exclude: |
+    (?x)^(
+        \.github/workflows/docker_*.yaml|
+        \.github/workflows/pr-*.yaml|
+        \.github/workflows/update-*.yaml|
+        \.github/workflows/README.md
+    )$
 repos:
   - repo: https://github.com/PlasmaFAIR/fortitude-pre-commit
     rev : v0.7.2
