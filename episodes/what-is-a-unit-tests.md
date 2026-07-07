@@ -168,9 +168,3 @@ A solution is provided in
 
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
-## References
-
-- David Thomas and Andrew Hunt (2019).
-  [The Pragmatic Programmer: your journey to mastery](https://search.worldcat.org/search?q=bn:9780135957059)
-  , 20th Anniversary Edition, 2nd Edition. Addison-Wesley Professional.
