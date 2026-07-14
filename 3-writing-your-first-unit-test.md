@@ -26,8 +26,8 @@ of any one tool.
 ## Testing the temperature
 
 We'll now use an example Fortran library which converts between units of temperature.
-This code can be found in the exercises repo under
-[3-writing-your-first-unit-test/challenge/src/temp_conversions.f90][temp-lib]. This
+This code can be found in the [exercises] under
+**exercises/3-writing-your-first-unit-test/challenge/src/temp_conversions.f90**. This
 library contains two functions, one to convert from Fahrenheit to Celsius
 (`fahrenheit_to_celsius`) and another to convert from Celsius to Kelvin
 (`celsius_to_kelvin`).
@@ -83,16 +83,12 @@ Write a unit test in standard Fortran for the temperature library to check that 
 convert from Fahrenheit to Kelvin. You can use your pseudocode as a starting point.
 
 As we are not yet using a testing framework, some boilerplate code has been provided to
-help you create a test-suite. Take a look at part one of the exercise
-[3-writing-your-first-unit-test/challenge][exercises-challenge].
+help you create a test-suite. Take a look at part one of the [exercise] at
+**exercises/3-writing-your-first-unit-test/challenge**.
 
 ::::::::::::::::::::::::::::::::::: solution
 
-A solution is provided in [3-writing-your-first-unit-test/solution][exercises-solution].
+A solution is provided in **exercises/3-writing-your-first-unit-test/solution**.
 
 ::::::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::::
-
-[temp-lib]: https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/challenge/src/temp_conversions.f90
-[exercises-challenge]: https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/challenge
-[exercises-solution]: https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/solution
