@@ -280,16 +280,13 @@ Note that the constructors (i.e. `toString`, `mpi_dot_product_test_case_construc
 
 #### Challenge: Update derived types to work with MPI
 
-Take a look at the exercise
-[6-testing-parallel-code](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/6-testing-parallel-code/challenge).
+Take a look at the exercise **exercise/6-testing-parallel-code/challenge** from the [exercises].
 This exercise contains an MPI parallelised version of the game of life from episode
-[2. Refactoring Fortran](https://carpentries-incubator.github.io/fortran-unit-testing/2-refactor-fortran.html)
-and the exercise
-[4-fortran-unit-test-syntax](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/4-fortran-unit-test-syntax/challenge).
+[2. Refactoring Fortran][ep-2] and **exercises/4-fortran-unit-test-syntax/challenge** from the
+[exercises].
 
-Complete the first step of the challenge by converting the derived types within
-[test_find_steady_state.pf](https://github.com/carpentries-incubator/fortran-unit-testing/blob/main/exercises/6-testing-parallel-code/challenge/test/test_find_steady_state.pf#L10-L29)
-to work with MPI.
+Complete the first step of the challenge by converting the [derived types][derived-types]
+within **test_find_steady_state.pf** to work with MPI.
 
 :::::::::::::::::::::::::::::::: solution
 
@@ -374,12 +371,10 @@ end function mpi_dot_product_test_suite
 
 #### Challenge: Update test suite to work with MPI
 
-Continuing with the exercise
-[6-testing-parallel-code](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/6-testing-parallel-code/challenge).
+Continuing with **exercises/6-testing-parallel-code/challenge** from the [exercises].
 
-Complete the next step of the challenge by converting the test suite within
-[test_find_steady_state.pf](https://github.com/carpentries-incubator/fortran-unit-testing/blob/main/exercises/6-testing-parallel-code/challenge/test/test_find_steady_state.pf#L37-L63)
-to work with your new derived types.
+Complete the next step of the challenge by converting the [test suite][getTestSuite]
+within **test_find_steady_state.pf** to work with your new derived types.
 
 :::::::::::::::::::::::::::::::: solution
 
@@ -457,11 +452,9 @@ In the example above, the MPI communicator is passed into the src procedure. By 
 
 #### Challenge: Update test logic to work with MPI
 
-Continuing with the exercise
-[exercises/6-testing-parallel-code/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/6-testing-parallel-code/challenge).
+Continuing with **exercises/6-testing-parallel-code/challenge** from the [exercises].
 
-Converting the test logic within
-[test_find_steady_state.pf](https://github.com/carpentries-incubator/fortran-unit-testing/blob/main/exercises/6-testing-parallel-code/challenge/test/test_find_steady_state.pf#L69-L84)
+Converting the [test logic][TestFindSteadyState] within **test_find_steady_state.pf**
 to work with the new src procedure signature.
 
 :::::::::::::::::::::::::::::::: solution
@@ -501,9 +494,7 @@ Just like serial tests, MPI tests can be integrated into projects which utilise 
 
 To build MPI enabled pFUnit tests via Make, one must use an mpi enabled compiler such as **mpif90** and
 include the pFUnit library in the compiler arguments **-lpfunit**. Therefore, the **tests/Makefile**
-from
-[5. Integrating with build systems#Integrating pFUnit with Make](https://carpentries-incubator.github.io/fortran-unit-testing/5-integrating-with-build-systems.html#integrating-pfunit-with-make)
-becomes,
+from Integrating pFUnit with Make in [episode 5][ep-5] becomes,
 
 ```makefile
 PFUNIT_INCLUDE_DIR ?= /path/to/pfunit/include
@@ -696,14 +687,15 @@ end subroutine test_partial_mpi_dot_product
 
 ### Challenge: A more complex MPI test
 
-Take a look at part 3 of
-[exercises/6-testing-parallel-code/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/6-testing-parallel-code/challenge)
-in the exercises repository.
+Take a look at part 3 of **exercises/6-testing-parallel-code/challenge** from the [exercises].
 
 :::::::::::::::::::::::::::::::: solution
 
-A solution is provided in
-[exercises/6-testing-parallel-code/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/6-testing-parallel-code/solution).
+A solution is provided in **exercises/6-testing-parallel-code/solution**.
 
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
+
+[derived-types]: https://github.com/carpentries-incubator/fortran-unit-testing/blob/main/exercises/6-testing-parallel-code/challenge/test/test_find_steady_state.pf#L10-L29
+[getTestSuite]: https://github.com/carpentries-incubator/fortran-unit-testing/blob/main/exercises/6-testing-parallel-code/challenge/test/test_find_steady_state.pf#L37-L63
+[TestFindSteadyState]: https://github.com/carpentries-incubator/fortran-unit-testing/blob/main/exercises/6-testing-parallel-code/challenge/test/test_find_steady_state.pf#L69-L84

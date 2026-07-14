@@ -4,12 +4,11 @@ title: "Setup"
 
 ## Exercises repository
 
-Throughout this walkthrough, we will use the Fortran [exercises](../exercises/) defined within this repo.
+Throughout this walkthrough, we will use the Fortran [exercises] defined within this repo.
 
 ### Codespaces
 
-The exercises repository is setup to work via GitHub codespaces. This process is documented in the
-[README.md of the exercises](../exercises/README.md).
+The exercises repository is setup to work via GitHub codespaces. This process is documented in the **exercises/README.md**.
 
 #### TL;DR
 
@@ -38,7 +37,7 @@ To following along with this lesson's exercises you will require the following
 Try to install the dependencies listed above.
 
 - CMake can be installed via [homebrew](https://formulae.brew.sh/formula/cmake) on mac or your package manager (apt, etc) on Linux.
-- pFUnit can be install via the bash script provided [build-pfunit.sh](../scripts/build-pfunit.sh).
+- pFUnit can be install via the bash script provided [build-pfunit.sh](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/scripts/build-pfunit.sh).
 
 :::::::::::::::::::::::::::: solution
 

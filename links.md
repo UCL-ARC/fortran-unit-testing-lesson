@@ -1,4 +1,3 @@
-<!--
-Place links that you need to refer to multiple times across pages here. Delete
-any links that you are not going to use.
- -->
+[exercises]: https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises
+[ep-2]: https://carpentries-incubator.github.io/fortran-unit-testing/2-refactor-fortran.html
+[ep-5]: https://carpentries-incubator.github.io/fortran-unit-testing/5-integrating-with-build-systems.html#integrating-pfunit-with-make
