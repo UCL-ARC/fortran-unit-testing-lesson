@@ -1,2 +1,3 @@
 test/*.F90
 build
+tests

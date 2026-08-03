@@ -71,3 +71,9 @@ po/*~
 # Python environment and artifacts
 *.egg-info
 .venv
+
+
+# Build artefacts
+*.o
+*.mod
+*.inc
