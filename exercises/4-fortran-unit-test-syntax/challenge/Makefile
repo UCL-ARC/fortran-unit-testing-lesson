@@ -1,6 +1,7 @@
 # Top level variables
 ROOT_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 FC := gfortran
+FC_FLAGS = -ffree-line-length-none
 
 #------------------------------------#
 #      Targets for compiling src     #
@@ -22,7 +23,7 @@ SRC_OBJS = $(patsubst %.f90, $(BUILD_DIR)/%.o, $(SRC_FILES))
 
 # Build src .o files
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.f90 | $(BUILD_DIR)
-	$(FC) -c -J $(BUILD_DIR) -o $@ $<
+	$(FC) -c -J $(BUILD_DIR) $(FC_FLAGS) -o $@ $<
 
 $(BUILD_DIR)/game_of_life: $(SRC_OBJS)
 	$(FC) -o $@ $(FC_FLAGS) $^ $(LIBS)
@@ -65,4 +66,5 @@ export ROOT_DIR
 export SRC_OBJS
 export SRC_DIR
 export FC
+export FC_FLAGS
 export TEST_DIR
