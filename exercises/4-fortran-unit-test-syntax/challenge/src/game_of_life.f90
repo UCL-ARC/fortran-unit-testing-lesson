@@ -6,13 +6,15 @@ module game_of_life
 contains
 
     !> Find the steady state of the Game of Life board
-    subroutine find_steady_state(steady_state, generation_number, input_board)
+    subroutine find_steady_state(steady_state, generation_number, input_board, animate)
         !> Whether the board has reached a steady state
         logical, intent(out) :: steady_state
         !> The number of generations that have been processed
         integer, intent(out) :: generation_number
         !> The starting state of the board
         integer, dimension(:,:), allocatable, intent(in) :: input_board
+        !> Flag to indicate if the animation should be printed to the screen
+        logical, optional, intent(in) :: animate
 
         integer, dimension(:,:), allocatable :: current_board, new_board
         integer, parameter :: max_generations = 100
@@ -21,6 +23,11 @@ contains
         integer, dimension(8) :: date_time_values
         integer :: mod_ms_step
         integer, parameter :: ms_per_step = 250
+        logical :: should_animate
+
+        ! Set default value of animate
+        should_animate = .true.
+        if (present(animate)) should_animate = animate
 
         allocate(current_board(size(input_board,1), size(input_board, 2)))
         allocate(new_board(size(input_board,1), size(input_board, 2)))
@@ -28,7 +35,7 @@ contains
         new_board = 0
 
         ! Clear the terminal screen
-        call system ("clear")
+        if (should_animate) call system ("clear")
 
         ! Iterate until we reach a steady state
         steady_state = .false.
@@ -43,7 +50,7 @@ contains
                 call evolve_board(current_board, new_board)
                 call check_for_steady_state(steady_state, current_board, new_board)
                 current_board = new_board
-                call draw_board(current_board)
+                if (should_animate) call draw_board(current_board)
 
                 generation_number = generation_number + 1
             end if

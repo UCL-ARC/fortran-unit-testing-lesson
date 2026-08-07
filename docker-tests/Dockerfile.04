@@ -5,8 +5,14 @@ COPY --chown=vscode exercises/4-fortran-unit-test-syntax /home/vscode/4-fortran-
 WORKDIR /home/vscode/4-fortran-unit-test-syntax/solution
 
 # build tests with cmake
-RUN cmake -B build -DCMAKE_PREFIX_PATH=/home/vscode/pfunit/build/installed && \
-    cmake --build build
+RUN cmake -B build-cmake -DCMAKE_PREFIX_PATH=/home/vscode/pfunit/build/installed && \
+    cmake --build build-cmake
 
 # test pfunit with ctest
-RUN ctest --test-dir build --output-on-failure
+RUN ctest --test-dir build-cmake --output-on-failure
+
+# build tests with make
+RUN make tests
+
+# run make tests
+RUN ./test/tests
