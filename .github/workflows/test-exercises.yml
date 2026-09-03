@@ -46,19 +46,19 @@ jobs:
           registry: ghcr.io
 
       - name: Test episode 1
-        run: podman build . -f docker-tests/Dockerfile.01
+        run: podman build . -f docker-tests/Dockerfile.intro-to-unit-tests
 
       - name: Test episode 2
-        run: podman build . -f docker-tests/Dockerfile.02
+        run: podman build . -f docker-tests/Dockerfile.refactoring-fortran
 
       - name: Test episode 3
-        run: podman build . -f docker-tests/Dockerfile.03
+        run: podman build . -f docker-tests/Dockerfile.writing-your-first-unit-test
 
       - name: Test episode 4
-        run: podman build . -f docker-tests/Dockerfile.04
+        run: podman build . -f docker-tests/Dockerfile.fortran-unit-test-syntax
 
       - name: Test episode 5
-        run: podman build . -f docker-tests/Dockerfile.05
+        run: podman build . -f docker-tests/Dockerfile.debugging-a-failing-test
 
       - name: Test episode 6
-        run: podman build . -f docker-tests/Dockerfile.06
+        run: podman build . -f docker-tests/Dockerfile.testing-parallel-code
