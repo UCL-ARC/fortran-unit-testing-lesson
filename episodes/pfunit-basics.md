@@ -39,7 +39,7 @@ the use of [pFUnit](https://github.com/Goddard-Fortran-Ecosystem/pFUnit) as it i
 
 ## The most basic pFUnit test
 
-As we've seen in the [previous episode](../3-writing-your-first-unit-test.html), if we were to write our own unit tests using a
+As we've seen in the [previous episode](../writing-your-first-unit-test.html), if we were to write our own unit tests using a
 custom testing setup we would need to define a test runner that could track success and failure states for each test and report
 the reason for each failure back to us.
 

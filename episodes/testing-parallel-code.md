@@ -499,7 +499,7 @@ Just like serial tests, MPI tests can be integrated into projects which utilise 
 To build MPI enabled pFUnit tests via Make, one must use an mpi enabled compiler such as **mpif90** and
 include the pFUnit library in the compiler arguments **-lpfunit**. Therefore, the **tests/Makefile**
 from
-[5. Integrating with build systems#Integrating pFUnit with Make](https://carpentries-incubator.github.io/fortran-unit-testing/5-integrating-with-build-systems.html#integrating-pfunit-with-make)
+[Integrating with build systems#Integrating pFUnit with Make](https://carpentries-incubator.github.io/fortran-unit-testing/integrating-with-build-systems.html#integrating-pfunit-with-make)
 becomes,
 
 ```makefile
