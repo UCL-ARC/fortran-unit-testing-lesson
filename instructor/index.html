@@ -209,7 +209,7 @@
 <div class="accordion accordion-flush" id="accordionFlush3">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading3">
-        <a href="2-refactor-fortran.html">2. Refactoring Fortran</a>
+        <a href="3-writing-your-first-unit-test.html">2. Writing your first unit test</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -218,7 +218,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="3-writing-your-first-unit-test.html">3. Writing your first unit test</a>
+        <a href="4-pfunit-basics.html">3. pFUnit basics</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -227,7 +227,7 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="4-pfunit-basics.html">4. pFUnit basics</a>
+        <a href="5-integrating-with-build-systems.html">4. Integrating with build systems</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -236,7 +236,7 @@
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="5-integrating-with-build-systems.html">5. Integrating with build systems</a>
+        <a href="6-parameterising-pfunit-tests.html">5. Parameterising pFUnit tests</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -245,7 +245,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="6-parameterising-pfunit-tests.html">6. Parameterising pFUnit tests</a>
+        <a href="7-testing-parallel-code.html">6. Testing parallel code</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -254,7 +254,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="7-testing-parallel-code.html">7. Testing parallel code</a>
+        <a href="appendix.html">7. Appendix</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -335,37 +335,27 @@ What is unit testing?<br>Why do we need unit tests?
 <span class="visually-hidden">Duration: </span>00h 10m
 </td>
 <td>
- 2. <a href="2-refactor-fortran.html">Refactoring Fortran</a>
-</td>
-<td>
-What does good Fortran code look like?<br>How do I refactor Fortran
-code to follow best practices?
-</td>
-</tr><tr><td>
-<span class="visually-hidden">Duration: </span>00h 20m
-</td>
-<td>
- 3. <a href="3-writing-your-first-unit-test.html">Writing your first
+ 2. <a href="3-writing-your-first-unit-test.html">Writing your first
 unit test</a>
 </td>
 <td>
 What does a unit test look like?
 </td>
 </tr><tr><td>
-<span class="visually-hidden">Duration: </span>00h 30m
+<span class="visually-hidden">Duration: </span>00h 20m
 </td>
 <td>
- 4. <a href="4-pfunit-basics.html">pFUnit basics</a>
+ 3. <a href="4-pfunit-basics.html">pFUnit basics</a>
 </td>
 <td>
 What is the syntax of writing a unit test in Fortran?<br>How do I build
 my tests with my existing build system?
 </td>
 </tr><tr><td>
-<span class="visually-hidden">Duration: </span>00h 40m
+<span class="visually-hidden">Duration: </span>00h 30m
 </td>
 <td>
- 5. <a href="5-integrating-with-build-systems.html">Integrating with
+ 4. <a href="5-integrating-with-build-systems.html">Integrating with
 build systems</a>
 </td>
 <td>
@@ -373,10 +363,10 @@ How do we go from <strong>.pf</strong> files to an executable
 test?<br>How do we identify which test is failing and where?
 </td>
 </tr><tr><td>
-<span class="visually-hidden">Duration: </span>00h 50m
+<span class="visually-hidden">Duration: </span>00h 40m
 </td>
 <td>
- 6. <a href="6-parameterising-pfunit-tests.html">Parameterising pFUnit
+ 5. <a href="6-parameterising-pfunit-tests.html">Parameterising pFUnit
 tests</a>
 </td>
 <td>
@@ -384,14 +374,22 @@ Why is it useful to parameterise a test?<br>What is the syntax of
 writing a parameterised unit test in Fortran?
 </td>
 </tr><tr><td>
-<span class="visually-hidden">Duration: </span>01h 00m
+<span class="visually-hidden">Duration: </span>00h 50m
 </td>
 <td>
- 7. <a href="7-testing-parallel-code.html">Testing parallel code</a>
+ 6. <a href="7-testing-parallel-code.html">Testing parallel code</a>
 </td>
 <td>
 How do I unit test a procedure which makes MPI calls?<br>How do I
 easily test different numbers of MPI ranks?
+</td>
+</tr><tr><td>
+<span class="visually-hidden">Duration: </span>01h 00m
+</td>
+<td>
+ 7. <a href="appendix.html">Appendix</a>
+</td>
+<td>
 </td>
 </tr><tr><td>
 <span class="visually-hidden">Duration: </span>01h 10m
@@ -426,7 +424,7 @@ repository home page. Then, from the codespaces tab, select
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Running locally outside of container </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p>If you do not wish to use GitHub Codespaces or the VSCode
 devcontainer, you can build/install the relevant dependencies on your
@@ -457,7 +455,7 @@ your package manager (apt, etc) on Linux.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -587,8 +585,8 @@ any links that you are not going to use.
   "url": "https://carpentries-incubator.github.io/fortran-unit-testing/instructor/index.html",
   "identifier": "https://carpentries-incubator.github.io/fortran-unit-testing/instructor/index.html",
   "dateCreated": "2025-05-09",
-  "dateModified": "2026-09-01",
-  "datePublished": "2026-09-01"
+  "dateModified": "2026-09-03",
+  "datePublished": "2026-09-03"
 }
 
   </script><script>
