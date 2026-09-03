@@ -34,7 +34,7 @@ best practice. Examples of what we mean by "bad practice" would be not limited t
 
 To demonstrate the benefits of refactoring Fortran and how it can be done, we're going to help John to improve his Fortran
 implementation of the game of life (See above). A copy of John's code can be found in the exercises repo at
-[2-refactoring-fortran/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/2-refactoring-fortran/challenge).
+[refactoring-fortran/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/refactoring-fortran/challenge).
 
 :::::::::::::::::::::::::::::::::::::::::::: callout
 
