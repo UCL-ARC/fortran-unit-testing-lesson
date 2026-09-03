@@ -1,10 +1,10 @@
 FROM ghcr.io/carpentries-incubator/intro-to-modern-fortran:main
 
-COPY --chown=vscode exercises/3-writing-your-first-unit-test /home/vscode/3-writing-your-first-unit-test
+COPY --chown=vscode exercises/writing-your-first-unit-test /home/vscode/writing-your-first-unit-test
 
 # Test the Challenge code
 
-WORKDIR /home/vscode/3-writing-your-first-unit-test/challenge
+WORKDIR /home/vscode/writing-your-first-unit-test/challenge
 
 # Build with CMake
 RUN cmake -B build-std && \

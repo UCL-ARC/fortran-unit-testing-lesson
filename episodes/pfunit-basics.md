@@ -128,12 +128,12 @@ end module test_dot_product_intrinsic
 ### Challenge: Test temperature conversions using pFUnit
 
 Continuing with part two of
-[3-writing-your-first-unit-test/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/challenge)
+[writing-your-first-unit-test/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/challenge)
 from the exercises. Write a single test for the temperature conversion using pFUnit.
 
 ::: solution
 
-A solution is provided in [3-writing-your-first-unit-test/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/3-writing-your-first-unit-test/solution).
+A solution is provided in [writing-your-first-unit-test/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/solution).
 
 :::
 
