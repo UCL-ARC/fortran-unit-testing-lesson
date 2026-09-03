@@ -1,8 +1,8 @@
 FROM ghcr.io/carpentries-incubator/intro-to-modern-fortran:main
 
-COPY --chown=vscode exercises/1-into-to-unit-tests /home/vscode/1-into-to-unit-tests
+COPY --chown=vscode exercises/intro-to-unit-tests /home/vscode/intro-to-unit-tests
 
-WORKDIR /home/vscode/1-into-to-unit-tests/challenge
+WORKDIR /home/vscode/intro-to-unit-tests/challenge
 
 # Build challenge's tests with cmake
 RUN cmake -B build && \

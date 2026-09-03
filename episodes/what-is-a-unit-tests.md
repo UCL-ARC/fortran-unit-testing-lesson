@@ -132,13 +132,13 @@ problematic code to investigate.
 ## Challenge 2: Unit test bad practices
 
 Take a look at
-[1-into-to-unit-tests/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/1-into-to-unit-tests/challenge)
+[intro-to-unit-tests/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/intro-to-unit-tests/challenge)
 in the exercises repository.
 
 :::::::::::::::::::::::::::::::: solution
 
 A solution is provided in
-[1-into-to-unit-tests/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/1-into-to-unit-tests/solution).
+[intro-to-unit-tests/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/intro-to-unit-tests/solution).
 
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
