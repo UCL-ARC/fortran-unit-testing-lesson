@@ -282,12 +282,9 @@ Note that the constructors (i.e. `toString`, `mpi_dot_product_test_case_construc
 
 Take a look at the exercise
 [6-testing-parallel-code](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/6-testing-parallel-code/challenge).
-This exercise contains an MPI parallelised version of the game of life from episode
-[2. Refactoring Fortran](https://carpentries-incubator.github.io/fortran-unit-testing/2-refactor-fortran.html)
-and the exercise
-[4-fortran-unit-test-syntax](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/4-fortran-unit-test-syntax/challenge).
-
-Complete the first step of the challenge by converting the derived types within
+This exercise contains an MPI parallelised version of the game of life (See
+appendix). Complete the first step of the challenge by converting the derived
+types within
 [test_find_steady_state.pf](https://github.com/carpentries-incubator/fortran-unit-testing/blob/main/exercises/6-testing-parallel-code/challenge/test/test_find_steady_state.pf#L10-L29)
 to work with MPI.
 

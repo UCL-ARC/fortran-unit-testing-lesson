@@ -6,24 +6,7 @@ exercises:
 
 This appendix contains supplementary material relevant to this Fortran unit testing workshop.
 
-## Refactoring Fortran
-
-Within Fortran projects, it is common to find many instances of bad practice which makes it difficult,
-if not impossible to implement unit tests. Therefore, in many cases, the first step to writing unit tests
-for a Fortran project is to refactor some section of the code into a more testable state which follows
-best practice. Examples of what we mean by "bad practice" would be not limited to but could include…
-
-- Using global variables.
-- Large, multi-purpose procedures.
-- Undocumented variables, procedures, modules and programs.
-
-To demonstrate the benefits of refactoring Fortran and how it can be done, we're going to help John to improve his Fortran
-implementation of the game of life. A copy of John's code can be found in the exercises repo at
-[2-refactoring-fortran/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/2-refactoring-fortran/challenge).
-
-:::::::::::::::::::::::::::::::::::::::::::: spoiler
-
-#### Conway's Game of Life
+## Conway's Game of Life
 
 Conway's Game of life is a cellular automaton devised by the British mathematician John Horton Conway in 1970 (Gardner, 1970).
 
@@ -38,11 +21,24 @@ are the cells that are horizontally, vertically, or diagonally adjacent. At each
 
 See the [Wikipedia article](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) for more details.
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::
+## Refactoring Fortran
+
+Within Fortran projects, it is common to find many instances of bad practice which makes it difficult,
+if not impossible to implement unit tests. Therefore, in many cases, the first step to writing unit tests
+for a Fortran project is to refactor some section of the code into a more testable state which follows
+best practice. Examples of what we mean by "bad practice" would be not limited to but could include…
+
+- Using global variables.
+- Large, multi-purpose procedures.
+- Undocumented variables, procedures, modules and programs.
+
+To demonstrate the benefits of refactoring Fortran and how it can be done, we're going to help John to improve his Fortran
+implementation of the game of life (See above). A copy of John's code can be found in the exercises repo at
+[2-refactoring-fortran/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/2-refactoring-fortran/challenge).
 
 :::::::::::::::::::::::::::::::::::::::::::: callout
 
-#### Checking we haven't broken anything
+### Checking we haven't broken anything
 
 To ensure we don't break anything during our refactoring we need to have some way to test our code.
 Since we don't have any automated tests in place we will need to do this manually. Firstly, let's
