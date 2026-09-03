@@ -1,8 +1,8 @@
 FROM ghcr.io/carpentries-incubator/intro-to-modern-fortran:main
 
-COPY --chown=vscode exercises/4-fortran-unit-test-syntax /home/vscode/4-fortran-unit-test-syntax
+COPY --chown=vscode exercises/fortran-unit-test-syntax /home/vscode/fortran-unit-test-syntax
 
-WORKDIR /home/vscode/4-fortran-unit-test-syntax/solution
+WORKDIR /home/vscode/fortran-unit-test-syntax/solution
 
 # build tests with cmake
 RUN cmake -B build-cmake -DCMAKE_PREFIX_PATH=/home/vscode/pfunit/build/installed && \
