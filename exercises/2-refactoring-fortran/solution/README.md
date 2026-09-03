@@ -11,7 +11,7 @@ cmake --build build
 
 ## Tasks
 
-> Implement the principles described in [the refactoring lesson](https://github-pages.arc.ucl.ac.uk/fortran-unit-testing-lesson/2-refactor-fortran.html)
+> Implement the principles described in [the refactoring section of the appendix](https://github-pages.arc.ucl.ac.uk/fortran-unit-testing-lesson/appendix.html).
 
 1. [Replace magic numbers with constants](https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/e9765a26a9e368571eb162771cd45cd3933c03c4)
 2. [Change of variable name](https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/30cfcceb1fc80ef236230e21dae574bdebf64c87)

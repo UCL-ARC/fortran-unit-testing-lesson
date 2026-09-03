@@ -20,7 +20,7 @@ cmake --build build
 
 ## Tasks
 
-Implement the principles described in [the refactoring lesson](https://github-pages.arc.ucl.ac.uk/fortran-unit-testing-lesson/2-refactor-fortran.html).
+Implement the principles described in [the refactoring section of the appendix](https://github-pages.arc.ucl.ac.uk/fortran-unit-testing-lesson/appendix.html).
 
 To ensure you are not changing the actual behaviour of the src code, every time you make a change,
 compare the output before and after. To do this store the output before making a change in a file

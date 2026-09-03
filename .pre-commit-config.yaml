@@ -50,4 +50,4 @@ repos:
         pass_filenames: false
         args: [sync]
       - id: vale
-        args: [--config=./.vale.ini]
+        args: [--config=./.vale.ini, --minAlertLevel=error]
