@@ -154,10 +154,19 @@
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/instructor-notes.html</loc>
   </url>
   <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/integrating-with-build-systems.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/introduction.html</loc>
   </url>
   <url>
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/key-points.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/parameterising-pfunit-tests.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/pfunit-basics.html</loc>
   </url>
   <url>
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/profiles.html</loc>
@@ -166,7 +175,19 @@
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/reference.html</loc>
   </url>
   <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/testing-parallel-code.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/what-is-a-unit-tests.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor/writing-your-first-unit-test.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/instructor-notes.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/integrating-with-build-systems.html</loc>
   </url>
   <url>
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/introduction.html</loc>
@@ -175,9 +196,24 @@
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/key-points.html</loc>
   </url>
   <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/parameterising-pfunit-tests.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/pfunit-basics.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/profiles.html</loc>
   </url>
   <url>
     <loc>https://carpentries-incubator.github.io/fortran-unit-testing/reference.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/testing-parallel-code.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/what-is-a-unit-tests.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/fortran-unit-testing/writing-your-first-unit-test.html</loc>
   </url>
 </urlset>
