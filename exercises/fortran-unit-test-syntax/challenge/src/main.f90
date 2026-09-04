@@ -15,7 +15,7 @@ program main
     logical :: steady_state = .false.
     character(len=:), allocatable :: io_error_message
 
-    !! CLI args
+    ! CLI args
     character(len=:), allocatable :: executable_name, input_filename
 
     ! Get current_board file path from command line
