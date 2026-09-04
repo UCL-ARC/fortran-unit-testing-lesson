@@ -242,14 +242,13 @@ end module test_something
 ### Challenge: Practice integrating with Make
 
 To verify your newly implemented tests of **temp_conversions** from
-the previous episode, complete **part i** of the
-[building-the-test](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/challenge#building-the-test)
-section of **writing-your-first-unit-test/challenge** and integrate your test(s) with the **Make** build system provided in the exercise.
+the previous episode, complete **part i** of the [Building the test][ex-writing-your-first-unit-test]
+section of the **Writing your first unit test exercise** and integrate your
+test(s) with the **Make** build system provided in the exercise.
 
 :::::::::::::::::::::::::::::::: solution
 
-A solution is provided in
-[writing-your-first-unit-test/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/solution#building-the-test).
+A solution is provided in [exercises/writing-your-first-unit-test/solution][ex-writing-your-first-unit-test-solution].
 
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::
@@ -432,14 +431,12 @@ add_pfunit_ctest (test_something_interesting
 ### Challenge: Practice integrating with CMake
 
 To verify your newly implemented tests of **temp_conversions** from
-the previous episode, complete **part ii** of the
-[building-the-test](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/challenge#building-the-test)
+the previous episode, complete **part ii** of the [building-the-test][ex-writing-your-first-unit-test]
 section of **writing-your-first-unit-test/challenge** and integrate your test(s) with the **CMake** build system provided in the exercise.
 
 :::::::::::::::::::::::::::::::: solution
 
-A solution is provided in
-[writing-your-first-unit-test/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/solution#building-the-test).
+A solution is provided in [exercises/writing-your-first-unit-test/solution][ex-writing-your-first-unit-test-solution].
 
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::

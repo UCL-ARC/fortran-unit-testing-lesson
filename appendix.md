@@ -33,8 +33,8 @@ best practice. Examples of what we mean by "bad practice" would be not limited t
 - Undocumented variables, procedures, modules and programs.
 
 To demonstrate the benefits of refactoring Fortran and how it can be done, we're going to help John to improve his Fortran
-implementation of the game of life (See above). A copy of John's code can be found in the exercises repo at
-[refactoring-fortran/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/refactoring-fortran/challenge).
+implementation of the game of life (See above). A copy of John's code can be found in the
+[Refactoring Fortran exercise][ex-refactoring-fortran].
 
 :::::::::::::::::::::::::::::::::::::::::::: callout
 
