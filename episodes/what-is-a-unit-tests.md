@@ -71,7 +71,7 @@ Challenge 1 should be lead by the instructor and done as a class activity.
 :::
 
 Assuming you have a function `reverse_array` which reverses the order of an
-allocated array. Finishingwriting the pseudo code unit test below for
+allocated array. Finishing writing the pseudo code unit test below for
 `reverse_array` using the pattern above. A template has been provided for you:
 
 ```txt
