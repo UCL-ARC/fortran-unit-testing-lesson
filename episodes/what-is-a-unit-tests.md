@@ -131,14 +131,20 @@ problematic code to investigate.
 
 ## Challenge 2: Unit test bad practices
 
-Take a look at
-[intro-to-unit-tests/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/intro-to-unit-tests/challenge)
+::: instructor
+
+Challenge 2 should be lead by the instructor and done as a class activity. Part 3 can be skipped if there is limited time.
+
+:::
+
+Take a look at the
+[Introduction to unit testing exercise][ex-intro-to-unit-tests]
 in the exercises repository.
 
 :::::::::::::::::::::::::::::::: solution
 
 A solution is provided in
-[intro-to-unit-tests/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/intro-to-unit-tests/solution).
+[exercises/intro-to-unit-tests/solution][ex-intro-to-unit-tests-solution].
 
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::

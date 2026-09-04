@@ -280,12 +280,10 @@ Note that the constructors (i.e. `toString`, `mpi_dot_product_test_case_construc
 
 #### Challenge: Update derived types to work with MPI
 
-Take a look at the
-[Testing parallel code exercise](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/testing-parallel-code/challenge).
+Take a look at the [Testing parallel code exercise][ex-testing-parallel-code].
 This exercise contains an MPI parallelised version of the game of life (See
-appendix) from the
-[Fortran Unit Test Syntax exercise](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/challenge).
-Complete the first step of the challenge by converting the derived types within
+appendix) from the **Fortran Unit Test Syntax exercise**. Complete the first
+step of the challenge by converting the derived types within
 [test_find_steady_state.pf](https://github.com/carpentries-incubator/fortran-unit-testing/blob/main/exercises/testing-parallel-code/challenge/test/test_find_steady_state.pf#L10-L29)
 to work with MPI.
 
@@ -373,7 +371,7 @@ end function mpi_dot_product_test_suite
 #### Challenge: Update test suite to work with MPI
 
 Continuing with the
-[Testing parallel code exercise](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/testing-parallel-code/challenge).
+[Testing parallel code exercise][ex-testing-parallel-code].
 
 Complete the next step of the challenge by converting the test suite within
 [test_find_steady_state.pf](https://github.com/carpentries-incubator/fortran-unit-testing/blob/main/exercises/testing-parallel-code/challenge/test/test_find_steady_state.pf#L37-L63)
@@ -456,7 +454,7 @@ In the example above, the MPI communicator is passed into the src procedure. By 
 #### Challenge: Update test logic to work with MPI
 
 Continuing with the
-[Testing parallel code exercise](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/testing-parallel-code/challenge).
+[Testing parallel code exercise][ex-testing-parallel-code].
 
 Converting the test logic within
 [test_find_steady_state.pf](https://github.com/carpentries-incubator/fortran-unit-testing/blob/main/exercises/testing-parallel-code/challenge/test/test_find_steady_state.pf#L69-L84)
@@ -695,13 +693,13 @@ end subroutine test_partial_mpi_dot_product
 ### Challenge: A more complex MPI test
 
 Take a look at part 3 of the
-[Testing parallel code exercise](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/testing-parallel-code/challenge)
+[Testing parallel code exercise][exercises-challenge]
 in the exercises repository.
 
 :::::::::::::::::::::::::::::::: solution
 
 A solution is provided in
-[exercises/testing-parallel-code/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/testing-parallel-code/solution).
+[exercises/testing-parallel-code/solution][ex-testing-parallel-code-solution].
 
 :::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
