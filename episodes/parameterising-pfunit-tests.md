@@ -347,14 +347,12 @@ testParameters = dot_product_test_parameters(a, b, expected_dot_product, "10x10 
 
 ### Challenge: Parameterising tests with pFUnit, part 1
 
-Take a look at
-[fortran-unit-test-syntax/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/challenge).
+Take a look at the [Fortran Unit Test Syntax exercise][ex-fortran-unit-test-syntax].
 Complete tasks 1 and 2.1.
 
 ::: solution
 
-A solution is provided in
-[fortran-unit-test-syntax/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/solution).
+A solution is provided in [exercises/fortran-unit-test-syntax/solution][ex-fortran-unit-test-syntax-solution].
 
 :::
 
@@ -464,14 +462,12 @@ Let's look at the key aspects of this function:
 
 ### Challenge: Parameterising tests with pFUnit, part 2
 
-Continuing with
-[fortran-unit-test-syntax/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/challenge),
-complete task 2.2.
+Continuing with the [Fortran Unit Test Syntax exercises][ex-fortran-unit-test-syntax],
+Complete task 2.2.
 
 ::: solution
 
-A solution is provided in
-[fortran-unit-test-syntax/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/solution).
+A solution is provided in [exercises/fortran-unit-test-syntax/solution][ex-fortran-unit-test-syntax-solution].
 
 :::
 
@@ -506,14 +502,12 @@ The key aspects are:
 
 ### Challenge: Parameterising tests with pFUnit, part 3
 
-Continuing with
-[fortran-unit-test-syntax/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/challenge),
+Continuing with the [Fortran Unit Test Syntax exercise][exercises-challenge],
 complete task 3.
 
 ::: solution
 
-A solution is provided in
-[fortran-unit-test-syntax/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/solution).
+A solution is provided in [exercises/fortran-unit-test-syntax/solution][ex-fortran-unit-test-syntax-solution].
 
 :::
 

@@ -39,9 +39,10 @@ the use of [pFUnit](https://github.com/Goddard-Fortran-Ecosystem/pFUnit) as it i
 
 ## The most basic pFUnit test
 
-As we've seen in the [previous episode](../writing-your-first-unit-test.html), if we were to write our own unit tests using a
-custom testing setup we would need to define a test runner that could track success and failure states for each test and report
-the reason for each failure back to us.
+As we've seen in the [previous episode][ep-writing-your-first-unit-test], if we
+were to write our own unit tests using a custom testing setup we would need to
+define a test runner that could track success and failure states for each test
+and report the reason for each failure back to us.
 
 Alternatively, if we were to use pFUnit, there is no longer a need to define this test runner because pFUnit handles that for us.
 Therefore, the most basic test we can define using pFunit becomes simple. For example, if we wanted to test the Fortran intrinsic
@@ -127,13 +128,13 @@ end module test_dot_product_intrinsic
 
 ### Challenge: Test temperature conversions using pFUnit
 
-Continuing with part two of
-[writing-your-first-unit-test/challenge](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/challenge)
+Continuing with part two of the
+[Writing your first unit test exercise][ex-writing-your-first-unit-test]
 from the exercises. Write a single test for the temperature conversion using pFUnit.
 
 ::: solution
 
-A solution is provided in [writing-your-first-unit-test/solution](https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/solution).
+A solution is provided in [exercises/writing-your-first-unit-test/solution][ex-writing-your-first-unit-test-solution].
 
 :::
 
