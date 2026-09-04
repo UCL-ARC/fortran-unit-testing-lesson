@@ -373,7 +373,7 @@
         
 <section id="aio-what-is-a-unit-tests"><p>Content from <a href="what-is-a-unit-tests.html">What is a Unit Test</a></p>
 <hr>
-<p>Last updated on 2026-09-03 |
+<p>Last updated on 2026-09-04 |
 
         <a href="https://github.com/carpentries-incubator/fortran-unit-testing/edit/main/episodes/what-is-a-unit-tests.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -583,8 +583,23 @@ problematic code to investigate.</p>
 <div id="challenge-2-unit-test-bad-practices" class="callout-inner">
 <h3 class="callout-title">Challenge 2: Unit test bad practices</h3>
 <div class="callout-content">
-<p>Take a look at <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/intro-to-unit-tests/challenge" class="external-link">intro-to-unit-tests/challenge</a>
-in the exercises repository.</p>
+
+</div>
+</div>
+</div>
+
+<div id="challenge-2-unit-test-bad-practices" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="challenge-2-unit-test-bad-practices" class="callout-inner">
+<h3 class="callout-title">Challenge 2: Unit test bad practices<em>
+(continued)</em>
+</h3>
+<div class="callout-content">
+<p>Take a look at the <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/intro-to-unit-tests/challenge" class="external-link">Introduction
+to unit testing exercise</a> in the exercises repository.</p>
 </div>
 </div>
 </div>
@@ -595,7 +610,7 @@ in the exercises repository.</p>
 </button>
 <div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
-<p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/intro-to-unit-tests/solution" class="external-link">intro-to-unit-tests/solution</a>.</p>
+<p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/intro-to-unit-tests/solution" class="external-link">exercises/intro-to-unit-tests/solution</a>.</p>
 </div>
 </div>
 </div>
@@ -607,13 +622,9 @@ in the exercises repository.</p>
 <li>David Thomas and Andrew Hunt (2019). <a href="https://search.worldcat.org/search?q=bn:9780135957059" class="external-link">The
 Pragmatic Programmer: your journey to mastery</a> , 20th Anniversary
 Edition, 2nd Edition. Addison-Wesley Professional.</li>
-</ul>
-<!--
-Place links that you need to refer to multiple times across pages here. Delete
-any links that you are not going to use.
- --></section></section><section id="aio-writing-your-first-unit-test"><p>Content from <a href="writing-your-first-unit-test.html">Writing your first unit test</a></p>
+</ul></section></section><section id="aio-writing-your-first-unit-test"><p>Content from <a href="writing-your-first-unit-test.html">Writing your first unit test</a></p>
 <hr>
-<p>Last updated on 2026-09-03 |
+<p>Last updated on 2026-09-04 |
 
         <a href="https://github.com/carpentries-incubator/fortran-unit-testing/edit/main/episodes/writing-your-first-unit-test.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -654,10 +665,11 @@ like before we try to learn the specific syntax of any one tool.</p>
 </h2>
 <hr class="half-width">
 <p>We’ll now use an example Fortran library which converts between units
-of temperature. This code can be found in the exercises repo under <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/challenge/src/temp_conversions.f90" class="external-link">writing-your-first-unit-test/challenge/src/temp_conversions.f90</a>.
-This library contains two functions, one to convert from Fahrenheit to
-Celsius (<code>fahrenheit_to_celsius</code>) and another to convert from
-Celsius to Kelvin (<code>celsius_to_kelvin</code>).</p>
+of temperature. This code can be found in the <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/challenge" class="external-link">Writing
+your first unit test exercise</a>. This library contains two functions,
+one to convert from Fahrenheit to Celsius
+(<code>fahrenheit_to_celsius</code>) and another to convert from Celsius
+to Kelvin (<code>celsius_to_kelvin</code>).</p>
 <p>Imagine we want to use this library to do some temperature
 conversions from Fahrenheit to Kelvin. To ensure the library contains
 the functionality we need, we decide to write some unit tests.</p>
@@ -723,8 +735,9 @@ outputs defined in the first step.</p></li>
 check that it can convert from Fahrenheit to Kelvin. You can use your
 pseudocode as a starting point.</p>
 <p>As we are not yet using a testing framework, some boilerplate code
-has been provided to help you create a test-suite. Take a look at part
-one of the exercise <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/challenge" class="external-link">writing-your-first-unit-test/challenge</a>.</p>
+has been provided to help you create a test-suite. Take a look at
+<strong>Part 1</strong> of the <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/challenge" class="external-link">Writing
+your first unit test exercise</a>.</p>
 </div>
 </div>
 </div>
@@ -735,18 +748,14 @@ one of the exercise <a href="https://github.com/carpentries-incubator/fortran-un
 </button>
 <div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
-<p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/solution" class="external-link">writing-your-first-unit-test/solution</a>.</p>
+<p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/solution" class="external-link">exercises/writing-your-first-unit-test/solution</a>.</p>
 </div>
 </div>
 </div>
 </div>
-<!--
-Place links that you need to refer to multiple times across pages here. Delete
-any links that you are not going to use.
- -->
 </section></section><section id="aio-pfunit-basics"><p>Content from <a href="pfunit-basics.html">pFUnit basics</a></p>
 <hr>
-<p>Last updated on 2026-09-03 |
+<p>Last updated on 2026-09-04 |
 
         <a href="https://github.com/carpentries-incubator/fortran-unit-testing/edit/main/episodes/pfunit-basics.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -807,10 +816,11 @@ removes the need to write a lot of boilerplate code.</li>
 </ul></section><section><h2 class="section-heading" id="the-most-basic-pfunit-test">The most basic pFUnit test<a class="anchor" aria-label="anchor" href="#the-most-basic-pfunit-test"></a>
 </h2>
 <hr class="half-width">
-<p>As we’ve seen in the <a href="writing-your-first-unit-test.html">previous episode</a>, if we
-were to write our own unit tests using a custom testing setup we would
-need to define a test runner that could track success and failure states
-for each test and report the reason for each failure back to us.</p>
+<p>As we’ve seen in the <a href="https://carpentries-incubator.github.io/fortran-unit-testing/writing-your-first-unit-test.html" class="external-link">previous
+episode</a>, if we were to write our own unit tests using a custom
+testing setup we would need to define a test runner that could track
+success and failure states for each test and report the reason for each
+failure back to us.</p>
 <p>Alternatively, if we were to use pFUnit, there is no longer a need to
 define this test runner because pFUnit handles that for us. Therefore,
 the most basic test we can define using pFunit becomes simple. For
@@ -921,9 +931,9 @@ again decorated with <strong><span class="citation">@Test</span></strong>:</p>
 <h3 class="callout-title">Challenge: Test temperature conversions using
 pFUnit</h3>
 <div class="callout-content">
-<p>Continuing with part two of <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/challenge" class="external-link">writing-your-first-unit-test/challenge</a>
-from the exercises. Write a single test for the temperature conversion
-using pFUnit.</p>
+<p>Continuing with part two of the <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/challenge" class="external-link">Writing
+your first unit test exercise</a> from the exercises. Write a single
+test for the temperature conversion using pFUnit.</p>
 </div>
 </div>
 </div>
@@ -934,18 +944,14 @@ using pFUnit.</p>
 </button>
 <div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
-<p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/solution" class="external-link">writing-your-first-unit-test/solution</a>.</p>
+<p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/solution" class="external-link">exercises/writing-your-first-unit-test/solution</a>.</p>
 </div>
 </div>
 </div>
 </div>
-<!--
-Place links that you need to refer to multiple times across pages here. Delete
-any links that you are not going to use.
- -->
 </section></section><section id="aio-integrating-with-build-systems"><p>Content from <a href="integrating-with-build-systems.html">Integrating with build systems</a></p>
 <hr>
-<p>Last updated on 2026-09-03 |
+<p>Last updated on 2026-09-04 |
 
         <a href="https://github.com/carpentries-incubator/fortran-unit-testing/edit/main/episodes/integrating-with-build-systems.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1252,10 +1258,10 @@ then taken from the name of the test subroutine. For example,
 <div class="callout-content">
 <p>To verify your newly implemented tests of
 <strong>temp_conversions</strong> from the previous episode, complete
-<strong>part i</strong> of the <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/challenge#building-the-test" class="external-link">building-the-test</a>
-section of <strong>writing-your-first-unit-test/challenge</strong> and
-integrate your test(s) with the <strong>Make</strong> build system
-provided in the exercise.</p>
+<strong>part i</strong> of the <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/challenge" class="external-link">Building
+the test</a> section of the <strong>Writing your first unit test
+exercise</strong> and integrate your test(s) with the
+<strong>Make</strong> build system provided in the exercise.</p>
 </div>
 </div>
 </div>
@@ -1266,7 +1272,7 @@ provided in the exercise.</p>
 </button>
 <div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
-<p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/solution#building-the-test" class="external-link">writing-your-first-unit-test/solution</a>.</p>
+<p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/solution" class="external-link">exercises/writing-your-first-unit-test/solution</a>.</p>
 </div>
 </div>
 </div>
@@ -1488,7 +1494,7 @@ CMake</h3>
 <div class="callout-content">
 <p>To verify your newly implemented tests of
 <strong>temp_conversions</strong> from the previous episode, complete
-<strong>part ii</strong> of the <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/challenge#building-the-test" class="external-link">building-the-test</a>
+<strong>part ii</strong> of the <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/challenge" class="external-link">building-the-test</a>
 section of <strong>writing-your-first-unit-test/challenge</strong> and
 integrate your test(s) with the <strong>CMake</strong> build system
 provided in the exercise.</p>
@@ -1502,19 +1508,15 @@ provided in the exercise.</p>
 </button>
 <div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
-<p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/solution#building-the-test" class="external-link">writing-your-first-unit-test/solution</a>.</p>
+<p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/writing-your-first-unit-test/solution" class="external-link">exercises/writing-your-first-unit-test/solution</a>.</p>
 </div>
 </div>
 </div>
 </div>
-<!--
-Place links that you need to refer to multiple times across pages here. Delete
-any links that you are not going to use.
- -->
 </div>
 </section></section><section id="aio-parameterising-pfunit-tests"><p>Content from <a href="parameterising-pfunit-tests.html">Parameterising pFUnit tests</a></p>
 <hr>
-<p>Last updated on 2026-09-03 |
+<p>Last updated on 2026-09-04 |
 
         <a href="https://github.com/carpentries-incubator/fortran-unit-testing/edit/main/episodes/parameterising-pfunit-tests.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1920,8 +1922,8 @@ create an instance of our type
 <h3 class="callout-title">Challenge: Parameterising tests with pFUnit,
 part 1</h3>
 <div class="callout-content">
-<p>Take a look at <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/challenge" class="external-link">fortran-unit-test-syntax/challenge</a>.
-Complete tasks 1 and 2.1.</p>
+<p>Take a look at the <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/challenge" class="external-link">Fortran
+Unit Test Syntax exercise</a>. Complete tasks 1 and 2.1.</p>
 </div>
 </div>
 </div>
@@ -1932,7 +1934,7 @@ Complete tasks 1 and 2.1.</p>
 </button>
 <div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
-<p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/solution" class="external-link">fortran-unit-test-syntax/solution</a>.</p>
+<p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/solution" class="external-link">exercises/fortran-unit-test-syntax/solution</a>.</p>
 </div>
 </div>
 </div>
@@ -2078,8 +2080,8 @@ where each element is a single test case.</li>
 <h3 class="callout-title">Challenge: Parameterising tests with pFUnit,
 part 2</h3>
 <div class="callout-content">
-<p>Continuing with <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/challenge" class="external-link">fortran-unit-test-syntax/challenge</a>,
-complete task 2.2.</p>
+<p>Continuing with the <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/challenge" class="external-link">Fortran
+Unit Test Syntax exercises</a>, Complete task 2.2.</p>
 </div>
 </div>
 </div>
@@ -2090,7 +2092,7 @@ complete task 2.2.</p>
 </button>
 <div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
-<p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/solution" class="external-link">fortran-unit-test-syntax/solution</a>.</p>
+<p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/solution" class="external-link">exercises/fortran-unit-test-syntax/solution</a>.</p>
 </div>
 </div>
 </div>
@@ -2140,8 +2142,8 @@ subroutine but simply just call <strong>dot_product</strong> and
 <h3 class="callout-title">Challenge: Parameterising tests with pFUnit,
 part 3</h3>
 <div class="callout-content">
-<p>Continuing with <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/challenge" class="external-link">fortran-unit-test-syntax/challenge</a>,
-complete task 3.</p>
+<p>Continuing with the [Fortran Unit Test Syntax
+exercise][exercises-challenge], complete task 3.</p>
 </div>
 </div>
 </div>
@@ -2152,7 +2154,7 @@ complete task 3.</p>
 </button>
 <div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
-<p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/solution" class="external-link">fortran-unit-test-syntax/solution</a>.</p>
+<p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/solution" class="external-link">exercises/fortran-unit-test-syntax/solution</a>.</p>
 </div>
 </div>
 </div>
@@ -2161,10 +2163,6 @@ complete task 3.</p>
 </div>
 </div>
 </div>
-<!--
-Place links that you need to refer to multiple times across pages here. Delete
-any links that you are not going to use.
- -->
 </section></section><section id="aio-testing-parallel-code"><p>Content from <a href="testing-parallel-code.html">Testing parallel code</a></p>
 <hr>
 <p>Last updated on 2026-09-04 |
@@ -2289,7 +2287,7 @@ the following MPI enabled version:</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Full pFUnit test of mpi_dot_product </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -2421,7 +2419,7 @@ the serial version we saw in the previous episode.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Derived types </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <p>To test MPI code, we must inform pFUnit that we intend to do so.
 Firstly, we must change how we define our test parameters. Assuming our
@@ -2521,8 +2519,8 @@ MPI</h3>
 <div class="callout-content">
 <p>Take a look at the <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/testing-parallel-code/challenge" class="external-link">Testing
 parallel code exercise</a>. This exercise contains an MPI parallelised
-version of the game of life (See appendix) from the <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/fortran-unit-test-syntax/challenge" class="external-link">Fortran
-Unit Test Syntax exercise</a>. Complete the first step of the challenge
+version of the game of life (See appendix) from the <strong>Fortran Unit
+Test Syntax exercise</strong>. Complete the first step of the challenge
 by converting the derived types within <a href="https://github.com/carpentries-incubator/fortran-unit-testing/blob/main/exercises/testing-parallel-code/challenge/test/test_find_steady_state.pf#L10-L29" class="external-link">test_find_steady_state.pf</a>
 to work with MPI.</p>
 </div>
@@ -2533,7 +2531,7 @@ to work with MPI.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Your derived types should now look something like this,</p>
 <div class="codewrapper sourceCode" id="cb5">
@@ -2572,7 +2570,7 @@ to work with MPI.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
   <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Test Suite </h3>
 </button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
+<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
 <div class="accordion-body">
 <p>Now that we have updated our derived types, we must update how we
 populate our test parameter sets within the test suite. There is
@@ -2643,7 +2641,7 @@ to work with your new derived types.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Your derived types should now look something like this,</p>
 <div class="codewrapper sourceCode" id="cb7">
@@ -2692,7 +2690,7 @@ to work with your new derived types.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler4" aria-expanded="false" aria-controls="collapseSpoiler4">
   <h3 class="accordion-header" id="headingSpoiler4">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Test Logic </h3>
 </button>
-<div id="collapseSpoiler4" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler4" aria-labelledby="headingSpoiler4">
+<div id="collapseSpoiler4" class="accordion-collapse collapse" aria-labelledby="headingSpoiler4" data-bs-parent="#accordionSpoiler4">
 <div class="accordion-body">
 <p>Since we are assuming our src procedure returns the same value to all
 ranks, for any number of MPI ranks, nothing much that needs to change
@@ -2751,7 +2749,7 @@ to work with the new src procedure signature.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <p>Your test logic should now look something like this,</p>
 <div class="codewrapper sourceCode" id="cb9">
@@ -3008,8 +3006,8 @@ indexed parameters during the test</p>
 <div id="challenge-a-more-complex-mpi-test" class="callout-inner">
 <h3 class="callout-title">Challenge: A more complex MPI test</h3>
 <div class="callout-content">
-<p>Take a look at part 3 of the <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/testing-parallel-code/challenge" class="external-link">Testing
-parallel code exercise</a> in the exercises repository.</p>
+<p>Take a look at part 3 of the [Testing parallel code
+exercise][exercises-challenge] in the exercises repository.</p>
 </div>
 </div>
 </div>
@@ -3018,20 +3016,16 @@ parallel code exercise</a> in the exercises repository.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <p>A solution is provided in <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/testing-parallel-code/solution" class="external-link">exercises/testing-parallel-code/solution</a>.</p>
 </div>
 </div>
 </div>
 </div>
-<!--
-Place links that you need to refer to multiple times across pages here. Delete
-any links that you are not going to use.
- -->
 </section></section><section id="aio-appendix"><p>Content from <a href="appendix.html">Appendix</a></p>
 <hr>
-<p>Last updated on 2026-09-03 |
+<p>Last updated on 2026-09-04 |
 
         <a href="https://github.com/carpentries-incubator/fortran-unit-testing/edit/main/episodes/appendix.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -3079,7 +3073,8 @@ mean by “bad practice” would be not limited to but could include…</p>
 <p>To demonstrate the benefits of refactoring Fortran and how it can be
 done, we’re going to help John to improve his Fortran implementation of
 the game of life (See above). A copy of John’s code can be found in the
-exercises repo at <a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/refactoring-fortran/challenge" class="external-link">refactoring-fortran/challenge</a>.</p>
+<a href="https://github.com/carpentries-incubator/fortran-unit-testing/tree/main/exercises/refactoring-fortran/challenge" class="external-link">Refactoring
+Fortran exercise</a>.</p>
 <div id="checking-we-havent-broken-anything" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -3126,7 +3121,7 @@ you know you need to refactor.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
   <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> 1. Replace magic numbers with constants </h3>
 </button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
+<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
 <div class="accordion-body">
 <div class="section level5">
 <h5 id="smells">Smells<a class="anchor" aria-label="anchor" href="#smells"></a>
@@ -3149,7 +3144,7 @@ to be changed, there is only one place we need to make an update.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Before </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3168,7 +3163,7 @@ to be changed, there is only one place we need to make an update.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> After </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3200,7 +3195,7 @@ constants.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>This can be achieved with the changes shown in this <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/e9765a26a9e368571eb162771cd45cd3933c03c4" class="external-link">commit</a></p>
 </div>
@@ -3217,7 +3212,7 @@ constants.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler6" aria-expanded="false" aria-controls="collapseSpoiler6">
   <h3 class="accordion-header" id="headingSpoiler6">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> 2. Change of variable name </h3>
 </button>
-<div id="collapseSpoiler6" class="accordion-collapse collapse" aria-labelledby="headingSpoiler6" data-bs-parent="#accordionSpoiler6">
+<div id="collapseSpoiler6" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler6" aria-labelledby="headingSpoiler6">
 <div class="accordion-body">
 <div class="section level5">
 <h5 id="smells-1">Smells<a class="anchor" aria-label="anchor" href="#smells-1"></a>
@@ -3239,7 +3234,7 @@ employed.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler4" aria-expanded="false" aria-controls="collapseSpoiler4">
   <h3 class="accordion-header" id="headingSpoiler4">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Before </h3>
 </button>
-<div id="collapseSpoiler4" class="accordion-collapse collapse" aria-labelledby="headingSpoiler4" data-bs-parent="#accordionSpoiler4">
+<div id="collapseSpoiler4" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler4" aria-labelledby="headingSpoiler4">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3255,7 +3250,7 @@ employed.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler5" aria-expanded="false" aria-controls="collapseSpoiler5">
   <h3 class="accordion-header" id="headingSpoiler5">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> After </h3>
 </button>
-<div id="collapseSpoiler5" class="accordion-collapse collapse" aria-labelledby="headingSpoiler5" data-bs-parent="#accordionSpoiler5">
+<div id="collapseSpoiler5" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler5" aria-labelledby="headingSpoiler5">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3284,7 +3279,7 @@ which make it clear what they are.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>This can be achieved with the changes shown in this <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/30cfcceb1fc80ef236230e21dae574bdebf64c87" class="external-link">commit</a></p>
 </div>
@@ -3301,7 +3296,7 @@ which make it clear what they are.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler9" aria-expanded="false" aria-controls="collapseSpoiler9">
   <h3 class="accordion-header" id="headingSpoiler9">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> 3. Break large procedures into smaller units </h3>
 </button>
-<div id="collapseSpoiler9" class="accordion-collapse collapse" aria-labelledby="headingSpoiler9" data-bs-parent="#accordionSpoiler9">
+<div id="collapseSpoiler9" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler9" aria-labelledby="headingSpoiler9">
 <div class="accordion-body">
 <div class="section level5">
 <h5 id="smells-2">Smells<a class="anchor" aria-label="anchor" href="#smells-2"></a>
@@ -3330,7 +3325,7 @@ and scenarios to consider when writing your tests.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler7" aria-expanded="false" aria-controls="collapseSpoiler7">
   <h3 class="accordion-header" id="headingSpoiler7">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Before </h3>
 </button>
-<div id="collapseSpoiler7" class="accordion-collapse collapse" aria-labelledby="headingSpoiler7" data-bs-parent="#accordionSpoiler7">
+<div id="collapseSpoiler7" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler7" aria-labelledby="headingSpoiler7">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3399,7 +3394,7 @@ and scenarios to consider when writing your tests.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler8" aria-expanded="false" aria-controls="collapseSpoiler8">
   <h3 class="accordion-header" id="headingSpoiler8">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> After </h3>
 </button>
-<div id="collapseSpoiler8" class="accordion-collapse collapse" aria-labelledby="headingSpoiler8" data-bs-parent="#accordionSpoiler8">
+<div id="collapseSpoiler8" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler8" aria-labelledby="headingSpoiler8">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3493,7 +3488,7 @@ to one</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>This can be achieved with the changes shown in this <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/fb06543e12e217e6f39ffc9df2f13108f64ca7ac" class="external-link">commit</a></p>
 </div>
@@ -3510,7 +3505,7 @@ to one</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler12" aria-expanded="false" aria-controls="collapseSpoiler12">
   <h3 class="accordion-header" id="headingSpoiler12">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> 4. Wrap program functionality in procedures </h3>
 </button>
-<div id="collapseSpoiler12" class="accordion-collapse collapse" aria-labelledby="headingSpoiler12" data-bs-parent="#accordionSpoiler12">
+<div id="collapseSpoiler12" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler12" aria-labelledby="headingSpoiler12">
 <div class="accordion-body">
 <div class="section level5">
 <h5 id="smell">Smell<a class="anchor" aria-label="anchor" href="#smell"></a>
@@ -3535,7 +3530,7 @@ aspects of your code.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler10" aria-expanded="false" aria-controls="collapseSpoiler10">
   <h3 class="accordion-header" id="headingSpoiler10">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Before </h3>
 </button>
-<div id="collapseSpoiler10" class="accordion-collapse collapse" aria-labelledby="headingSpoiler10" data-bs-parent="#accordionSpoiler10">
+<div id="collapseSpoiler10" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler10" aria-labelledby="headingSpoiler10">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3565,7 +3560,7 @@ aspects of your code.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler11" aria-expanded="false" aria-controls="collapseSpoiler11">
   <h3 class="accordion-header" id="headingSpoiler11">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> After </h3>
 </button>
-<div id="collapseSpoiler11" class="accordion-collapse collapse" aria-labelledby="headingSpoiler11" data-bs-parent="#accordionSpoiler11">
+<div id="collapseSpoiler11" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler11" aria-labelledby="headingSpoiler11">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3616,7 +3611,7 @@ to one</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <p>This can be achieved with the changes shown in this <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/ee860cac1cc2b1c2f0f2ed99b2fe26060e576ce4" class="external-link">commit</a></p>
 </div>
@@ -3633,7 +3628,7 @@ to one</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler15" aria-expanded="false" aria-controls="collapseSpoiler15">
   <h3 class="accordion-header" id="headingSpoiler15">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> 5. Replace repeated code with a procedure </h3>
 </button>
-<div id="collapseSpoiler15" class="accordion-collapse collapse" aria-labelledby="headingSpoiler15" data-bs-parent="#accordionSpoiler15">
+<div id="collapseSpoiler15" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler15" aria-labelledby="headingSpoiler15">
 <div class="accordion-body">
 <div class="section level5">
 <h5 id="smells-3">Smells<a class="anchor" aria-label="anchor" href="#smells-3"></a>
@@ -3655,7 +3650,7 @@ place this needs to be done</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler13" aria-expanded="false" aria-controls="collapseSpoiler13">
   <h3 class="accordion-header" id="headingSpoiler13">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Before </h3>
 </button>
-<div id="collapseSpoiler13" class="accordion-collapse collapse" aria-labelledby="headingSpoiler13" data-bs-parent="#accordionSpoiler13">
+<div id="collapseSpoiler13" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler13" aria-labelledby="headingSpoiler13">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3700,7 +3695,7 @@ place this needs to be done</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler14" aria-expanded="false" aria-controls="collapseSpoiler14">
   <h3 class="accordion-header" id="headingSpoiler14">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> After </h3>
 </button>
-<div id="collapseSpoiler14" class="accordion-collapse collapse" aria-labelledby="headingSpoiler14" data-bs-parent="#accordionSpoiler14">
+<div id="collapseSpoiler14" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler14" aria-labelledby="headingSpoiler14">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3777,7 +3772,7 @@ your code unreadable. Try not to go too far when refactoring!</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
 <div class="accordion-body">
 <p>This can be achieved with the changes shown in this <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/da18b6af1a01c82235975ed1589d0496cf6b23f2" class="external-link">commit</a></p>
 </div>
@@ -3794,7 +3789,7 @@ your code unreadable. Try not to go too far when refactoring!</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler18" aria-expanded="false" aria-controls="collapseSpoiler18">
   <h3 class="accordion-header" id="headingSpoiler18">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> 6. Replace global variables with procedure arguments </h3>
 </button>
-<div id="collapseSpoiler18" class="accordion-collapse collapse" aria-labelledby="headingSpoiler18" data-bs-parent="#accordionSpoiler18">
+<div id="collapseSpoiler18" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler18" aria-labelledby="headingSpoiler18">
 <div class="accordion-body">
 <div class="section level5">
 <h5 id="smells-4">Smells<a class="anchor" aria-label="anchor" href="#smells-4"></a>
@@ -3821,7 +3816,7 @@ arguments such as their <code>intent</code>.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler16" aria-expanded="false" aria-controls="collapseSpoiler16">
   <h3 class="accordion-header" id="headingSpoiler16">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Before </h3>
 </button>
-<div id="collapseSpoiler16" class="accordion-collapse collapse" aria-labelledby="headingSpoiler16" data-bs-parent="#accordionSpoiler16">
+<div id="collapseSpoiler16" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler16" aria-labelledby="headingSpoiler16">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3851,7 +3846,7 @@ arguments such as their <code>intent</code>.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler17" aria-expanded="false" aria-controls="collapseSpoiler17">
   <h3 class="accordion-header" id="headingSpoiler17">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> After </h3>
 </button>
-<div id="collapseSpoiler17" class="accordion-collapse collapse" aria-labelledby="headingSpoiler17" data-bs-parent="#accordionSpoiler17">
+<div id="collapseSpoiler17" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler17" aria-labelledby="headingSpoiler17">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">F90<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3897,7 +3892,7 @@ procedures with dummy arguments.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
   <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
+<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
 <div class="accordion-body">
 <p>This can be achieved with the changes shown in this <a href="https://github.com/UCL-ARC/fortran-unit-testing-exercises/commit/02da8d0b614d7d7412a066fbdd3c249eb308f5a9" class="external-link">commit</a></p>
 </div>
@@ -3914,7 +3909,7 @@ procedures with dummy arguments.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler21" aria-expanded="false" aria-controls="collapseSpoiler21">
   <h3 class="accordion-header" id="headingSpoiler21">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> 7. Separate code concepts into files or modules </h3>
 </button>
-<div id="collapseSpoiler21" class="accordion-collapse collapse" aria-labelledby="headingSpoiler21" data-bs-parent="#accordionSpoiler21">
+<div id="collapseSpoiler21" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler21" aria-labelledby="headingSpoiler21">
 <div class="accordion-body">
 <div class="section level5">
 <h5 id="smells-5">Smells<a class="anchor" aria-label="anchor" href="#smells-5"></a>
@@ -3938,7 +3933,7 @@ variables to be private.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler19" aria-expanded="false" aria-controls="collapseSpoiler19">
   <h3 class="accordion-header" id="headingSpoiler19">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Before </h3>
 </button>
-<div id="collapseSpoiler19" class="accordion-collapse collapse" aria-labelledby="headingSpoiler19" data-bs-parent="#accordionSpoiler19">
+<div id="collapseSpoiler19" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler19" aria-labelledby="headingSpoiler19">
 <div class="accordion-body">
 <p>Using the example we have seen so far, we start with two files
 <code>my_matrix_prog.f90</code> and
@@ -3964,7 +3959,7 @@ variables to be private.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler20" aria-expanded="false" aria-controls="collapseSpoiler20">
   <h3 class="accordion-header" id="headingSpoiler20">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> After </h3>
 </button>
-<div id="collapseSpoiler20" class="accordion-collapse collapse" aria-labelledby="headingSpoiler20" data-bs-parent="#accordionSpoiler20">
+<div id="collapseSpoiler20" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler20" aria-labelledby="headingSpoiler20">
 <div class="accordion-body">
 <p>If we split the procedures in these files across multiple modules
 which focus on different tasks, we could end up with something like
@@ -4008,7 +4003,7 @@ example, we could place <code>display_trace</code> in
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution7" aria-expanded="false" aria-controls="collapseSolution7">
   <h4 class="accordion-header" id="headingSolution7"> Show me the solution </h4>
 </button>
-<div id="collapseSolution7" class="accordion-collapse collapse" aria-labelledby="headingSolution7" data-bs-parent="#accordionSolution7">
+<div id="collapseSolution7" class="accordion-collapse collapse" data-bs-parent="#accordionSolution7" aria-labelledby="headingSolution7">
 <div class="accordion-body">
 <p>You should end up with a module structure. For example, like
 this:</p>
@@ -4067,10 +4062,6 @@ Martin Gardner</a>. Scientific American, 223, pp.120–123.</li>
 <li>Michael Feathers (2004). <a href="https://search.worldcat.org/title/660166658" class="external-link">Working Effectively
 with Legacy Code</a>. Pearson.</li>
 </ul>
-<!--
-Place links that you need to refer to multiple times across pages here. Delete
-any links that you are not going to use.
- -->
 </div>
 </section></section>
 </div>
