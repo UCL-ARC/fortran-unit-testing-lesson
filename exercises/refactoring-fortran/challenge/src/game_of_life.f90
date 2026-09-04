@@ -8,21 +8,21 @@ program game_of_life
 
     implicit none
 
-    !! Board args
+    ! Board args
     integer :: nrow, ncol
     integer :: i, generation_number
     integer, dimension(:,:), allocatable :: current_board, new_board
 
-    !! Animation args
+    ! Animation args
     integer, dimension(8) :: date_time_values
     integer :: mod_ms_step
     logical :: steady_state = .false.
 
-    !! CLI args
+    ! CLI args
     integer                       :: argl
     character(len=:), allocatable :: cli_arg_temp_store, input_fname
 
-    !! File IO args
+    ! File IO args
     character(len=80) :: text_to_discard
     integer :: input_file_io
     integer :: iostat

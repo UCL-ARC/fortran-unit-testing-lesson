@@ -8,7 +8,6 @@ module test_read_model_from_file
 
     public
 
-    ! TASK: Define a parameter type `read_model_from_file_test_params` to be used for testing io::read_model_from_file
     !> Type to bundle inputs and expected outputs of io::read_model_from_file
     @testParameter
     type, extends(AbstractTestParameter) :: read_model_from_file_test_params

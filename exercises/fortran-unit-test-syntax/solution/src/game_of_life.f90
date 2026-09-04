@@ -19,7 +19,7 @@ contains
         integer, dimension(:,:), allocatable :: current_board, new_board
         integer, parameter :: max_generations = 100
 
-        !! Animation args
+        ! Animation args
         integer, dimension(8) :: date_time_values
         integer :: mod_ms_step
         integer, parameter :: ms_per_step = 250

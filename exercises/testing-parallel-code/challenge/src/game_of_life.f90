@@ -25,26 +25,26 @@ contains
         !> The total number of processes in the MPI communicator
         integer, intent(in) :: nprocs
 
-        !! Board args
+        ! Board args
         integer, parameter :: max_generations = 100
         integer :: local_nrows, local_ncols, nrows_per_rank, ncols_per_rank
         integer, dimension(:,:), allocatable :: global_board, local_current, local_new
         logical :: local_steady
         integer :: row_start, col_start
 
-        !! MPI args
+        ! MPI args
         integer :: ierr, rank, mpi_req
         integer :: coords(2)
         logical :: periods(2)
         type(DomainDecomposition) :: domainDecomp
 
-        !! MPI args for rank 0 only
+        ! MPI args for rank 0 only
         integer :: coords_i(2), neighbours_i(4), row_start_i, col_start_i, local_nrows_i, local_ncols_i
 
-        !! Timing
+        ! Timing
         real :: start_time, end_time
 
-        !! Misc
+        ! Misc
         integer :: i, j
 
         local_steady = .false.

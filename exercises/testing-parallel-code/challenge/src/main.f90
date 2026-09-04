@@ -12,18 +12,18 @@ program main
     use io, only : read_model_from_file
     implicit none
 
-    !! Board args
+    ! Board args
     integer, dimension(:,:), allocatable :: global_input_board
     integer :: generation_number, global_nrows, global_ncols
     logical :: local_steady = .false.
 
-    !! CLI args
+    ! CLI args
     character(len=:), allocatable :: executable_name, input_filename
 
-    !! IO args
+    ! IO args
     character(len=:), allocatable :: io_error_message
 
-    !! MPI args
+    ! MPI args
     integer :: ierr, rank, nprocs
     logical :: error_found = .false.
 
@@ -72,10 +72,6 @@ program main
     call MPI_Bcast(global_ncols, 1, MPI_INTEGER, 0, MPI_COMM_WORLD, ierr)
 
     call find_steady_state(local_steady, generation_number, global_input_board, global_ncols, global_nrows, MPI_COMM_WORLD, nprocs)
-
-    ! if (rank == 0) then
-    !     write(*,*) "Hello from rank 0", local_steady, generation_number
-    ! end if
 
     if (rank == 0) then
         if (local_steady) then
